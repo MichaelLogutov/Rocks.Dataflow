@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{443C4D55-86FB-4EF2-B5E3-991A9E766844}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Rocks.Dataflow</RootNamespace>
+    <AssemblyName>Rocks.Dataflow</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>false</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Threading.Tasks.Dataflow, Version=4.5.23.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Tpl.Dataflow.4.5.23\lib\portable-net45+win8+wpa81\System.Threading.Tasks.Dataflow.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Dataflow.cs" />
+    <Compile Include="Fluent\DataflowFluent.Split.Join.cs" />
+    <Compile Include="Fluent\DataflowFluent.Split.Process.cs" />
+    <Compile Include="Fluent\DataflowFluent.Split.cs" />
+    <Compile Include="Fluent\Builders\DataflowSplitBuilder.cs" />
+    <Compile Include="Fluent\Builders\DataflowSplitJoinBuilder.cs" />
+    <Compile Include="Fluent\Builders\DataflowSplitProcessTransformBuilder.cs" />
+    <Compile Include="Fluent\Builders\DataflowSplitProcessBuilder.cs" />
+    <Compile Include="Fluent\Builders\DataflowSplitJoinFinalBuilder.cs" />
+    <Compile Include="SplitJoin\DataflowSplitJoin.cs" />
+    <Compile Include="SplitJoin\SplitJoinFailedItem.cs" />
+    <Compile Include="SplitJoin\SplitJoinIntermediateResult.cs" />
+    <Compile Include="SplitJoin\SplitJoinItem.cs" />
+    <Compile Include="SplitJoin\SplitJoinItemResult.cs" />
+    <Compile Include="SplitJoin\SplitJoinResult.cs" />
+    <Compile Include="DataflowStatus.cs" />
+    <Compile Include="Exceptions\DataflowException.cs" />
+    <Compile Include="Exceptions\InvalidDataflowStatusException.cs" />
+    <Compile Include="Fluent\DataflowFluent.TransformMany.cs" />
+    <Compile Include="Fluent\DataflowFluent.Transform.cs" />
+    <Compile Include="Fluent\DataflowFluent.Action.cs" />
+    <Compile Include="Fluent\Builders\DataflowActionBuilder.cs" />
+    <Compile Include="Fluent\IDataflowFinalBuilder.cs" />
+    <Compile Include="Fluent\Builders\DataflowFinalBuilder.cs" />
+    <Compile Include="Fluent\Builders\DataflowBuilder.cs" />
+    <Compile Include="Fluent\IDataflowBuilder.cs" />
+    <Compile Include="Fluent\BuildResults\DataflowFinalBuilderBuildResult.cs" />
+    <Compile Include="Fluent\BuildResults\DataflowBuilderBuildResult.cs" />
+    <Compile Include="Fluent\DataflowFluent.cs" />
+    <Compile Include="Fluent\Builders\DataflowExecutionBlockBuilder.cs" />
+    <Compile Include="Fluent\Builders\DataflowTranformManyBuilder.cs" />
+    <Compile Include="Fluent\Builders\DataflowTranformBuilder.cs" />
+    <Compile Include="Fluent\IDataflowErrorLogger.cs" />
+    <Compile Include="Fluent\IDataflowBuilderBuildResult.cs" />
+    <Compile Include="Fluent\IDataflowFinalBuilderBuildResult.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Extensions\DataflowExtensions.cs" />
+    <Compile Include="Properties\JetBrains.Annotations.cs" />
+    <Compile Include="Void.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
