@@ -36,9 +36,9 @@
     <NoWarn>1591,1574</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Rocks.Commands, Version=1.0.5430.30486, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Rocks.Commands, Version=1.0.5430.40110, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Rocks.Commands.1.0.5430.30486\lib\net451\Rocks.Commands.dll</HintPath>
+      <HintPath>..\packages\Rocks.Commands.1.0.5430.40110\lib\net451\Rocks.Commands.dll</HintPath>
     </Reference>
     <Reference Include="SimpleInjector">
       <HintPath>..\packages\SimpleInjector.2.6.1\lib\net45\SimpleInjector.dll</HintPath>
@@ -59,7 +59,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Fluent\DataflowFluent.Action.cs" />
+    <Compile Include="Fluent\DataflowCommandsFluent.Action.cs" />
+    <Compile Include="Fluent\DataflowCommandsFluent.Transform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\JetBrains.Annotations.cs" />
   </ItemGroup>

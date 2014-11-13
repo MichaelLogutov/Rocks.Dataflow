@@ -41,9 +41,9 @@
     <Reference Include="FluentAssertions.Core">
       <HintPath>..\packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Rocks.Commands, Version=1.0.5430.30486, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Rocks.Commands, Version=1.0.5430.40110, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Rocks.Commands.1.0.5430.30486\lib\net451\Rocks.Commands.dll</HintPath>
+      <HintPath>..\packages\Rocks.Commands.1.0.5430.40110\lib\net451\Rocks.Commands.dll</HintPath>
     </Reference>
     <Reference Include="SimpleInjector">
       <HintPath>..\packages\SimpleInjector.2.6.1\lib\net45\SimpleInjector.dll</HintPath>
@@ -70,8 +70,12 @@
   <ItemGroup>
     <Compile Include="FluentTests\FluentAsyncTests.cs" />
     <Compile Include="FluentTests\FluentSyncTests.cs" />
+    <Compile Include="FluentTests\Infrastructure\CharToIntAsyncCommand.cs" />
+    <Compile Include="FluentTests\Infrastructure\CharToIntCommand.cs" />
     <Compile Include="FluentTests\Infrastructure\IncrementAsyncCommand.cs" />
     <Compile Include="FluentTests\Infrastructure\IncrementCommand.cs" />
+    <Compile Include="FluentTests\Infrastructure\IntToCharAsyncCommand.cs" />
+    <Compile Include="FluentTests\Infrastructure\IntToCharCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

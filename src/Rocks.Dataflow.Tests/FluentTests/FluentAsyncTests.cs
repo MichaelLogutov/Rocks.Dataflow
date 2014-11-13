@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -81,23 +82,23 @@ namespace Rocks.Dataflow.Tests.FluentTests
 			var result = new ConcurrentBag<string> ();
 
 			var sut = DataflowFluent
-				.Transform<TestDataflowContext<int>, TestDataflowContext<string>> (async x =>
+				.Transform<int, string> (async x =>
 				{
 					await Task.Yield ();
-					return new TestDataflowContext<string> { Data = x.ToString () };
+					return x.ToString (CultureInfo.InvariantCulture);
 				})
 				.WithBoundedCapacity (100)
 				.Action (async x =>
 				{
 					await Task.Yield ();
-					result.Add (x.Data);
+					result.Add (x);
 				})
 				.WithMaxDegreeOfParallelism ();
 
 
 			// act
 			var dataflow = sut.CreateDataflow ();
-			await dataflow.Process (new[] { 1, 2, 3 }.CreateDataflowContexts ());
+			await dataflow.Process (new[] { 1, 2, 3 });
 
 
 			// assert
@@ -133,6 +134,42 @@ namespace Rocks.Dataflow.Tests.FluentTests
 
 			// assert
 			result.Should ().BeEquivalentTo ("1", "2", "3");
+		}
+
+
+		[TestMethod]
+		public async Task TransformThenTransformThenAction_CorrectlyBuilded ()
+		{
+			// arrange
+			var result = new ConcurrentBag<int> ();
+
+			var sut = DataflowFluent
+				.Transform<int, string> (async x =>
+				{
+					await Task.Yield ();
+					return x.ToString (CultureInfo.InvariantCulture);
+				})
+				.Transform (async s =>
+				{
+					await Task.Yield ();
+					return int.Parse (s);
+				})
+				.WithBoundedCapacity (100)
+				.Action (async x =>
+				{
+					await Task.Yield ();
+					result.Add (x);
+				})
+				.WithMaxDegreeOfParallelism ();
+
+
+			// act
+			var dataflow = sut.CreateDataflow ();
+			await dataflow.Process (new[] { 1, 2, 3 });
+
+
+			// assert
+			result.Should ().BeEquivalentTo (1, 2, 3);
 		}
 	}
 }

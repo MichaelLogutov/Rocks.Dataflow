@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -11,6 +12,7 @@ namespace Rocks.Dataflow.Commands.Tests.FluentTests.Infrastructure
 	public class IncrementAsyncCommand : IAsyncCommand<Void>
 	{
 		public int Number { get; set; }
+		public IProducerConsumerCollection<int> Result { get; set; }
 	}
 
 
@@ -21,7 +23,8 @@ namespace Rocks.Dataflow.Commands.Tests.FluentTests.Infrastructure
 		{
 			await Task.Yield ();
 
-			command.Number++;
+			command.Result.TryAdd (command.Number + 1);
+
 			return Void.Result;
 		}
 	}
