@@ -7,6 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rocks.Dataflow", "Rocks.Dat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rocks.Dataflow.Tests", "Rocks.Dataflow.Tests\Rocks.Dataflow.Tests.csproj", "{42D01BD2-CC67-4495-912F-3AB52571077A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rocks.Dataflow.Commands", "Rocks.Dataflow.Commands\Rocks.Dataflow.Commands.csproj", "{1CCCE1BB-2477-4C61-91CA-2B1BF929910D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dataflow", "Dataflow", "{2FD2A17D-AF5F-489F-B0A1-15FFB97CAE99}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dataflow.Commands", "Dataflow.Commands", "{0A59628C-F91F-4C42-8DA8-7FDB36A8DFE8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,8 +27,17 @@ Global
 		{42D01BD2-CC67-4495-912F-3AB52571077A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42D01BD2-CC67-4495-912F-3AB52571077A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42D01BD2-CC67-4495-912F-3AB52571077A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CCCE1BB-2477-4C61-91CA-2B1BF929910D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CCCE1BB-2477-4C61-91CA-2B1BF929910D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CCCE1BB-2477-4C61-91CA-2B1BF929910D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CCCE1BB-2477-4C61-91CA-2B1BF929910D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{443C4D55-86FB-4EF2-B5E3-991A9E766844} = {2FD2A17D-AF5F-489F-B0A1-15FFB97CAE99}
+		{42D01BD2-CC67-4495-912F-3AB52571077A} = {2FD2A17D-AF5F-489F-B0A1-15FFB97CAE99}
+		{1CCCE1BB-2477-4C61-91CA-2B1BF929910D} = {0A59628C-F91F-4C42-8DA8-7FDB36A8DFE8}
 	EndGlobalSection
 EndGlobal

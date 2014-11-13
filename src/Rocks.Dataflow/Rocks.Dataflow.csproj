@@ -22,6 +22,9 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>bin\Debug\Rocks.Dataflow.XML</DocumentationFile>
+    <NoWarn>1591,1574</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,6 +33,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>bin\Release\Rocks.Dataflow.XML</DocumentationFile>
+    <NoWarn>1591,1574</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -86,6 +92,7 @@
     <Compile Include="Void.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Package.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
