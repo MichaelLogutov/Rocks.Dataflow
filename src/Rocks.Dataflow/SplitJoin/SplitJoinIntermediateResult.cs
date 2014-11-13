@@ -7,7 +7,7 @@ namespace Rocks.Dataflow.SplitJoin
 	/// <summary>
 	///     An intermediate result of processing single item splitted from parent.
 	/// </summary>
-	internal class SplitJoinIntermediateResult<TItem>
+	public class SplitJoinIntermediateResult<TItem>
 	{
 		#region Private fields
 

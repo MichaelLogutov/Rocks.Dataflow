@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<package>
+	<metadata>
+		<id>$id$</id>
+		<version>$version$</version>
+		<authors>$author$</authors>
+		<description>$description$</description>
+		<projectUrl>https://github.com/MichaelLogutov/Rocks.Dataflow.Commands</projectUrl>
+		<licenseUrl>https://github.com/MichaelLogutov/Rocks.Dataflow.Commands/blob/master/LICENSE</licenseUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+	</metadata>
+	<files>
+		<file src="bin\$configuration$\$id$.xml" target="lib\net451" />
+	</files>
+</package>

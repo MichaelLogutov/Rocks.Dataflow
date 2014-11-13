@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle ("Rocks.Dataflow")]
@@ -13,4 +12,3 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible (false)]
 [assembly: Guid ("a946d47a-e705-4e9d-a5ac-9c4f52de7399")]
 [assembly: AssemblyVersion ("1.0.*")]
-[assembly: InternalsVisibleTo ("Rocks.Dataflow.Tests")]

@@ -89,7 +89,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Extensions\DataflowExtensions.cs" />
     <Compile Include="Properties\JetBrains.Annotations.cs" />
-    <Compile Include="Void.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Package.nuspec" />
