@@ -72,7 +72,7 @@ namespace Rocks.Dataflow.Tests.FluentTests
 
 
 		[TestMethod]
-		public async Task TransformThenAction_CorrectlyBuilded ()
+		public async Task TransformAction_CorrectlyBuilded ()
 		{
 			// arrange
 			var result = new ConcurrentBag<string> ();
@@ -81,7 +81,7 @@ namespace Rocks.Dataflow.Tests.FluentTests
 				.ReceiveDataOfType<int> ()
 				.Transform (x => x.ToString (CultureInfo.InvariantCulture))
 				.WithBoundedCapacity (100)
-				.Do (x => result.Add (x))
+				.Do (result.Add)
 				.WithMaxDegreeOfParallelism ();
 
 
@@ -96,7 +96,7 @@ namespace Rocks.Dataflow.Tests.FluentTests
 
 
 		[TestMethod]
-		public async Task TransformManyThenAction_CorrectlyBuilded ()
+		public async Task TransformManyAction_CorrectlyBuilded ()
 		{
 			// arrange
 			var result = new ConcurrentBag<string> ();
@@ -120,7 +120,7 @@ namespace Rocks.Dataflow.Tests.FluentTests
 
 
 		[TestMethod]
-		public async Task TransformThenTransformThenAction_CorrectlyBuilded ()
+		public async Task TransformTransformAction_CorrectlyBuilded ()
 		{
 			// arrange
 			var result = new ConcurrentBag<int> ();
@@ -130,7 +130,7 @@ namespace Rocks.Dataflow.Tests.FluentTests
 				.Transform (x => x.ToString (CultureInfo.InvariantCulture))
 				.Transform (int.Parse)
 				.WithBoundedCapacity (100)
-				.Do (x => result.Add (x))
+				.Do (result.Add)
 				.WithMaxDegreeOfParallelism ();
 
 
@@ -141,6 +141,31 @@ namespace Rocks.Dataflow.Tests.FluentTests
 
 			// assert
 			result.Should ().BeEquivalentTo (1, 2, 3);
+		}
+
+
+		[TestMethod]
+		public async Task TransformTransformManyAction_CorrectlyBuilded ()
+		{
+			// arrange
+			var result = new ConcurrentBag<char> ();
+
+			var sut = DataflowFluent
+				.ReceiveDataOfType<int> ()
+				.Transform (x => x.ToString (CultureInfo.InvariantCulture))
+				.TransformMany (s => s.ToCharArray ())
+				.WithBoundedCapacity (100)
+				.Do (result.Add)
+				.WithMaxDegreeOfParallelism ();
+
+
+			// act
+			var dataflow = sut.CreateDataflow ();
+			await dataflow.Process (new[] { 1, 2, 3 });
+
+
+			// assert
+			result.Should ().BeEquivalentTo ('1', '2', '3');
 		}
 	}
 }

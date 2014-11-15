@@ -327,5 +327,40 @@ namespace Rocks.Dataflow.Tests.FluentTests.SplitJoinTests
 			result.Should ().BeEquivalentTo ("a", "a", "ac");
 			exceptions.Should ().ContainItemsAssignableTo<TestException> ();
 		}
+
+
+		[TestMethod]
+		public async Task TransformSplitJoin_CorrectlyBuilded ()
+		{
+			// arrange
+			var process = new ConcurrentBag<string> ();
+			var process2 = new ConcurrentBag<string> ();
+
+			var sut = DataflowFluent
+				.ReceiveDataOfType<string> ()
+				.TransformAsync (async s =>
+				{
+					await Task.Yield ();
+					process.Add (s);
+					return s;
+				})
+				.SplitToAsync<char> (async s =>
+				{
+					await Task.Yield ();
+					process2.Add (s);
+					return s.ToCharArray ();
+				})
+				.SplitJoin ();
+
+
+			// act
+			var dataflow = sut.CreateDataflow ();
+			await dataflow.Process (new[] { "a", "ab", "abc" });
+
+
+			// assert
+			process.Should ().BeEquivalentTo ("a", "ab", "abc");
+			process.Should ().BeEquivalentTo (process2);
+		}
 	}
 }

@@ -76,7 +76,7 @@ namespace Rocks.Dataflow.Tests.FluentTests
 
 
 		[TestMethod]
-		public async Task TransformThenAction_CorrectlyBuilded ()
+		public async Task TransformAction_CorrectlyBuilded ()
 		{
 			// arrange
 			var result = new ConcurrentBag<string> ();
@@ -108,7 +108,7 @@ namespace Rocks.Dataflow.Tests.FluentTests
 
 
 		[TestMethod]
-		public async Task TransformManyThenAction_CorrectlyBuilded ()
+		public async Task TransformManyAction_CorrectlyBuilded ()
 		{
 			// arrange
 			var result = new ConcurrentBag<string> ();
@@ -140,7 +140,7 @@ namespace Rocks.Dataflow.Tests.FluentTests
 
 
 		[TestMethod]
-		public async Task TransformThenTransformThenAction_CorrectlyBuilded ()
+		public async Task TransformTransformAction_CorrectlyBuilded ()
 		{
 			// arrange
 			var result = new ConcurrentBag<int> ();
@@ -173,6 +173,43 @@ namespace Rocks.Dataflow.Tests.FluentTests
 
 			// assert
 			result.Should ().BeEquivalentTo (1, 2, 3);
+		}
+
+
+		[TestMethod]
+		public async Task TransformTransformManyAction_CorrectlyBuilded ()
+		{
+			// arrange
+			var result = new ConcurrentBag<char> ();
+
+			var sut = DataflowFluent
+				.ReceiveDataOfType<int> ()
+				.TransformAsync (async x =>
+				{
+					await Task.Yield ();
+					return x.ToString (CultureInfo.InvariantCulture);
+				})
+				.TransformManyAsync<char> (async s =>
+				{
+					await Task.Yield ();
+					return s.ToCharArray ();
+				})
+				.WithBoundedCapacity (100)
+				.DoAsync (async x =>
+				{
+					await Task.Yield ();
+					result.Add (x);
+				})
+				.WithMaxDegreeOfParallelism ();
+
+
+			// act
+			var dataflow = sut.CreateDataflow ();
+			await dataflow.Process (new[] { 1, 2, 3 });
+
+
+			// assert
+			result.Should ().BeEquivalentTo ('1', '2', '3');
 		}
 	}
 }
