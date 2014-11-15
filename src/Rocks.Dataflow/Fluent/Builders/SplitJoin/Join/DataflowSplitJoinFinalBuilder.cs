@@ -3,7 +3,7 @@ using System.Threading.Tasks.Dataflow;
 using JetBrains.Annotations;
 using Rocks.Dataflow.SplitJoin;
 
-namespace Rocks.Dataflow.Fluent.Builders
+namespace Rocks.Dataflow.Fluent.Builders.SplitJoin.Join
 {
 	public class DataflowSplitJoinFinalBuilder<TStart, TParent, TItem> :
 		DataflowFinalBuilder<DataflowSplitJoinFinalBuilder<TStart, TParent, TItem>, TStart, SplitJoinItem<TParent, TItem>>
@@ -21,7 +21,7 @@ namespace Rocks.Dataflow.Fluent.Builders
 
 		/// <summary>
 		///     Gets the builder instance that will be returned from the
-		///     <see cref="DataflowExecutionBlockBuilder{TBuilder}" /> methods.
+		///     <see cref="DataflowExecutionBlockBuilder{TStart,TBuilder}" /> methods.
 		/// </summary>
 		protected override DataflowSplitJoinFinalBuilder<TStart, TParent, TItem> Builder { get { return this; } }
 

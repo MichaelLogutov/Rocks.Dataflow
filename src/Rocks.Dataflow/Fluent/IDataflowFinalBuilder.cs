@@ -2,7 +2,7 @@
 
 namespace Rocks.Dataflow.Fluent
 {
-	public interface IDataflowFinalBuilder<in TInput>
+	public interface IDataflowFinalBuilder<TInput> : IDataflowStartBuilder<TInput>
 	{
 		/// <summary>
 		///     Builds the starting and final blocks of the dataflow.

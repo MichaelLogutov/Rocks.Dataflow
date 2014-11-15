@@ -4,9 +4,9 @@ using System.Threading.Tasks.Dataflow;
 using JetBrains.Annotations;
 using Rocks.Dataflow.SplitJoin;
 
-namespace Rocks.Dataflow.Fluent.Builders
+namespace Rocks.Dataflow.Fluent.Builders.SplitJoin.Process
 {
-	public class DataflowSplitProcessBuilder<TStart, TParent, TItem> :
+	public partial class DataflowSplitProcessBuilder<TStart, TParent, TItem> :
 		DataflowBuilder<DataflowSplitProcessBuilder<TStart, TParent, TItem>, TStart, SplitJoinItem<TParent, TItem>, SplitJoinItem<TParent, TItem>>
 	{
 		#region Private fields
@@ -45,7 +45,7 @@ namespace Rocks.Dataflow.Fluent.Builders
 
 		/// <summary>
 		///     Gets the builder instance that will be returned from the
-		///     <see cref="DataflowExecutionBlockBuilder{TBuilder}" /> methods.
+		///     <see cref="DataflowExecutionBlockBuilder{TStart,TBuilder}" /> methods.
 		/// </summary>
 		protected override DataflowSplitProcessBuilder<TStart, TParent, TItem> Builder { get { return this; } }
 

@@ -19,8 +19,8 @@ namespace Rocks.Dataflow.Tests.FluentTests
 			var result = new ConcurrentBag<string> ();
 
 			var sut = DataflowFluent
-				.Action<string>
-				(x =>
+				.ReceiveDataOfType<string> ()
+				.Do (x =>
 				{
 					if (x == "b")
 						throw new TestException ();
@@ -47,8 +47,8 @@ namespace Rocks.Dataflow.Tests.FluentTests
 			var result = new ConcurrentBag<string> ();
 
 			var sut = DataflowFluent
-				.Action<TestDataflowContext<string>>
-				(x =>
+				.ReceiveDataOfType<TestDataflowContext<string>> ()
+				.Do (x =>
 				{
 					if (x.Data == "b")
 						throw new TestException ();
@@ -78,9 +78,10 @@ namespace Rocks.Dataflow.Tests.FluentTests
 			var result = new ConcurrentBag<string> ();
 
 			var sut = DataflowFluent
-				.Transform<int, string> (x => x.ToString (CultureInfo.InvariantCulture))
+				.ReceiveDataOfType<int> ()
+				.Transform (x => x.ToString (CultureInfo.InvariantCulture))
 				.WithBoundedCapacity (100)
-				.Action (x => result.Add (x))
+				.Do (x => result.Add (x))
 				.WithMaxDegreeOfParallelism ();
 
 
@@ -101,9 +102,10 @@ namespace Rocks.Dataflow.Tests.FluentTests
 			var result = new ConcurrentBag<string> ();
 
 			var sut = DataflowFluent
-				.TransformMany<TestDataflowContext<int>, TestDataflowContext<string>> (x => new[] { new TestDataflowContext<string> { Data = x.ToString () } })
+				.ReceiveDataOfType<TestDataflowContext<int>> ()
+				.TransformMany (x => new[] { new TestDataflowContext<string> { Data = x.ToString () } })
 				.WithBoundedCapacity (100)
-				.Action (x => result.Add (x.Data))
+				.Do (x => result.Add (x.Data))
 				.WithMaxDegreeOfParallelism ();
 
 
@@ -124,10 +126,11 @@ namespace Rocks.Dataflow.Tests.FluentTests
 			var result = new ConcurrentBag<int> ();
 
 			var sut = DataflowFluent
-				.Transform<int, string> (x => x.ToString (CultureInfo.InvariantCulture))
+				.ReceiveDataOfType<int> ()
+				.Transform (x => x.ToString (CultureInfo.InvariantCulture))
 				.Transform (int.Parse)
 				.WithBoundedCapacity (100)
-				.Action (x => result.Add (x))
+				.Do (x => result.Add (x))
 				.WithMaxDegreeOfParallelism ();
 
 

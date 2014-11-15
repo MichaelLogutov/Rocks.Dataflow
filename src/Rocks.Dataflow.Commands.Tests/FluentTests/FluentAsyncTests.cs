@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rocks.Commands;
-using Rocks.Dataflow.Commands.Fluent;
 using Rocks.Dataflow.Commands.Tests.FluentTests.Infrastructure;
 using Rocks.Dataflow.Fluent;
 
@@ -19,24 +18,24 @@ namespace Rocks.Dataflow.Commands.Tests.FluentTests
 		}
 
 
-		[TestMethod]
-		public async Task ActionCommand_CorrectlyProcessed ()
-		{
-			// arrange
-			var result = new ConcurrentBag<int> ();
+		//[TestMethod]
+		//public async Task ActionCommand_CorrectlyProcessed ()
+		//{
+		//	// arrange
+		//	var result = new ConcurrentBag<int> ();
 
-			var sut = DataflowCommandsFluent
-				.ActionCommandAsync<int, IncrementAsyncCommand> (x => new IncrementAsyncCommand { Number = x, Result = result })
-				.CreateDataflow ();
-
-
-			// act
-			await sut.Process (new[] { 1, 2, 3 });
+		//	var sut = DataflowCommandsFluent
+		//		.ActionCommandAsync<int, IncrementAsyncCommand> (x => new IncrementAsyncCommand { Number = x, Result = result })
+		//		.CreateDataflow ();
 
 
-			// assert
-			result.Should ().BeEquivalentTo (2, 3, 4);
-		}
+		//	// act
+		//	await sut.Process (new[] { 1, 2, 3 });
+
+
+		//	// assert
+		//	result.Should ().BeEquivalentTo (2, 3, 4);
+		//}
 
 
 		//[TestMethod]

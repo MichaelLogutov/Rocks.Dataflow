@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using JetBrains.Annotations;
 
-namespace Rocks.Dataflow.Fluent.Builders
+namespace Rocks.Dataflow.Fluent.Builders.Action
 {
 	public class DataflowActionBuilder<TStart, TInput> :
 		DataflowFinalBuilder<DataflowActionBuilder<TStart, TInput>, TStart, TInput>
@@ -44,7 +44,7 @@ namespace Rocks.Dataflow.Fluent.Builders
 
 		/// <summary>
 		///     Gets the builder instance that will be returned from the
-		///     <see cref="DataflowExecutionBlockBuilder{TBuilder}" /> methods.
+		///     <see cref="DataflowExecutionBlockBuilder{TStart,TBuilder}" /> methods.
 		/// </summary>
 		protected override DataflowActionBuilder<TStart, TInput> Builder { get { return this; } }
 

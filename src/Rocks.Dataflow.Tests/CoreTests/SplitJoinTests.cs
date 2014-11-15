@@ -11,11 +11,42 @@ using Rocks.Dataflow.Extensions;
 using Rocks.Dataflow.SplitJoin;
 using Rocks.Dataflow.Tests.FluentTests.Infrastructure;
 
-namespace Rocks.Dataflow.Tests
+namespace Rocks.Dataflow.Tests.CoreTests
 {
 	[TestClass]
 	public class SplitJoinTests
 	{
+		[TestMethod]
+		public async Task SplitJoin_CorrectlyBuilded ()
+		{
+			// arrange
+			var process = new ConcurrentBag<string> ();
+
+			var split_block = DataflowSplitJoin.CreateSplitBlock<string, char> (async s =>
+			{
+				await Task.Yield ();
+				process.Add (s);
+				return s.ToCharArray ();
+			});
+
+			var join_block = DataflowSplitJoin.CreateFinalJoinBlock<string, char> ();
+
+			split_block.LinkWithCompletionPropagation (join_block);
+
+
+			// act
+			foreach (var str in new[] { "a", "bb", "ccc" })
+				await split_block.SendAsync (str);
+
+			split_block.Complete ();
+			await Task.WhenAll (split_block.Completion, join_block.Completion);
+
+
+			// assert
+			process.Should ().BeEquivalentTo ("a", "bb", "ccc");
+		}
+
+
 		[TestMethod]
 		public async Task SplitProcessJoin_CorrectlyBuilded ()
 		{

@@ -6,7 +6,6 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rocks.Commands;
 using Rocks.Dataflow.Fluent;
-using Rocks.Dataflow.Commands.Fluent;
 using Rocks.Dataflow.Commands.Tests.FluentTests.Infrastructure;
 using Void = Rocks.Commands.Void;
 

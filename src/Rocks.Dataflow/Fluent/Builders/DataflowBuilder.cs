@@ -6,7 +6,7 @@ using Rocks.Dataflow.Fluent.BuildResults;
 
 namespace Rocks.Dataflow.Fluent.Builders
 {
-	public abstract class DataflowBuilder<TBuilder, TStart, TInput, TOutput> : DataflowExecutionBlockBuilder<TBuilder>,
+	public abstract partial class DataflowBuilder<TBuilder, TStart, TInput, TOutput> : DataflowExecutionBlockBuilder<TStart, TBuilder>,
 	                                                                           IDataflowBuilder<TStart, TOutput>
 	{
 		#region Private fields

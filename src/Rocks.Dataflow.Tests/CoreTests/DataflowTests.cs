@@ -6,7 +6,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rocks.Dataflow.Extensions;
 
-namespace Rocks.Dataflow.Tests
+namespace Rocks.Dataflow.Tests.CoreTests
 {
 	[TestClass]
 	public class DataflowTests

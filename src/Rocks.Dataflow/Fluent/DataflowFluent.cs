@@ -1,18 +1,17 @@
 ﻿using JetBrains.Annotations;
+using Rocks.Dataflow.Fluent.Builders.Start;
 
 namespace Rocks.Dataflow.Fluent
 {
-	public static partial class DataflowFluent
+	public static class DataflowFluent
 	{
 		/// <summary>
-		///     Creates <see cref="Dataflow{TInput}" /> from the currently configured blocks.
+		///     Starts the dataflow with the input data of <typeparamref name="TStart" />.
 		/// </summary>
 		[NotNull]
-		public static Dataflow<TStart> CreateDataflow<TStart, TOutput> (this IDataflowBuilder<TStart, TOutput> builder)
+		public static DataflowStartBuilder<TStart> ReceiveDataOfType<TStart> ()
 		{
-			var build_result = builder.Build ();
-
-			return new Dataflow<TStart> (build_result.StartingBlock, build_result.FinalBlock);
+			return new DataflowStartBuilder<TStart> ();
 		}
 
 

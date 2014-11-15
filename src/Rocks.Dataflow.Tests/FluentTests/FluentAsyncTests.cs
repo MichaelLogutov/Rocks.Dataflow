@@ -19,8 +19,8 @@ namespace Rocks.Dataflow.Tests.FluentTests
 			var result = new ConcurrentBag<string> ();
 
 			var sut = DataflowFluent
-				.Action<string>
-				(async x =>
+				.ReceiveDataOfType<string> ()
+				.DoAsync (async x =>
 				{
 					await Task.Yield ();
 
@@ -49,8 +49,8 @@ namespace Rocks.Dataflow.Tests.FluentTests
 			var result = new ConcurrentBag<string> ();
 
 			var sut = DataflowFluent
-				.Action<TestDataflowContext<string>>
-				(async x =>
+				.ReceiveDataOfType<TestDataflowContext<string>> ()
+				.DoAsync (async x =>
 				{
 					await Task.Yield ();
 
@@ -82,13 +82,14 @@ namespace Rocks.Dataflow.Tests.FluentTests
 			var result = new ConcurrentBag<string> ();
 
 			var sut = DataflowFluent
-				.Transform<int, string> (async x =>
+				.ReceiveDataOfType<int> ()
+				.TransformAsync (async x =>
 				{
 					await Task.Yield ();
 					return x.ToString (CultureInfo.InvariantCulture);
 				})
 				.WithBoundedCapacity (100)
-				.Action (async x =>
+				.DoAsync (async x =>
 				{
 					await Task.Yield ();
 					result.Add (x);
@@ -113,13 +114,14 @@ namespace Rocks.Dataflow.Tests.FluentTests
 			var result = new ConcurrentBag<string> ();
 
 			var sut = DataflowFluent
-				.TransformMany<TestDataflowContext<int>, TestDataflowContext<string>> (async x =>
+				.ReceiveDataOfType<TestDataflowContext<int>> ()
+				.TransformManyAsync<TestDataflowContext<string>> (async x =>
 				{
 					await Task.Yield ();
 					return new[] { new TestDataflowContext<string> { Data = x.ToString () } };
 				})
 				.WithBoundedCapacity (100)
-				.Action (async x =>
+				.DoAsync (async x =>
 				{
 					await Task.Yield ();
 					result.Add (x.Data);
@@ -144,18 +146,19 @@ namespace Rocks.Dataflow.Tests.FluentTests
 			var result = new ConcurrentBag<int> ();
 
 			var sut = DataflowFluent
-				.Transform<int, string> (async x =>
+				.ReceiveDataOfType<int> ()
+				.TransformAsync (async x =>
 				{
 					await Task.Yield ();
 					return x.ToString (CultureInfo.InvariantCulture);
 				})
-				.Transform (async s =>
+				.TransformAsync (async s =>
 				{
 					await Task.Yield ();
 					return int.Parse (s);
 				})
 				.WithBoundedCapacity (100)
-				.Action (async x =>
+				.DoAsync (async x =>
 				{
 					await Task.Yield ();
 					result.Add (x);

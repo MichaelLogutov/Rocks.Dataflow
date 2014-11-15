@@ -339,7 +339,7 @@ namespace Rocks.Dataflow.SplitJoin
 				(x =>
 				{
 					if (x.Result == null)
-						throw new InvalidOperationException (string.Format ("Item ({0}) has not been completed.", x));
+						x.CompletedSuccessfully ();
 
 					SplitJoinIntermediateResult<TItem> intermediate_result;
 					if (!intermediate_results.TryGetValue (x.Parent, out intermediate_result))
@@ -381,7 +381,7 @@ namespace Rocks.Dataflow.SplitJoin
 				(async x =>
 				{
 					if (x.Result == null)
-						throw new InvalidOperationException (string.Format ("Item ({0}) has not been completed.", x));
+						x.CompletedSuccessfully ();
 
 					SplitJoinIntermediateResult<TItem> intermediate_result;
 					if (!intermediate_results.TryGetValue (x.Parent, out intermediate_result))
@@ -425,7 +425,7 @@ namespace Rocks.Dataflow.SplitJoin
 				(x =>
 				{
 					if (x.Result == null)
-						throw new InvalidOperationException (string.Format ("Item ({0}) has not been completed.", x));
+						x.CompletedSuccessfully ();
 
 					SplitJoinIntermediateResult<TItem> intermediate_result;
 					if (!intermediate_results.TryGetValue (x.Parent, out intermediate_result))

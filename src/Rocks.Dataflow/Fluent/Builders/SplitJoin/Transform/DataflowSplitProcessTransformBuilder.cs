@@ -4,9 +4,9 @@ using System.Threading.Tasks.Dataflow;
 using JetBrains.Annotations;
 using Rocks.Dataflow.SplitJoin;
 
-namespace Rocks.Dataflow.Fluent.Builders
+namespace Rocks.Dataflow.Fluent.Builders.SplitJoin.Transform
 {
-	public class DataflowSplitProcessTransformBuilder<TStart, TParent, TInputItem, TOutputItem> :
+	public partial class DataflowSplitProcessTransformBuilder<TStart, TParent, TInputItem, TOutputItem> :
 		DataflowBuilder<
 			DataflowSplitProcessTransformBuilder<TStart, TParent, TInputItem, TOutputItem>,
 			TStart,
@@ -64,7 +64,7 @@ namespace Rocks.Dataflow.Fluent.Builders
 
 		/// <summary>
 		///     Gets the builder instance that will be returned from the
-		///     <see cref="DataflowExecutionBlockBuilder{TBuilder}" /> methods.
+		///     <see cref="DataflowExecutionBlockBuilder{TStart,TBuilder}" /> methods.
 		/// </summary>
 		protected override DataflowSplitProcessTransformBuilder<TStart, TParent, TInputItem, TOutputItem> Builder { get { return this; } }
 

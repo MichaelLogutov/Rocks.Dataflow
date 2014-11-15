@@ -1,25 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using JetBrains.Annotations;
 
-namespace Rocks.Dataflow.Fluent.Builders
+namespace Rocks.Dataflow.Fluent.Builders.Tranform
 {
-	public class DataflowTranformManyBuilder<TStart, TInput, TOutput> :
-		DataflowBuilder<DataflowTranformManyBuilder<TStart, TInput, TOutput>, TStart, TInput, TOutput>
+	public class DataflowTranformBuilder<TStart, TInput, TOutput> :
+		DataflowBuilder<DataflowTranformBuilder<TStart, TInput, TOutput>, TStart, TInput, TOutput>
 	{
 		#region Private fields
 
-		private readonly Func<TInput, Task<IEnumerable<TOutput>>> processAsync;
-		private readonly Func<TInput, IEnumerable<TOutput>> processSync;
+		private readonly Func<TInput, Task<TOutput>> processAsync;
+		private readonly Func<TInput, TOutput> processSync;
 
 		#endregion
 
 		#region Construct
 
-		public DataflowTranformManyBuilder ([CanBeNull] IDataflowBuilder<TStart, TInput> previousBuilder,
-		                                    [NotNull] Func<TInput, Task<IEnumerable<TOutput>>> processAsync)
+		public DataflowTranformBuilder ([CanBeNull] IDataflowBuilder<TStart, TInput> previousBuilder,
+		                                [NotNull] Func<TInput, Task<TOutput>> processAsync)
 			: base (previousBuilder)
 		{
 			if (processAsync == null)
@@ -29,8 +28,8 @@ namespace Rocks.Dataflow.Fluent.Builders
 		}
 
 
-		public DataflowTranformManyBuilder ([CanBeNull] IDataflowBuilder<TStart, TInput> previousBuilder,
-		                                    [NotNull] Func<TInput, IEnumerable<TOutput>> processSync)
+		public DataflowTranformBuilder ([CanBeNull] IDataflowBuilder<TStart, TInput> previousBuilder,
+		                                [NotNull] Func<TInput, TOutput> processSync)
 			: base (previousBuilder)
 		{
 			if (processSync == null)
@@ -45,9 +44,9 @@ namespace Rocks.Dataflow.Fluent.Builders
 
 		/// <summary>
 		///     Gets the builder instance that will be returned from the
-		///     <see cref="DataflowExecutionBlockBuilder{TBuilder}" /> methods.
+		///     <see cref="DataflowExecutionBlockBuilder{TStart,TBuilder}" /> methods.
 		/// </summary>
-		protected override DataflowTranformManyBuilder<TStart, TInput, TOutput> Builder { get { return this; } }
+		protected override DataflowTranformBuilder<TStart, TInput, TOutput> Builder { get { return this; } }
 
 		#endregion
 
@@ -58,16 +57,16 @@ namespace Rocks.Dataflow.Fluent.Builders
 		/// </summary>
 		protected override IPropagatorBlock<TInput, TOutput> CreateBlock ()
 		{
-			TransformManyBlock<TInput, TOutput> block;
+			TransformBlock<TInput, TOutput> block;
 
 			if (this.processAsync != null)
 			{
-				block = new TransformManyBlock<TInput, TOutput>
+				block = new TransformBlock<TInput, TOutput>
 					(async input =>
 					{
 						// ReSharper disable once CompareNonConstrainedGenericWithNull
 						if (input == null)
-							return new TOutput[0];
+							return default (TOutput);
 
 						try
 						{
@@ -81,19 +80,19 @@ namespace Rocks.Dataflow.Fluent.Builders
 							if (logger != null)
 								logger.OnException (ex);
 
-							return new TOutput[0];
+							return default (TOutput);
 						}
 					},
 					 this.options);
 			}
 			else
 			{
-				block = new TransformManyBlock<TInput, TOutput>
+				block = new TransformBlock<TInput, TOutput>
 					(input =>
 					{
 						// ReSharper disable once CompareNonConstrainedGenericWithNull
 						if (input == null)
-							return new TOutput[0];
+							return default (TOutput);
 
 						try
 						{
@@ -107,7 +106,7 @@ namespace Rocks.Dataflow.Fluent.Builders
 							if (logger != null)
 								logger.OnException (ex);
 
-							return new TOutput[0];
+							return default (TOutput);
 						}
 					},
 					 this.options);

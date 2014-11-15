@@ -4,10 +4,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using JetBrains.Annotations;
+using Rocks.Dataflow.Fluent.Builders.Start;
 
 namespace Rocks.Dataflow.Fluent.Builders
 {
-	public abstract class DataflowExecutionBlockBuilder<TBuilder>
+	public abstract class DataflowExecutionBlockBuilder<TStart, TBuilder> : DataflowStartBuilder<TStart>
 	{
 		#region Private fields
 
@@ -95,7 +96,7 @@ namespace Rocks.Dataflow.Fluent.Builders
 
 		/// <summary>
 		///     Gets the builder instance that will be returned from the
-		///     <see cref="DataflowExecutionBlockBuilder{TBuilder}" /> methods.
+		///     <see cref="DataflowExecutionBlockBuilder{TStart,TBuilder}" /> methods.
 		/// </summary>
 		protected abstract TBuilder Builder { get; }
 

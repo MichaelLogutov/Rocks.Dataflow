@@ -1,41 +1,42 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using JetBrains.Annotations;
 
-namespace Rocks.Dataflow.Fluent.Builders
+namespace Rocks.Dataflow.Fluent.Builders.Tranform
 {
-	public class DataflowTranformBuilder<TStart, TInput, TOutput> :
-		DataflowBuilder<DataflowTranformBuilder<TStart, TInput, TOutput>, TStart, TInput, TOutput>
+	public class DataflowTranformManyBuilder<TStart, TInput, TOutput> :
+		DataflowBuilder<DataflowTranformManyBuilder<TStart, TInput, TOutput>, TStart, TInput, TOutput>
 	{
 		#region Private fields
 
-		private readonly Func<TInput, Task<TOutput>> processAsync;
-		private readonly Func<TInput, TOutput> processSync;
+		private readonly Func<TInput, IEnumerable<TOutput>> processSync;
+		private readonly Func<TInput, Task<IEnumerable<TOutput>>> processAsync;
 
 		#endregion
 
 		#region Construct
 
-		public DataflowTranformBuilder ([CanBeNull] IDataflowBuilder<TStart, TInput> previousBuilder,
-		                                [NotNull] Func<TInput, Task<TOutput>> processAsync)
+		public DataflowTranformManyBuilder ([CanBeNull] IDataflowBuilder<TStart, TInput> previousBuilder,
+		                                    [NotNull] Func<TInput, Task<IEnumerable<TOutput>>> process)
 			: base (previousBuilder)
 		{
-			if (processAsync == null)
-				throw new ArgumentNullException ("processAsync");
+			if (process == null)
+				throw new ArgumentNullException ("process");
 
-			this.processAsync = processAsync;
+			this.processAsync = process;
 		}
 
 
-		public DataflowTranformBuilder ([CanBeNull] IDataflowBuilder<TStart, TInput> previousBuilder,
-		                                [NotNull] Func<TInput, TOutput> processSync)
+		public DataflowTranformManyBuilder ([CanBeNull] IDataflowBuilder<TStart, TInput> previousBuilder,
+		                                    [NotNull] Func<TInput, IEnumerable<TOutput>> process)
 			: base (previousBuilder)
 		{
-			if (processSync == null)
-				throw new ArgumentNullException ("processSync");
+			if (process == null)
+				throw new ArgumentNullException ("process");
 
-			this.processSync = processSync;
+			this.processSync = process;
 		}
 
 		#endregion
@@ -44,9 +45,9 @@ namespace Rocks.Dataflow.Fluent.Builders
 
 		/// <summary>
 		///     Gets the builder instance that will be returned from the
-		///     <see cref="DataflowExecutionBlockBuilder{TBuilder}" /> methods.
+		///     <see cref="DataflowExecutionBlockBuilder{TStart,TBuilder}" /> methods.
 		/// </summary>
-		protected override DataflowTranformBuilder<TStart, TInput, TOutput> Builder { get { return this; } }
+		protected override DataflowTranformManyBuilder<TStart, TInput, TOutput> Builder { get { return this; } }
 
 		#endregion
 
@@ -57,16 +58,16 @@ namespace Rocks.Dataflow.Fluent.Builders
 		/// </summary>
 		protected override IPropagatorBlock<TInput, TOutput> CreateBlock ()
 		{
-			TransformBlock<TInput, TOutput> block;
+			TransformManyBlock<TInput, TOutput> block;
 
 			if (this.processAsync != null)
 			{
-				block = new TransformBlock<TInput, TOutput>
+				block = new TransformManyBlock<TInput, TOutput>
 					(async input =>
 					{
 						// ReSharper disable once CompareNonConstrainedGenericWithNull
 						if (input == null)
-							return default (TOutput);
+							return new TOutput[0];
 
 						try
 						{
@@ -80,19 +81,19 @@ namespace Rocks.Dataflow.Fluent.Builders
 							if (logger != null)
 								logger.OnException (ex);
 
-							return default (TOutput);
+							return new TOutput[0];
 						}
 					},
 					 this.options);
 			}
 			else
 			{
-				block = new TransformBlock<TInput, TOutput>
+				block = new TransformManyBlock<TInput, TOutput>
 					(input =>
 					{
 						// ReSharper disable once CompareNonConstrainedGenericWithNull
 						if (input == null)
-							return default (TOutput);
+							return new TOutput[0];
 
 						try
 						{
@@ -106,7 +107,7 @@ namespace Rocks.Dataflow.Fluent.Builders
 							if (logger != null)
 								logger.OnException (ex);
 
-							return default (TOutput);
+							return new TOutput[0];
 						}
 					},
 					 this.options);
