@@ -79,10 +79,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Rocks.Dataflow.Commands\Rocks.Dataflow.Commands.csproj">
-      <Project>{1CCCE1BB-2477-4C61-91CA-2B1BF929910D}</Project>
-      <Name>Rocks.Dataflow.Commands</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Rocks.Dataflow\Rocks.Dataflow.csproj">
       <Project>{443c4d55-86fb-4ef2-b5e3-991a9e766844}</Project>
       <Name>Rocks.Dataflow</Name>
