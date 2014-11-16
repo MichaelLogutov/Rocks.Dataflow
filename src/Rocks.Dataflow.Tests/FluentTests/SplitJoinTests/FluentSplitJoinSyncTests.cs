@@ -48,7 +48,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.SplitJoinTests
 				.ReceiveDataOfType<string> ()
 				.SplitTo<char> (s => s.ToCharArray ())
 				.SplitJoinInto (x => new string (x.SucceffullyCompletedItems.ToArray ()))
-				.Do (result.Add);
+				.Action (result.Add);
 
 
 			// act
@@ -123,7 +123,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.SplitJoinTests
 				.SplitTo<char> (s => s.ToCharArray ())
 				.SplitProcess ((s, c) => process.Add (c))
 				.SplitJoinInto (x => new string (x.SucceffullyCompletedItems.ToArray ()))
-				.Do (result.Add);
+				.Action (result.Add);
 
 
 			// act
@@ -179,7 +179,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.SplitJoinTests
 				.SplitProcess ((s, n) => process2.Add (n))
 				.SplitTransform ((s, n) => (char) n)
 				.SplitJoinInto (x => new string (x.SucceffullyCompletedItems.ToArray ()))
-				.Do (result.Add);
+				.Action (result.Add);
 
 
 			// act
@@ -205,7 +205,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.SplitJoinTests
 				.SplitTransform ((s, c) => (int) c)
 				.SplitTransform ((s, i) => (char) i)
 				.SplitJoinInto (x => new string (x.SucceffullyCompletedItems.ToArray ()))
-				.Do (result.Add);
+				.Action (result.Add);
 
 
 			// act
@@ -242,7 +242,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.SplitJoinTests
 					exceptions.AddRange (x.FailedItems.Select (f => f.Exception));
 					return new string (x.SucceffullyCompletedItems.ToArray ());
 				})
-				.Do (result.Add);
+				.Action (result.Add);
 
 
 			// act

@@ -20,7 +20,7 @@ namespace Rocks.Dataflow.Tests.FluentTests
 
 			var sut = DataflowFluent
 				.ReceiveDataOfType<string> ()
-				.DoAsync (async x =>
+				.ActionAsync (async x =>
 				{
 					await Task.Yield ();
 
@@ -50,7 +50,7 @@ namespace Rocks.Dataflow.Tests.FluentTests
 
 			var sut = DataflowFluent
 				.ReceiveDataOfType<TestDataflowContext<string>> ()
-				.DoAsync (async x =>
+				.ActionAsync (async x =>
 				{
 					await Task.Yield ();
 
@@ -89,7 +89,7 @@ namespace Rocks.Dataflow.Tests.FluentTests
 					return x.ToString (CultureInfo.InvariantCulture);
 				})
 				.WithBoundedCapacity (100)
-				.DoAsync (async x =>
+				.ActionAsync (async x =>
 				{
 					await Task.Yield ();
 					result.Add (x);
@@ -121,7 +121,7 @@ namespace Rocks.Dataflow.Tests.FluentTests
 					return new[] { new TestDataflowContext<string> { Data = x.ToString () } };
 				})
 				.WithBoundedCapacity (100)
-				.DoAsync (async x =>
+				.ActionAsync (async x =>
 				{
 					await Task.Yield ();
 					result.Add (x.Data);
@@ -158,7 +158,7 @@ namespace Rocks.Dataflow.Tests.FluentTests
 					return int.Parse (s);
 				})
 				.WithBoundedCapacity (100)
-				.DoAsync (async x =>
+				.ActionAsync (async x =>
 				{
 					await Task.Yield ();
 					result.Add (x);
@@ -195,7 +195,7 @@ namespace Rocks.Dataflow.Tests.FluentTests
 					return s.ToCharArray ();
 				})
 				.WithBoundedCapacity (100)
-				.DoAsync (async x =>
+				.ActionAsync (async x =>
 				{
 					await Task.Yield ();
 					result.Add (x);

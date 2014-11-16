@@ -10,7 +10,7 @@ namespace Rocks.Dataflow.Fluent.Builders
 		/// <summary>
 		///     Ends the dataflow with the <see cref="ActionBlock{TOutput}" /> using <paramref name="process" /> as a body.
 		/// </summary>
-		public DataflowActionBuilder<TStart, TOutput> DoAsync (Func<TOutput, Task> process)
+		public DataflowActionBuilder<TStart, TOutput> ActionAsync (Func<TOutput, Task> process)
 		{
 			return new DataflowActionBuilder<TStart, TOutput> (this, process);
 		}
@@ -19,7 +19,7 @@ namespace Rocks.Dataflow.Fluent.Builders
 		/// <summary>
 		///     Ends the dataflow with the <see cref="ActionBlock{TOutput}" /> using <paramref name="process" /> as a body.
 		/// </summary>
-		public DataflowActionBuilder<TStart, TOutput> Do (Action<TOutput> process)
+		public DataflowActionBuilder<TStart, TOutput> Action (Action<TOutput> process)
 		{
 			return new DataflowActionBuilder<TStart, TOutput> (this, process);
 		}

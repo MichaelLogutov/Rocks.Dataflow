@@ -20,7 +20,7 @@ namespace Rocks.Dataflow.Tests.FluentTests
 
 			var sut = DataflowFluent
 				.ReceiveDataOfType<string> ()
-				.Do (x =>
+				.Action (x =>
 				{
 					if (x == "b")
 						throw new TestException ();
@@ -48,7 +48,7 @@ namespace Rocks.Dataflow.Tests.FluentTests
 
 			var sut = DataflowFluent
 				.ReceiveDataOfType<TestDataflowContext<string>> ()
-				.Do (x =>
+				.Action (x =>
 				{
 					if (x.Data == "b")
 						throw new TestException ();
@@ -81,7 +81,7 @@ namespace Rocks.Dataflow.Tests.FluentTests
 				.ReceiveDataOfType<int> ()
 				.Transform (x => x.ToString (CultureInfo.InvariantCulture))
 				.WithBoundedCapacity (100)
-				.Do (result.Add)
+				.Action (result.Add)
 				.WithMaxDegreeOfParallelism ();
 
 
@@ -105,7 +105,7 @@ namespace Rocks.Dataflow.Tests.FluentTests
 				.ReceiveDataOfType<TestDataflowContext<int>> ()
 				.TransformMany (x => new[] { new TestDataflowContext<string> { Data = x.ToString () } })
 				.WithBoundedCapacity (100)
-				.Do (x => result.Add (x.Data))
+				.Action (x => result.Add (x.Data))
 				.WithMaxDegreeOfParallelism ();
 
 
@@ -130,7 +130,7 @@ namespace Rocks.Dataflow.Tests.FluentTests
 				.Transform (x => x.ToString (CultureInfo.InvariantCulture))
 				.Transform (int.Parse)
 				.WithBoundedCapacity (100)
-				.Do (result.Add)
+				.Action (result.Add)
 				.WithMaxDegreeOfParallelism ();
 
 
@@ -155,7 +155,7 @@ namespace Rocks.Dataflow.Tests.FluentTests
 				.Transform (x => x.ToString (CultureInfo.InvariantCulture))
 				.TransformMany (s => s.ToCharArray ())
 				.WithBoundedCapacity (100)
-				.Do (result.Add)
+				.Action (result.Add)
 				.WithMaxDegreeOfParallelism ();
 
 

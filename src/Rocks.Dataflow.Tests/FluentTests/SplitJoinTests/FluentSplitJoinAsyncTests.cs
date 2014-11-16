@@ -57,7 +57,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.SplitJoinTests
 					await Task.Yield ();
 					return new string (x.SucceffullyCompletedItems.ToArray ());
 				})
-				.DoAsync (async x =>
+				.ActionAsync (async x =>
 				{
 					await Task.Yield ();
 					result.Add (x);
@@ -161,7 +161,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.SplitJoinTests
 					await Task.Yield ();
 					return new string (x.SucceffullyCompletedItems.ToArray ());
 				})
-				.DoAsync (async x =>
+				.ActionAsync (async x =>
 				{
 					await Task.Yield ();
 					result.Add (x);
@@ -257,7 +257,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.SplitJoinTests
 					await Task.Yield ();
 					return new string (x.SucceffullyCompletedItems.ToArray ());
 				})
-				.DoAsync (async x =>
+				.ActionAsync (async x =>
 				{
 					await Task.Yield ();
 					result.Add (x);
@@ -311,7 +311,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.SplitJoinTests
 					exceptions.AddRange (x.FailedItems.Select (f => f.Exception));
 					return new string (x.SucceffullyCompletedItems.ToArray ());
 				})
-				.DoAsync (async x =>
+				.ActionAsync (async x =>
 				{
 					await Task.Yield ();
 					result.Add (x);
