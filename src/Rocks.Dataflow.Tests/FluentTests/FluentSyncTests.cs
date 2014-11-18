@@ -167,5 +167,29 @@ namespace Rocks.Dataflow.Tests.FluentTests
 			// assert
 			result.Should ().BeEquivalentTo ('1', '2', '3');
 		}
+
+
+		[TestMethod]
+		public async Task TransformAction_WithNullReturn_CorrectlyExecuted ()
+		{
+			// arrange
+			var result = new ConcurrentBag<int> ();
+
+			var sut = DataflowFluent
+				.ReceiveDataOfType<TestDataflowContext<int>> ()
+				.Transform (x => x.Data == 2 ? null : x)
+				.WithBoundedCapacity (100)
+				.Action (x => { result.Add (x.Data); })
+				.WithMaxDegreeOfParallelism ();
+
+
+			// act
+			var dataflow = sut.CreateDataflow ();
+			await dataflow.Process (new[] { 1, 2, 3 }.CreateDataflowContexts ());
+
+
+			// assert
+			result.Should ().BeEquivalentTo (1, 3);
+		}
 	}
 }
