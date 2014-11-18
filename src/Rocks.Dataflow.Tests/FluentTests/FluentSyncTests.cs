@@ -67,6 +67,7 @@ namespace Rocks.Dataflow.Tests.FluentTests
 
 			// assert
 			result.Should ().BeEquivalentTo ("a", "c");
+			contexts.SelectMany (x => x.Exceptions).Should ().HaveCount (1);
 			contexts.SelectMany (x => x.Exceptions).Should ().ContainItemsAssignableTo<TestException> ();
 		}
 

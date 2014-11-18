@@ -74,7 +74,7 @@ namespace Rocks.Dataflow.Fluent.Builders.Action
 						}
 						catch (Exception ex)
 						{
-							var logger = ex as IDataflowErrorLogger;
+							var logger = input as IDataflowErrorLogger;
 							if (logger != null)
 								logger.OnException (ex);
 						}
@@ -96,7 +96,7 @@ namespace Rocks.Dataflow.Fluent.Builders.Action
 						}
 						catch (Exception ex)
 						{
-							var logger = ex as IDataflowErrorLogger;
+							var logger = input as IDataflowErrorLogger;
 							if (logger != null)
 								logger.OnException (ex);
 						}

@@ -129,7 +129,7 @@ namespace Rocks.Dataflow.SplitJoin
 					}
 					catch (Exception ex)
 					{
-						var logger = splitJoinItem as IDataflowErrorLogger;
+						var logger = splitJoinItem.Parent as IDataflowErrorLogger;
 						if (logger != null)
 							logger.OnException (ex);
 
@@ -174,7 +174,7 @@ namespace Rocks.Dataflow.SplitJoin
 					}
 					catch (Exception ex)
 					{
-						var logger = splitJoinItem as IDataflowErrorLogger;
+						var logger = splitJoinItem.Parent as IDataflowErrorLogger;
 						if (logger != null)
 							logger.OnException (ex);
 

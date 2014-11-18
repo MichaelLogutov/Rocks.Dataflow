@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rocks.Dataflow.Fluent;
+using Rocks.Dataflow.Tests.FluentTests.Infrastructure;
 
 namespace Rocks.Dataflow.Tests.FluentTests.SplitJoinTests
 {
@@ -361,6 +362,46 @@ namespace Rocks.Dataflow.Tests.FluentTests.SplitJoinTests
 			// assert
 			process.Should ().BeEquivalentTo ("a", "ab", "abc");
 			process.Should ().BeEquivalentTo (process2);
+		}
+
+
+		[TestMethod]
+		public async Task SplitProcessJoin_WithException_PassTheExceptionToContext ()
+		{
+			// arrange
+			var process = new ConcurrentBag<char> ();
+
+			var sut = DataflowFluent
+				.ReceiveDataOfType<TestDataflowContext<string>> ()
+				.SplitToAsync<char> (async context =>
+				{
+					await Task.Yield ();
+					return context.Data.ToCharArray ();
+				})
+				.SplitProcessAsync (async (s, c) =>
+				{
+					await Task.Yield ();
+
+					if (c == 'b')
+						throw new TestException ();
+
+					process.Add (c);
+				})
+				.SplitJoin ();
+
+
+			var contexts = new[] { "a", "b", "c" }.CreateDataflowContexts ();
+
+
+			// act
+			var dataflow = sut.CreateDataflow ();
+			await dataflow.Process (contexts);
+
+
+			// assert
+			process.Should ().BeEquivalentTo ('a', 'c');
+			contexts.SelectMany (x => x.Exceptions).Should ().HaveCount (1);
+			contexts.SelectMany (x => x.Exceptions).Should ().ContainItemsAssignableTo<TestException> ();
 		}
 	}
 }
