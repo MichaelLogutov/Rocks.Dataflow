@@ -291,22 +291,28 @@ namespace Rocks.Dataflow.Tests.FluentTests.SplitJoinTests
 
 
 		[TestMethod]
-		public async Task SplitProcessJoin_WithException_PassTheExceptionToContext ()
+		public async Task SplitProcessJoin_WithException_PassTheExceptionToChildContext ()
 		{
 			// arrange
-			var process = new ConcurrentBag<char> ();
+			var failed_items_exceptions = new List<Exception> ();
+			var split_items_exceptions = new List<Exception> ();
+			var result = new List<char> ();
 
 			var sut = DataflowFluent
 				.ReceiveDataOfType<TestDataflowContext<string>> ()
-				.SplitTo (context => context.Data.ToCharArray ())
+				.SplitTo<TestDataflowContext<char>> (context => context.Data.CreateDataflowContexts ())
 				.SplitProcess ((s, c) =>
 				{
-					if (c == 'b')
+					if (c.Data == 'b')
 						throw new TestException ();
-
-					process.Add (c);
 				})
-				.SplitJoin ();
+				.SplitJoin (splitJoinResult =>
+				{
+					failed_items_exceptions.AddRange (splitJoinResult.FailedItems.Select (x => x.Exception));
+					split_items_exceptions.AddRange (splitJoinResult.FailedItems.SelectMany (x => x.Item.Exceptions));
+
+					result.AddRange (splitJoinResult.SucceffullyCompletedItems.Select (x => x.Data));
+				});
 
 
 			var contexts = new[] { "a", "b", "c" }.CreateDataflowContexts ();
@@ -318,9 +324,12 @@ namespace Rocks.Dataflow.Tests.FluentTests.SplitJoinTests
 
 
 			// assert
-			process.Should ().BeEquivalentTo ('a', 'c');
-			contexts.SelectMany (x => x.Exceptions).Should ().HaveCount (1);
-			contexts.SelectMany (x => x.Exceptions).Should ().ContainItemsAssignableTo<TestException> ();
+			result.Should ().BeEquivalentTo ('a', 'c');
+			contexts.SelectMany (x => x.Exceptions).Should ().BeEmpty ();
+			failed_items_exceptions.Should ().HaveCount (1);
+			failed_items_exceptions.Should ().ContainItemsAssignableTo<TestException> ();
+			split_items_exceptions.Should ().HaveCount (1);
+			split_items_exceptions.Should ().ContainItemsAssignableTo<TestException> ();
 		}
 	}
 }

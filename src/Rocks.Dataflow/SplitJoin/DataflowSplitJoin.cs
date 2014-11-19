@@ -129,7 +129,7 @@ namespace Rocks.Dataflow.SplitJoin
 					}
 					catch (Exception ex)
 					{
-						var logger = splitJoinItem.Parent as IDataflowErrorLogger;
+						var logger = splitJoinItem.Item as IDataflowErrorLogger;
 						if (logger != null)
 							logger.OnException (ex);
 
@@ -174,7 +174,7 @@ namespace Rocks.Dataflow.SplitJoin
 					}
 					catch (Exception ex)
 					{
-						var logger = splitJoinItem.Parent as IDataflowErrorLogger;
+						var logger = splitJoinItem.Item as IDataflowErrorLogger;
 						if (logger != null)
 							logger.OnException (ex);
 
@@ -232,7 +232,7 @@ namespace Rocks.Dataflow.SplitJoin
 					}
 					catch (Exception ex)
 					{
-						var logger = splitJoinItem as IDataflowErrorLogger;
+						var logger = splitJoinItem.Item as IDataflowErrorLogger;
 						if (logger != null)
 							logger.OnException (ex);
 
@@ -294,7 +294,7 @@ namespace Rocks.Dataflow.SplitJoin
 					}
 					catch (Exception ex)
 					{
-						var logger = splitJoinItem as IDataflowErrorLogger;
+						var logger = splitJoinItem.Item as IDataflowErrorLogger;
 						if (logger != null)
 							logger.OnException (ex);
 
@@ -321,6 +321,92 @@ namespace Rocks.Dataflow.SplitJoin
 		public static ITargetBlock<SplitJoinItem<TParent, TItem>> CreateFinalJoinBlock<TParent, TItem> ()
 		{
 			var block = new ActionBlock<SplitJoinItem<TParent, TItem>> (x => { });
+
+			return block;
+		}
+
+
+		/// <summary>
+		///     Creates a final dataflow block that waits for all <see cref="SplitJoinItem{TParent, TItem}" /> items
+		///		to be processed.
+		///		The <paramref name="process "/> will be called without parallelism and thus can be not thread safe.
+		/// </summary>
+		[NotNull]
+		public static ITargetBlock<SplitJoinItem<TParent, TItem>> CreateFinalJoinBlock<TParent, TItem> (
+			[NotNull] Func<SplitJoinResult<TParent, TItem>, Task> process)
+		{
+			if (process == null)
+				throw new ArgumentNullException ("process");
+
+			var intermediate_results = new Dictionary<TParent, SplitJoinIntermediateResult<TItem>> ();
+
+			var block = new ActionBlock<SplitJoinItem<TParent, TItem>>
+				(async x =>
+				{
+					if (x.Result == null)
+						x.CompletedSuccessfully ();
+
+					SplitJoinIntermediateResult<TItem> intermediate_result;
+					if (!intermediate_results.TryGetValue (x.Parent, out intermediate_result))
+					{
+						intermediate_result = new SplitJoinIntermediateResult<TItem> (x.TotalItemsCount);
+						intermediate_results[x.Parent] = intermediate_result;
+					}
+
+					if (intermediate_result.Completed (x))
+					{
+						var split_join_result = new SplitJoinResult<TParent, TItem> (x.Parent, intermediate_result);
+						await process (split_join_result).ConfigureAwait (false);
+					}
+				},
+				 new ExecutionDataflowBlockOptions
+				 {
+					 BoundedCapacity = DataflowBlockOptions.Unbounded,
+					 MaxDegreeOfParallelism = 1
+				 });
+
+			return block;
+		}
+
+
+		/// <summary>
+		///     Creates a final dataflow block that waits for all <see cref="SplitJoinItem{TParent, TItem}" /> items
+		///		to be processed.
+		///		The <paramref name="process "/> will be called without parallelism and thus can be not thread safe.
+		/// </summary>
+		[NotNull]
+		public static ITargetBlock<SplitJoinItem<TParent, TItem>> CreateFinalJoinBlock<TParent, TItem> (
+			[NotNull] Action<SplitJoinResult<TParent, TItem>> process)
+		{
+			if (process == null)
+				throw new ArgumentNullException ("process");
+
+			var intermediate_results = new Dictionary<TParent, SplitJoinIntermediateResult<TItem>> ();
+
+			var block = new ActionBlock<SplitJoinItem<TParent, TItem>>
+				(x =>
+				{
+					if (x.Result == null)
+						x.CompletedSuccessfully ();
+
+					SplitJoinIntermediateResult<TItem> intermediate_result;
+					if (!intermediate_results.TryGetValue (x.Parent, out intermediate_result))
+					{
+						intermediate_result = new SplitJoinIntermediateResult<TItem> (x.TotalItemsCount);
+						intermediate_results[x.Parent] = intermediate_result;
+					}
+
+					if (intermediate_result.Completed (x))
+					{
+						var split_join_result = new SplitJoinResult<TParent, TItem> (x.Parent, intermediate_result);
+						process (split_join_result);
+					}
+				},
+				 new ExecutionDataflowBlockOptions
+				 {
+					 BoundedCapacity = DataflowBlockOptions.Unbounded,
+					 MaxDegreeOfParallelism = 1
+				 });
 
 			return block;
 		}
@@ -373,8 +459,11 @@ namespace Rocks.Dataflow.SplitJoin
 		/// </summary>
 		[NotNull]
 		public static IPropagatorBlock<SplitJoinItem<TParent, TItem>, TOutput> CreateJoinBlock<TParent, TItem, TOutput>
-			(Func<SplitJoinResult<TParent, TItem>, Task<TOutput>> process)
+			([NotNull] Func<SplitJoinResult<TParent, TItem>, Task<TOutput>> process)
 		{
+			if (process == null)
+				throw new ArgumentNullException ("process");
+
 			var intermediate_results = new Dictionary<TParent, SplitJoinIntermediateResult<TItem>> ();
 
 			var block = new TransformManyBlock<SplitJoinItem<TParent, TItem>, TOutput>
