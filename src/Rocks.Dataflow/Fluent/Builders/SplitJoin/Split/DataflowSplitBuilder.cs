@@ -47,7 +47,7 @@ namespace Rocks.Dataflow.Fluent.Builders.SplitJoin.Split
 
 		/// <summary>
 		///     Gets the builder instance that will be returned from the
-		///     <see cref="DataflowExecutionBlockBuilder{TStart,TBuilder}" /> methods.
+		///     <see cref="DataflowExecutionBlockBuilder{TStart,TBuilder,TInput}" /> methods.
 		/// </summary>
 		protected override DataflowSplitBuilder<TStart, TInput, TItem> Builder { get { return this; } }
 
@@ -61,8 +61,8 @@ namespace Rocks.Dataflow.Fluent.Builders.SplitJoin.Split
 		protected override IPropagatorBlock<TInput, SplitJoinItem<TInput, TItem>> CreateBlock ()
 		{
 			var block = this.getItemsAsync != null
-				            ? DataflowSplitJoin.CreateSplitBlock (this.getItemsAsync, this.options)
-				            : DataflowSplitJoin.CreateSplitBlock (this.getItemsSync, this.options);
+				            ? DataflowSplitJoin.CreateSplitBlock (this.getItemsAsync, this.options, this.DefaultExceptionLogger)
+				            : DataflowSplitJoin.CreateSplitBlock (this.getItemsSync, this.options, this.DefaultExceptionLogger);
 
 			return block;
 		}

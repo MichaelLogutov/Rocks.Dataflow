@@ -65,10 +65,17 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CoreTests\DataflowTests.cs" />
-    <Compile Include="FluentTests\FluentSyncTests.cs" />
-    <Compile Include="FluentTests\SplitJoinTests\FluentSplitJoinAsyncTests.cs" />
-    <Compile Include="FluentTests\SplitJoinTests\FluentSplitJoinSyncTests.cs" />
-    <Compile Include="FluentTests\FluentAsyncTests.cs" />
+    <Compile Include="FluentTests\ExceptionHandlingTests\FluentSplitJoinAsyncTests.cs" />
+    <Compile Include="FluentTests\ExceptionHandlingTests\FluentTransformManySyncTests.cs" />
+    <Compile Include="FluentTests\ExceptionHandlingTests\FluentTransformManyAsyncTests.cs" />
+    <Compile Include="FluentTests\ExceptionHandlingTests\FluentTransformSyncTests.cs" />
+    <Compile Include="FluentTests\ExceptionHandlingTests\FluentTransformAsyncTests.cs" />
+    <Compile Include="FluentTests\ExceptionHandlingTests\FluentActionSyncTests.cs" />
+    <Compile Include="FluentTests\ExceptionHandlingTests\FluentActionAsyncTests.cs" />
+    <Compile Include="FluentTests\CompositionTests\FluentSyncTests.cs" />
+    <Compile Include="FluentTests\CompositionTests\FluentSplitJoinAsyncTests.cs" />
+    <Compile Include="FluentTests\CompositionTests\FluentSplitJoinSyncTests.cs" />
+    <Compile Include="FluentTests\CompositionTests\FluentAsyncTests.cs" />
     <Compile Include="FluentTests\Infrastructure\TestDataflowContext.cs" />
     <Compile Include="FluentTests\Infrastructure\TestDataflowContextExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

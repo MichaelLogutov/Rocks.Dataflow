@@ -44,7 +44,7 @@ namespace Rocks.Dataflow.Fluent.Builders.Tranform
 
 		/// <summary>
 		///     Gets the builder instance that will be returned from the
-		///     <see cref="DataflowExecutionBlockBuilder{TStart,TBuilder}" /> methods.
+		///     <see cref="DataflowExecutionBlockBuilder{TStart,TBuilder,TInput}" /> methods.
 		/// </summary>
 		protected override DataflowTranformBuilder<TStart, TInput, TOutput> Builder { get { return this; } }
 
@@ -79,6 +79,8 @@ namespace Rocks.Dataflow.Fluent.Builders.Tranform
 							var logger = input as IDataflowErrorLogger;
 							if (logger != null)
 								logger.OnException (ex);
+							else if (this.DefaultExceptionLogger != null)
+								this.DefaultExceptionLogger (ex, input);
 
 							return default (TOutput);
 						}
@@ -105,6 +107,8 @@ namespace Rocks.Dataflow.Fluent.Builders.Tranform
 							var logger = input as IDataflowErrorLogger;
 							if (logger != null)
 								logger.OnException (ex);
+							else if (this.DefaultExceptionLogger != null)
+								this.DefaultExceptionLogger (ex, input);
 
 							return default (TOutput);
 						}

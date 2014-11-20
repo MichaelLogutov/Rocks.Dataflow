@@ -5,7 +5,7 @@ using Rocks.Dataflow.Fluent.Builders.Action;
 
 namespace Rocks.Dataflow.Fluent.Builders.Start
 {
-	public partial class DataflowStartBuilder<TStart> : IDataflowStartBuilder<TStart>
+	public partial class DataflowStartBuilder<TStart>
 	{
 		/// <summary>
 		///     Ends the dataflow from the <see cref="ActionBlock{TStart}" /> using <paramref name="process"/> as a body.

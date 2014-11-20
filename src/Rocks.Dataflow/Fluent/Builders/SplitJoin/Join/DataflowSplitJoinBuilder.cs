@@ -45,7 +45,7 @@ namespace Rocks.Dataflow.Fluent.Builders.SplitJoin.Join
 
 		/// <summary>
 		///     Gets the builder instance that will be returned from the
-		///     <see cref="DataflowExecutionBlockBuilder{TStart,TBuilder}" /> methods.
+		///     <see cref="DataflowExecutionBlockBuilder{TStart,TBuilder,TInput}" /> methods.
 		/// </summary>
 		protected override DataflowSplitJoinBuilder<TStart, TParent, TItem, TOutput> Builder { get { return this; } }
 

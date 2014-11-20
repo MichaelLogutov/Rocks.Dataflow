@@ -17,7 +17,8 @@ namespace Rocks.Dataflow.SplitJoin
 		[NotNull]
 		public static IPropagatorBlock<TParent, SplitJoinItem<TParent, TItem>> CreateSplitBlock<TParent, TItem>
 			([NotNull] Func<TParent, Task<IReadOnlyList<TItem>>> getItems,
-			 ExecutionDataflowBlockOptions options = null)
+			 ExecutionDataflowBlockOptions options = null,
+			 Action<Exception, object> defaultExceptionLogger = null)
 		{
 			if (getItems == null)
 				throw new ArgumentNullException ("getItems");
@@ -43,6 +44,8 @@ namespace Rocks.Dataflow.SplitJoin
 						var logger = parent as IDataflowErrorLogger;
 						if (logger != null)
 							logger.OnException (ex);
+						else if (defaultExceptionLogger != null)
+							defaultExceptionLogger (ex, parent);
 
 						return new SplitJoinItem<TParent, TItem>[0];
 					}
@@ -61,7 +64,8 @@ namespace Rocks.Dataflow.SplitJoin
 		[NotNull]
 		public static IPropagatorBlock<TParent, SplitJoinItem<TParent, TItem>> CreateSplitBlock<TParent, TItem>
 			([NotNull] Func<TParent, IReadOnlyList<TItem>> getItems,
-			 ExecutionDataflowBlockOptions options = null)
+			 ExecutionDataflowBlockOptions options = null,
+			 Action<Exception, object> defaultExceptionLogger = null)
 		{
 			if (getItems == null)
 				throw new ArgumentNullException ("getItems");
@@ -87,6 +91,8 @@ namespace Rocks.Dataflow.SplitJoin
 						var logger = parent as IDataflowErrorLogger;
 						if (logger != null)
 							logger.OnException (ex);
+						else if (defaultExceptionLogger != null)
+							defaultExceptionLogger (ex, parent);
 
 						return new SplitJoinItem<TParent, TItem>[0];
 					}
@@ -103,7 +109,8 @@ namespace Rocks.Dataflow.SplitJoin
 		[NotNull]
 		public static IPropagatorBlock<SplitJoinItem<TParent, TItem>, SplitJoinItem<TParent, TItem>> CreateProcessBlock<TParent, TItem>
 			([NotNull] Func<TParent, TItem, Task> process,
-			 ExecutionDataflowBlockOptions options = null)
+			 ExecutionDataflowBlockOptions options = null,
+			 Action<Exception, SplitJoinItem<TParent, TItem>> defaultExceptionLogger = null)
 		{
 			if (process == null)
 				throw new ArgumentNullException ("process");
@@ -132,6 +139,8 @@ namespace Rocks.Dataflow.SplitJoin
 						var logger = splitJoinItem.Item as IDataflowErrorLogger;
 						if (logger != null)
 							logger.OnException (ex);
+						else if (defaultExceptionLogger != null)
+							defaultExceptionLogger (ex, splitJoinItem);
 
 						splitJoinItem.Failed (ex);
 					}
@@ -150,7 +159,8 @@ namespace Rocks.Dataflow.SplitJoin
 		[NotNull]
 		public static IPropagatorBlock<SplitJoinItem<TParent, TItem>, SplitJoinItem<TParent, TItem>> CreateProcessBlock<TParent, TItem>
 			([NotNull] Action<TParent, TItem> process,
-			 ExecutionDataflowBlockOptions options = null)
+			 ExecutionDataflowBlockOptions options = null,
+			 Action<Exception, SplitJoinItem<TParent, TItem>> defaultExceptionLogger = null)
 		{
 			if (process == null)
 				throw new ArgumentNullException ("process");
@@ -177,6 +187,8 @@ namespace Rocks.Dataflow.SplitJoin
 						var logger = splitJoinItem.Item as IDataflowErrorLogger;
 						if (logger != null)
 							logger.OnException (ex);
+						else if (defaultExceptionLogger != null)
+							defaultExceptionLogger (ex, splitJoinItem);
 
 						splitJoinItem.Failed (ex);
 					}
@@ -196,7 +208,8 @@ namespace Rocks.Dataflow.SplitJoin
 		public static IPropagatorBlock<SplitJoinItem<TParent, TInputItem>, SplitJoinItem<TParent, TOutputItem>>
 			CreateProcessBlock<TParent, TInputItem, TOutputItem>
 			([NotNull] Func<TParent, TInputItem, Task<TOutputItem>> process,
-			 ExecutionDataflowBlockOptions options = null)
+			 ExecutionDataflowBlockOptions options = null,
+			 Action<Exception, SplitJoinItem<TParent, TInputItem>> defaultExceptionLogger = null)
 		{
 			if (process == null)
 				throw new ArgumentNullException ("process");
@@ -235,6 +248,8 @@ namespace Rocks.Dataflow.SplitJoin
 						var logger = splitJoinItem.Item as IDataflowErrorLogger;
 						if (logger != null)
 							logger.OnException (ex);
+						else if (defaultExceptionLogger != null)
+							defaultExceptionLogger (ex, splitJoinItem);
 
 						var new_split_join_item = new SplitJoinItem<TParent, TOutputItem> (splitJoinItem.Parent,
 						                                                                   default (TOutputItem),
@@ -258,7 +273,8 @@ namespace Rocks.Dataflow.SplitJoin
 		public static IPropagatorBlock<SplitJoinItem<TParent, TInputItem>, SplitJoinItem<TParent, TOutputItem>>
 			CreateProcessBlock<TParent, TInputItem, TOutputItem>
 			([NotNull] Func<TParent, TInputItem, TOutputItem> process,
-			 ExecutionDataflowBlockOptions options = null)
+			 ExecutionDataflowBlockOptions options = null,
+			 Action<Exception, SplitJoinItem<TParent, TInputItem>> defaultExceptionLogger = null)
 		{
 			if (process == null)
 				throw new ArgumentNullException ("process");
@@ -297,6 +313,8 @@ namespace Rocks.Dataflow.SplitJoin
 						var logger = splitJoinItem.Item as IDataflowErrorLogger;
 						if (logger != null)
 							logger.OnException (ex);
+						else if (defaultExceptionLogger != null)
+							defaultExceptionLogger (ex, splitJoinItem);
 
 						var new_split_join_item = new SplitJoinItem<TParent, TOutputItem> (splitJoinItem.Parent,
 						                                                                   default (TOutputItem),

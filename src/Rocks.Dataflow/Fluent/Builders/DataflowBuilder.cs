@@ -6,21 +6,14 @@ using Rocks.Dataflow.Fluent.BuildResults;
 
 namespace Rocks.Dataflow.Fluent.Builders
 {
-	public abstract partial class DataflowBuilder<TBuilder, TStart, TInput, TOutput> : DataflowExecutionBlockBuilder<TStart, TBuilder>,
-	                                                                           IDataflowBuilder<TStart, TOutput>
+	public abstract partial class DataflowBuilder<TBuilder, TStart, TInput, TOutput> : DataflowExecutionBlockBuilder<TStart, TBuilder, TInput>,
+	                                                                                   IDataflowBuilder<TStart, TOutput>
 	{
-		#region Private fields
-
-		[CanBeNull]
-		private readonly IDataflowBuilder<TStart, TInput> previousBuilder;
-
-		#endregion
-
 		#region Construct
 
 		protected DataflowBuilder ([CanBeNull] IDataflowBuilder<TStart, TInput> previousBuilder)
+			: base (previousBuilder)
 		{
-			this.previousBuilder = previousBuilder;
 		}
 
 		#endregion

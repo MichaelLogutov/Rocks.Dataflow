@@ -8,10 +8,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rocks.Dataflow.Fluent;
 using Rocks.Dataflow.Tests.FluentTests.Infrastructure;
 
-namespace Rocks.Dataflow.Tests.FluentTests.SplitJoinTests
+namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 {
 	[TestClass]
-	public class FluentSplitJoinAsyncTests
+	public class FluentSplitJoinSyncTests
 	{
 		[TestMethod]
 		public async Task SplitJoin_CorrectlyBuilded ()
@@ -21,9 +21,8 @@ namespace Rocks.Dataflow.Tests.FluentTests.SplitJoinTests
 
 			var sut = DataflowFluent
 				.ReceiveDataOfType<string> ()
-				.SplitToAsync<char> (async s =>
+				.SplitTo<char> (s =>
 				{
-					await Task.Yield ();
 					process.Add (s);
 					return s.ToCharArray ();
 				})
@@ -48,21 +47,9 @@ namespace Rocks.Dataflow.Tests.FluentTests.SplitJoinTests
 
 			var sut = DataflowFluent
 				.ReceiveDataOfType<string> ()
-				.SplitToAsync<char> (async s =>
-				{
-					await Task.Yield ();
-					return s.ToCharArray ();
-				})
-				.SplitJoinIntoAsync (async x =>
-				{
-					await Task.Yield ();
-					return new string (x.SucceffullyCompletedItems.ToArray ());
-				})
-				.ActionAsync (async x =>
-				{
-					await Task.Yield ();
-					result.Add (x);
-				});
+				.SplitTo<char> (s => s.ToCharArray ())
+				.SplitJoinInto (x => new string (x.SucceffullyCompletedItems.ToArray ()))
+				.Action (result.Add);
 
 
 			// act
@@ -76,22 +63,18 @@ namespace Rocks.Dataflow.Tests.FluentTests.SplitJoinTests
 
 
 		[TestMethod]
-		public async Task SplitProcessJoin_CorrectlyBuilded ()
+		public async Task SplitTransformJoin_CorrectlyBuilded ()
 		{
 			// arrange
 			var process = new ConcurrentBag<char> ();
 
 			var sut = DataflowFluent
 				.ReceiveDataOfType<string> ()
-				.SplitToAsync<char> (async s =>
+				.SplitTo<char> (s => s.ToCharArray ())
+				.SplitTransform ((s, c) =>
 				{
-					await Task.Yield ();
-					return s.ToCharArray ();
-				})
-				.SplitProcessAsync (async (s, c) =>
-				{
-					await Task.Yield ();
 					process.Add (c);
+					return (int) c;
 				})
 				.SplitJoin ();
 
@@ -107,24 +90,15 @@ namespace Rocks.Dataflow.Tests.FluentTests.SplitJoinTests
 
 
 		[TestMethod]
-		public async Task SplitTransformJoin_CorrectlyBuilded ()
+		public async Task SplitProcessJoin_CorrectlyBuilded ()
 		{
 			// arrange
 			var process = new ConcurrentBag<char> ();
 
 			var sut = DataflowFluent
 				.ReceiveDataOfType<string> ()
-				.SplitToAsync<char> (async s =>
-				{
-					await Task.Yield ();
-					return s.ToCharArray ();
-				})
-				.SplitTransformAsync (async (s, c) =>
-				{
-					await Task.Yield ();
-					process.Add (c);
-					return (int) c;
-				})
+				.SplitTo (s => s.ToCharArray ())
+				.SplitProcess ((s, c) => process.Add (c))
 				.SplitJoin ();
 
 
@@ -147,26 +121,10 @@ namespace Rocks.Dataflow.Tests.FluentTests.SplitJoinTests
 
 			var sut = DataflowFluent
 				.ReceiveDataOfType<string> ()
-				.SplitToAsync<char> (async s =>
-				{
-					await Task.Yield ();
-					return s.ToCharArray ();
-				})
-				.SplitProcessAsync (async (s, c) =>
-				{
-					await Task.Yield ();
-					process.Add (c);
-				})
-				.SplitJoinIntoAsync (async x =>
-				{
-					await Task.Yield ();
-					return new string (x.SucceffullyCompletedItems.ToArray ());
-				})
-				.ActionAsync (async x =>
-				{
-					await Task.Yield ();
-					result.Add (x);
-				});
+				.SplitTo<char> (s => s.ToCharArray ())
+				.SplitProcess ((s, c) => process.Add (c))
+				.SplitJoinInto (x => new string (x.SucceffullyCompletedItems.ToArray ()))
+				.Action (result.Add);
 
 
 			// act
@@ -189,21 +147,9 @@ namespace Rocks.Dataflow.Tests.FluentTests.SplitJoinTests
 
 			var sut = DataflowFluent
 				.ReceiveDataOfType<string> ()
-				.SplitToAsync<char> (async s =>
-				{
-					await Task.Yield ();
-					return s.ToCharArray ();
-				})
-				.SplitProcessAsync (async (s, c) =>
-				{
-					await Task.Yield ();
-					process.Add (c);
-				})
-				.SplitProcessAsync (async (s, c) =>
-				{
-					await Task.Yield ();
-					process2.Add (c);
-				})
+				.SplitTo<char> (s => s.ToCharArray ())
+				.SplitProcess ((s, c) => process.Add (c))
+				.SplitProcess ((s, c) => process2.Add (c))
 				.SplitJoin ();
 
 
@@ -228,41 +174,13 @@ namespace Rocks.Dataflow.Tests.FluentTests.SplitJoinTests
 
 			var sut = DataflowFluent
 				.ReceiveDataOfType<string> ()
-				.SplitToAsync<char> (async s =>
-				{
-					await Task.Yield ();
-					return s.ToCharArray ();
-				})
-				.SplitProcessAsync (async (s, c) =>
-				{
-					await Task.Yield ();
-					process.Add (c);
-				})
-				.SplitTransformAsync (async (s, c) =>
-				{
-					await Task.Yield ();
-					return (int) c;
-				})
-				.SplitProcessAsync (async (s, n) =>
-				{
-					await Task.Yield ();
-					process2.Add (n);
-				})
-				.SplitTransformAsync (async (s, n) =>
-				{
-					await Task.Yield ();
-					return (char) n;
-				})
-				.SplitJoinIntoAsync (async x =>
-				{
-					await Task.Yield ();
-					return new string (x.SucceffullyCompletedItems.ToArray ());
-				})
-				.ActionAsync (async x =>
-				{
-					await Task.Yield ();
-					result.Add (x);
-				});
+				.SplitTo<char> (s => s.ToCharArray ())
+				.SplitProcess ((s, c) => process.Add (c))
+				.SplitTransform ((s, c) => (int) c)
+				.SplitProcess ((s, n) => process2.Add (n))
+				.SplitTransform ((s, n) => (char) n)
+				.SplitJoinInto (x => new string (x.SucceffullyCompletedItems.ToArray ()))
+				.Action (result.Add);
 
 
 			// act
@@ -277,6 +195,31 @@ namespace Rocks.Dataflow.Tests.FluentTests.SplitJoinTests
 
 
 		[TestMethod]
+		public async Task Split_SplitTransform_Join_Action_CorrectlyBuilded ()
+		{
+			// arrange
+			var result = new ConcurrentBag<string> ();
+
+			var sut = DataflowFluent
+				.ReceiveDataOfType<string> ()
+				.SplitTo (s => s.ToCharArray ())
+				.SplitTransform ((s, c) => (int) c)
+				.SplitTransform ((s, i) => (char) i)
+				.SplitJoinInto (x => new string (x.SucceffullyCompletedItems.ToArray ()))
+				.Action (result.Add);
+
+
+			// act
+			var dataflow = sut.CreateDataflow ();
+			await dataflow.Process (new[] { "a", "ab", "abc" });
+
+
+			// assert
+			result.Should ().BeEquivalentTo ("a", "ab", "abc");
+		}
+
+
+		[TestMethod]
 		public async Task Split_SplitTransform_Join_Action_WithFailedItems_CorrectlyBuilded ()
 		{
 			// arrange
@@ -285,38 +228,22 @@ namespace Rocks.Dataflow.Tests.FluentTests.SplitJoinTests
 
 			var sut = DataflowFluent
 				.ReceiveDataOfType<string> ()
-				.SplitToAsync<char> (async s =>
+				.SplitTo (s => s.ToCharArray ())
+				.SplitTransform ((s, c) => (int) c)
+				.SplitTransform ((s, i) =>
 				{
-					await Task.Yield ();
-					return s.ToCharArray ();
-				})
-				.SplitTransformAsync (async (s, c) =>
-				{
-					await Task.Yield ();
-					return (int) c;
-				})
-				.SplitTransformAsync (async (s, i) =>
-				{
-					await Task.Yield ();
-
 					var c = (char) i;
 					if (c == 'b')
 						throw new TestException ();
 
 					return c;
 				})
-				.SplitJoinIntoAsync (async x =>
+				.SplitJoinInto (x =>
 				{
-					await Task.Yield ();
-
 					exceptions.AddRange (x.FailedItems.Select (f => f.Exception));
 					return new string (x.SucceffullyCompletedItems.ToArray ());
 				})
-				.ActionAsync (async x =>
-				{
-					await Task.Yield ();
-					result.Add (x);
-				});
+				.Action (result.Add);
 
 
 			// act
@@ -339,15 +266,13 @@ namespace Rocks.Dataflow.Tests.FluentTests.SplitJoinTests
 
 			var sut = DataflowFluent
 				.ReceiveDataOfType<string> ()
-				.TransformAsync (async s =>
+				.Transform (s =>
 				{
-					await Task.Yield ();
 					process.Add (s);
 					return s;
 				})
-				.SplitToAsync<char> (async s =>
+				.SplitTo (s =>
 				{
-					await Task.Yield ();
 					process2.Add (s);
 					return s.ToCharArray ();
 				})
@@ -375,22 +300,14 @@ namespace Rocks.Dataflow.Tests.FluentTests.SplitJoinTests
 
 			var sut = DataflowFluent
 				.ReceiveDataOfType<TestDataflowContext<string>> ()
-				.SplitToAsync<TestDataflowContext<char>> (async context =>
+				.SplitTo<TestDataflowContext<char>> (context => context.Data.CreateDataflowContexts ())
+				.SplitProcess ((s, c) =>
 				{
-					await Task.Yield ();
-					return context.Data.CreateDataflowContexts ();
-				})
-				.SplitProcessAsync (async (s, c) =>
-				{
-					await Task.Yield ();
-
 					if (c.Data == 'b')
 						throw new TestException ();
 				})
-				.SplitJoinAsync (async splitJoinResult =>
+				.SplitJoin (splitJoinResult =>
 				{
-					await Task.Yield ();
-
 					failed_items_exceptions.AddRange (splitJoinResult.FailedItems.Select (x => x.Exception));
 					split_items_exceptions.AddRange (splitJoinResult.FailedItems.SelectMany (x => x.Item.Exceptions));
 

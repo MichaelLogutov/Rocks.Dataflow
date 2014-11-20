@@ -7,71 +7,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rocks.Dataflow.Fluent;
 using Rocks.Dataflow.Tests.FluentTests.Infrastructure;
 
-namespace Rocks.Dataflow.Tests.FluentTests
+namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 {
 	[TestClass]
 	public class FluentSyncTests
 	{
-		[TestMethod]
-		public async Task Action_WithException_DoesNotPropagateException ()
-		{
-			// arrange
-			var result = new ConcurrentBag<string> ();
-
-			var sut = DataflowFluent
-				.ReceiveDataOfType<string> ()
-				.Action (x =>
-				{
-					if (x == "b")
-						throw new TestException ();
-
-					result.Add (x);
-				})
-				.WithMaxDegreeOfParallelism ();
-
-
-			// act
-			var dataflow = sut.CreateDataflow ();
-			await dataflow.Process (new[] { "a", "b", "c" });
-
-
-			// assert
-			result.Should ().BeEquivalentTo ("a", "c");
-		}
-
-
-		[TestMethod]
-		public async Task Action_WithException_PassTheExceptionToContext ()
-		{
-			// arrange
-			var result = new ConcurrentBag<string> ();
-
-			var sut = DataflowFluent
-				.ReceiveDataOfType<TestDataflowContext<string>> ()
-				.Action (x =>
-				{
-					if (x.Data == "b")
-						throw new TestException ();
-
-					result.Add (x.Data);
-				})
-				.WithMaxDegreeOfParallelism ();
-
-			var contexts = new[] { "a", "b", "c" }.CreateDataflowContexts ();
-
-
-			// act
-			var dataflow = sut.CreateDataflow ();
-			await dataflow.Process (contexts);
-
-
-			// assert
-			result.Should ().BeEquivalentTo ("a", "c");
-			contexts.SelectMany (x => x.Exceptions).Should ().HaveCount (1);
-			contexts.SelectMany (x => x.Exceptions).Should ().ContainItemsAssignableTo<TestException> ();
-		}
-
-
 		[TestMethod]
 		public async Task TransformAction_CorrectlyBuilded ()
 		{
@@ -180,7 +120,7 @@ namespace Rocks.Dataflow.Tests.FluentTests
 				.ReceiveDataOfType<TestDataflowContext<int>> ()
 				.Transform (x => x.Data == 2 ? null : x)
 				.WithBoundedCapacity (100)
-				.Action (x => { result.Add (x.Data); })
+				.Action (x => result.Add (x.Data))
 				.WithMaxDegreeOfParallelism ();
 
 

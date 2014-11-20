@@ -62,6 +62,7 @@
     <Compile Include="Fluent\Builders\SplitJoin\Split\DataflowSplitBuilder.Join.cs" />
     <Compile Include="Fluent\Builders\SplitJoin\Process\DataflowSplitProcessBuilder.Join.cs" />
     <Compile Include="Fluent\Builders\SplitJoin\Transform\DataflowSplitProcessTransformBuilder.Join.cs" />
+    <Compile Include="Fluent\Builders\Start\DataflowStartBuilder.cs" />
     <Compile Include="Fluent\Builders\Start\DataflowStartBuilder.Transform.cs" />
     <Compile Include="Fluent\Builders\Start\DataflowStartBuilder.Action.cs" />
     <Compile Include="Fluent\Builders\Start\DataflowStartBuilder.Split.cs" />
