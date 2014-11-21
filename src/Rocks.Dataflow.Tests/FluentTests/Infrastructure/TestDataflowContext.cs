@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Rocks.Dataflow.Fluent;
 
@@ -8,17 +8,11 @@ namespace Rocks.Dataflow.Tests.FluentTests.Infrastructure
 	[DebuggerDisplay ("{Data}, {Exceptions.Count} exceptions")]
 	internal class TestDataflowContext<TData> : IDataflowErrorLogger
 	{
-		#region Private fields
-
-		private readonly ConcurrentQueue<Exception> exceptions;
-
-		#endregion
-
 		#region Construct
 
 		public TestDataflowContext ()
 		{
-			this.exceptions = new ConcurrentQueue<Exception> ();
+			this.Exceptions = new List<Exception> ();
 		}
 
 		#endregion
@@ -26,7 +20,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.Infrastructure
 		#region Public properties
 
 		public TData Data { get; set; }
-		public ConcurrentQueue<Exception> Exceptions { get { return this.exceptions; } }
+		public IList<Exception> Exceptions { get; set; }
 
 		#endregion
 
@@ -52,7 +46,8 @@ namespace Rocks.Dataflow.Tests.FluentTests.Infrastructure
 		/// </summary>
 		void IDataflowErrorLogger.OnException (Exception exception)
 		{
-			this.Exceptions.Enqueue (exception);
+			lock (this.Exceptions)
+				this.Exceptions.Add (exception);
 		}
 
 		#endregion

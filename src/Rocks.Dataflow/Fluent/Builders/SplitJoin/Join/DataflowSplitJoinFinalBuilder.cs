@@ -9,37 +9,10 @@ namespace Rocks.Dataflow.Fluent.Builders.SplitJoin.Join
 	public class DataflowSplitJoinFinalBuilder<TStart, TParent, TItem> :
 		DataflowFinalBuilder<DataflowSplitJoinFinalBuilder<TStart, TParent, TItem>, TStart, SplitJoinItem<TParent, TItem>>
 	{
+		#region Private fields
+
 		private readonly Func<SplitJoinResult<TParent, TItem>, Task> processAsync;
 		private readonly Action<SplitJoinResult<TParent, TItem>> processSync;
-
-		#region Protected properties
-
-		/// <summary>
-		///     Gets the builder instance that will be returned from the
-		///     <see cref="DataflowExecutionBlockBuilder{TStart,TBuilder,TInput}" /> methods.
-		/// </summary>
-		protected override DataflowSplitJoinFinalBuilder<TStart, TParent, TItem> Builder { get { return this; } }
-
-		#endregion
-
-		#region Protected methods
-
-		/// <summary>
-		///     Creates a dataflow block from current configuration.
-		/// </summary>
-		protected override ITargetBlock<SplitJoinItem<TParent, TItem>> CreateBlock ()
-		{
-			ITargetBlock<SplitJoinItem<TParent, TItem>> block;
-
-			if (this.processAsync != null)
-				block = DataflowSplitJoin.CreateFinalJoinBlock (this.processAsync);
-			else if (this.processSync != null)
-				block = DataflowSplitJoin.CreateFinalJoinBlock (this.processSync);
-			else
-				block = DataflowSplitJoin.CreateFinalJoinBlock<TParent, TItem> ();
-
-			return block;
-		}
 
 		#endregion
 
@@ -64,6 +37,37 @@ namespace Rocks.Dataflow.Fluent.Builders.SplitJoin.Join
 			: base (previousBuilder)
 		{
 			this.processSync = processSync;
+		}
+
+		#endregion
+
+		#region Protected properties
+
+		/// <summary>
+		///     Gets the builder instance that will be returned from the
+		///     <see cref="DataflowExecutionBlockBuilder{TStart,TBuilder,TInput}" /> methods.
+		/// </summary>
+		protected override DataflowSplitJoinFinalBuilder<TStart, TParent, TItem> Builder { get { return this; } }
+
+		#endregion
+
+		#region Protected methods
+
+		/// <summary>
+		///     Creates a dataflow block from current configuration.
+		/// </summary>
+		protected override ITargetBlock<SplitJoinItem<TParent, TItem>> CreateBlock ()
+		{
+			ITargetBlock<SplitJoinItem<TParent, TItem>> block;
+
+			if (this.processAsync != null)
+				block = DataflowSplitJoin.CreateFinalJoinBlockAsync (this.processAsync, this.DefaultExceptionLogger);
+			else if (this.processSync != null)
+				block = DataflowSplitJoin.CreateFinalJoinBlock (this.processSync, this.DefaultExceptionLogger);
+			else
+				block = DataflowSplitJoin.CreateFinalJoinBlock<TParent, TItem> ();
+
+			return block;
 		}
 
 		#endregion

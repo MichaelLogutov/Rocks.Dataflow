@@ -15,7 +15,7 @@ namespace Rocks.Dataflow.SplitJoin
 		///     which can be joined afterward with join dataflow block.
 		/// </summary>
 		[NotNull]
-		public static IPropagatorBlock<TParent, SplitJoinItem<TParent, TItem>> CreateSplitBlock<TParent, TItem>
+		public static IPropagatorBlock<TParent, SplitJoinItem<TParent, TItem>> CreateSplitBlockAsync<TParent, TItem>
 			([NotNull] Func<TParent, Task<IReadOnlyList<TItem>>> getItems,
 			 ExecutionDataflowBlockOptions options = null,
 			 Action<Exception, object> defaultExceptionLogger = null)
@@ -107,7 +107,7 @@ namespace Rocks.Dataflow.SplitJoin
 		///     Creates a dataflow block that process single <see cref="SplitJoinItem{TParent, TItem}" /> item.
 		/// </summary>
 		[NotNull]
-		public static IPropagatorBlock<SplitJoinItem<TParent, TItem>, SplitJoinItem<TParent, TItem>> CreateProcessBlock<TParent, TItem>
+		public static IPropagatorBlock<SplitJoinItem<TParent, TItem>, SplitJoinItem<TParent, TItem>> CreateProcessBlockAsync<TParent, TItem>
 			([NotNull] Func<TParent, TItem, Task> process,
 			 ExecutionDataflowBlockOptions options = null,
 			 Action<Exception, SplitJoinItem<TParent, TItem>> defaultExceptionLogger = null)
@@ -206,7 +206,7 @@ namespace Rocks.Dataflow.SplitJoin
 		/// </summary>
 		[NotNull]
 		public static IPropagatorBlock<SplitJoinItem<TParent, TInputItem>, SplitJoinItem<TParent, TOutputItem>>
-			CreateProcessBlock<TParent, TInputItem, TOutputItem>
+			CreateTransformBlockAsync<TParent, TInputItem, TOutputItem>
 			([NotNull] Func<TParent, TInputItem, Task<TOutputItem>> process,
 			 ExecutionDataflowBlockOptions options = null,
 			 Action<Exception, SplitJoinItem<TParent, TInputItem>> defaultExceptionLogger = null)
@@ -271,7 +271,7 @@ namespace Rocks.Dataflow.SplitJoin
 		/// </summary>
 		[NotNull]
 		public static IPropagatorBlock<SplitJoinItem<TParent, TInputItem>, SplitJoinItem<TParent, TOutputItem>>
-			CreateProcessBlock<TParent, TInputItem, TOutputItem>
+			CreateTransformBlock<TParent, TInputItem, TOutputItem>
 			([NotNull] Func<TParent, TInputItem, TOutputItem> process,
 			 ExecutionDataflowBlockOptions options = null,
 			 Action<Exception, SplitJoinItem<TParent, TInputItem>> defaultExceptionLogger = null)
@@ -350,8 +350,9 @@ namespace Rocks.Dataflow.SplitJoin
 		///		The <paramref name="process "/> will be called without parallelism and thus can be not thread safe.
 		/// </summary>
 		[NotNull]
-		public static ITargetBlock<SplitJoinItem<TParent, TItem>> CreateFinalJoinBlock<TParent, TItem> (
-			[NotNull] Func<SplitJoinResult<TParent, TItem>, Task> process)
+		public static ITargetBlock<SplitJoinItem<TParent, TItem>> CreateFinalJoinBlockAsync<TParent, TItem> (
+			[NotNull] Func<SplitJoinResult<TParent, TItem>, Task> process,
+			Action<Exception, SplitJoinResult<TParent, TItem>> defaultExceptionLogger = null)
 		{
 			if (process == null)
 				throw new ArgumentNullException ("process");
@@ -374,7 +375,19 @@ namespace Rocks.Dataflow.SplitJoin
 					if (intermediate_result.Completed (x))
 					{
 						var split_join_result = new SplitJoinResult<TParent, TItem> (x.Parent, intermediate_result);
-						await process (split_join_result).ConfigureAwait (false);
+
+						try
+						{
+							await process (split_join_result).ConfigureAwait (false);
+						}
+						catch (Exception ex)
+						{
+							var logger = x.Parent as IDataflowErrorLogger;
+							if (logger != null)
+								logger.OnException (ex);
+							else if (defaultExceptionLogger != null)
+								defaultExceptionLogger (ex, split_join_result);
+						}
 					}
 				},
 				 new ExecutionDataflowBlockOptions
@@ -394,7 +407,8 @@ namespace Rocks.Dataflow.SplitJoin
 		/// </summary>
 		[NotNull]
 		public static ITargetBlock<SplitJoinItem<TParent, TItem>> CreateFinalJoinBlock<TParent, TItem> (
-			[NotNull] Action<SplitJoinResult<TParent, TItem>> process)
+			[NotNull] Action<SplitJoinResult<TParent, TItem>> process,
+			Action<Exception, SplitJoinResult<TParent, TItem>> defaultExceptionLogger = null)
 		{
 			if (process == null)
 				throw new ArgumentNullException ("process");
@@ -417,7 +431,18 @@ namespace Rocks.Dataflow.SplitJoin
 					if (intermediate_result.Completed (x))
 					{
 						var split_join_result = new SplitJoinResult<TParent, TItem> (x.Parent, intermediate_result);
-						process (split_join_result);
+						try
+						{
+							process (split_join_result);
+						}
+						catch (Exception ex)
+						{
+							var logger = x.Parent as IDataflowErrorLogger;
+							if (logger != null)
+								logger.OnException (ex);
+							else if (defaultExceptionLogger != null)
+								defaultExceptionLogger (ex, split_join_result);
+						}
 					}
 				},
 				 new ExecutionDataflowBlockOptions
@@ -476,8 +501,9 @@ namespace Rocks.Dataflow.SplitJoin
 		///		The <paramref name="process "/> will be called without parallelism and thus can be not thread safe.
 		/// </summary>
 		[NotNull]
-		public static IPropagatorBlock<SplitJoinItem<TParent, TItem>, TOutput> CreateJoinBlock<TParent, TItem, TOutput>
-			([NotNull] Func<SplitJoinResult<TParent, TItem>, Task<TOutput>> process)
+		public static IPropagatorBlock<SplitJoinItem<TParent, TItem>, TOutput> CreateJoinBlockAsync<TParent, TItem, TOutput>
+			([NotNull] Func<SplitJoinResult<TParent, TItem>, Task<TOutput>> process,
+			 Action<Exception, SplitJoinResult<TParent, TItem>> defaultExceptionLogger = null)
 		{
 			if (process == null)
 				throw new ArgumentNullException ("process");
@@ -500,9 +526,21 @@ namespace Rocks.Dataflow.SplitJoin
 					if (intermediate_result.Completed (x))
 					{
 						var split_join_result = new SplitJoinResult<TParent, TItem> (x.Parent, intermediate_result);
-						var result = await process (split_join_result).ConfigureAwait (false);
 
-						return new[] { result };
+						try
+						{
+							var result = await process (split_join_result).ConfigureAwait (false);
+
+							return new[] { result };
+						}
+						catch (Exception ex)
+						{
+							var logger = x.Parent as IDataflowErrorLogger;
+							if (logger != null)
+								logger.OnException (ex);
+							else if (defaultExceptionLogger != null)
+								defaultExceptionLogger (ex, split_join_result);
+						}
 					}
 
 					return new TOutput[0];
@@ -524,7 +562,8 @@ namespace Rocks.Dataflow.SplitJoin
 		/// </summary>
 		[NotNull]
 		public static IPropagatorBlock<SplitJoinItem<TParent, TItem>, TOutput> CreateJoinBlock<TParent, TItem, TOutput>
-			(Func<SplitJoinResult<TParent, TItem>, TOutput> process)
+			(Func<SplitJoinResult<TParent, TItem>, TOutput> process,
+			 Action<Exception, SplitJoinResult<TParent, TItem>> defaultExceptionLogger = null)
 		{
 			var intermediate_results = new Dictionary<TParent, SplitJoinIntermediateResult<TItem>> ();
 
@@ -544,9 +583,21 @@ namespace Rocks.Dataflow.SplitJoin
 					if (intermediate_result.Completed (x))
 					{
 						var split_join_result = new SplitJoinResult<TParent, TItem> (x.Parent, intermediate_result);
-						var result = process (split_join_result);
 
-						return new[] { result };
+						try
+						{
+							var result = process (split_join_result);
+
+							return new[] { result };
+						}
+						catch (Exception ex)
+						{
+							var logger = x.Parent as IDataflowErrorLogger;
+							if (logger != null)
+								logger.OnException (ex);
+							else if (defaultExceptionLogger != null)
+								defaultExceptionLogger (ex, split_join_result);
+						}
 					}
 
 					return new TOutput[0];

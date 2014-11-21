@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Rocks.Dataflow.Fluent.Builders.SplitJoin.Join;
 using Rocks.Dataflow.SplitJoin;
 
@@ -13,6 +14,25 @@ namespace Rocks.Dataflow.Fluent.Builders.SplitJoin.Transform
 		public DataflowSplitJoinFinalBuilder<TStart, TParent, TOutputItem> SplitJoin ()
 		{
 			return new DataflowSplitJoinFinalBuilder<TStart, TParent, TOutputItem> (this);
+		}
+
+
+		/// <summary>
+		///     Ends the dataflow with the block that joins the splitted items.
+		/// </summary>
+		public DataflowSplitJoinFinalBuilder<TStart, TParent, TOutputItem> SplitJoinAsync (
+			[NotNull] Func<SplitJoinResult<TParent, TOutputItem>, Task> process)
+		{
+			return new DataflowSplitJoinFinalBuilder<TStart, TParent, TOutputItem> (this, process);
+		}
+
+
+		/// <summary>
+		///     Ends the dataflow with the block that joins the splitted items.
+		/// </summary>
+		public DataflowSplitJoinFinalBuilder<TStart, TParent, TOutputItem> SplitJoin ([NotNull] Action<SplitJoinResult<TParent, TOutputItem>> process)
+		{
+			return new DataflowSplitJoinFinalBuilder<TStart, TParent, TOutputItem> (this, process);
 		}
 
 

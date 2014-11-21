@@ -59,8 +59,8 @@ namespace Rocks.Dataflow.Fluent.Builders.SplitJoin.Join
 		protected override IPropagatorBlock<SplitJoinItem<TParent, TItem>, TOutput> CreateBlock ()
 		{
 			var block = this.processAsync != null
-				            ? DataflowSplitJoin.CreateJoinBlock (this.processAsync)
-				            : DataflowSplitJoin.CreateJoinBlock (this.processSync);
+				            ? DataflowSplitJoin.CreateJoinBlockAsync (this.processAsync, this.DefaultExceptionLogger)
+				            : DataflowSplitJoin.CreateJoinBlock (this.processSync, this.DefaultExceptionLogger);
 
 			return block;
 		}
