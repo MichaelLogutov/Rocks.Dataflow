@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Dataflow.cs" />
     <Compile Include="Fluent\Builders\DataflowBuilder.Split.cs" />
+    <Compile Include="Fluent\Builders\DataflowBuilder.Process.cs" />
     <Compile Include="Fluent\Builders\DataflowBuilder.TransformMany.cs" />
     <Compile Include="Fluent\Builders\DataflowBuilder.Transform.cs" />
     <Compile Include="Fluent\Builders\DataflowBuilder.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Fluent\Builders\SplitJoin\Process\DataflowSplitProcessBuilder.Join.cs" />
     <Compile Include="Fluent\Builders\SplitJoin\Transform\DataflowSplitProcessTransformBuilder.Join.cs" />
     <Compile Include="Fluent\Builders\Start\DataflowStartBuilder.cs" />
+    <Compile Include="Fluent\Builders\Start\DataflowStartBuilder.Process.cs" />
     <Compile Include="Fluent\Builders\Start\DataflowStartBuilder.Transform.cs" />
     <Compile Include="Fluent\Builders\Start\DataflowStartBuilder.Action.cs" />
     <Compile Include="Fluent\Builders\Start\DataflowStartBuilder.Split.cs" />
@@ -72,6 +74,7 @@
     <Compile Include="Fluent\Builders\SplitJoin\Transform\DataflowSplitProcessTransformBuilder.cs" />
     <Compile Include="Fluent\Builders\SplitJoin\Process\DataflowSplitProcessBuilder.cs" />
     <Compile Include="Fluent\Builders\SplitJoin\Join\DataflowSplitJoinFinalBuilder.cs" />
+    <Compile Include="Fluent\Builders\Tranform\DataflowProcessBuilder.cs" />
     <Compile Include="Fluent\IDataflowStartBuilder.cs" />
     <Compile Include="SplitJoin\DataflowSplitJoin.cs" />
     <Compile Include="SplitJoin\SplitJoinFailedItem.cs" />

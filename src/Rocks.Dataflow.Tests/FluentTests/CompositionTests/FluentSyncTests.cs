@@ -132,5 +132,54 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 			// assert
 			result.Should ().BeEquivalentTo (1, 3);
 		}
+
+
+		[TestMethod]
+		public async Task ProcessAction_CorrectlyBuilded ()
+		{
+			// arrange
+			var result = new ConcurrentBag<int> ();
+
+			var sut = DataflowFluent
+				.ReceiveDataOfType<int> ()
+				.Process (x => { })
+				.WithBoundedCapacity (100)
+				.Action (result.Add)
+				.WithMaxDegreeOfParallelism ();
+
+
+			// act
+			var dataflow = sut.CreateDataflow ();
+			await dataflow.Process (new[] { 1, 2, 3 });
+
+
+			// assert
+			result.Should ().BeEquivalentTo (1, 2, 3);
+		}
+
+
+		[TestMethod]
+		public async Task ProcessProcessAction_CorrectlyBuilded ()
+		{
+			// arrange
+			var result = new ConcurrentBag<int> ();
+
+			var sut = DataflowFluent
+				.ReceiveDataOfType<int> ()
+				.Process (x => { })
+				.Process (x => { })
+				.WithBoundedCapacity (100)
+				.Action (result.Add)
+				.WithMaxDegreeOfParallelism ();
+
+
+			// act
+			var dataflow = sut.CreateDataflow ();
+			await dataflow.Process (new[] { 1, 2, 3 });
+
+
+			// assert
+			result.Should ().BeEquivalentTo (1, 2, 3);
+		}
 	}
 }

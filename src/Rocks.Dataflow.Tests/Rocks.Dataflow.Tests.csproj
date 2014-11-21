@@ -67,8 +67,10 @@
     <Compile Include="CoreTests\DataflowTests.cs" />
     <Compile Include="CoreTests\SplitJoinSyncTests.cs" />
     <Compile Include="FluentTests\ExceptionHandlingTests\FluentSplitJoinAsyncTests.cs" />
+    <Compile Include="FluentTests\ExceptionHandlingTests\FluentProcessAsyncTests.cs" />
     <Compile Include="FluentTests\ExceptionHandlingTests\FluentTransformManySyncTests.cs" />
     <Compile Include="FluentTests\ExceptionHandlingTests\FluentTransformManyAsyncTests.cs" />
+    <Compile Include="FluentTests\ExceptionHandlingTests\FluentProcessSyncTests.cs" />
     <Compile Include="FluentTests\ExceptionHandlingTests\FluentTransformSyncTests.cs" />
     <Compile Include="FluentTests\ExceptionHandlingTests\FluentTransformAsyncTests.cs" />
     <Compile Include="FluentTests\ExceptionHandlingTests\FluentActionSyncTests.cs" />
