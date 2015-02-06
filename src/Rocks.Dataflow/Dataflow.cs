@@ -89,7 +89,7 @@ namespace Rocks.Dataflow
             this.Start ();
 
             foreach (var item in items)
-                await this.SendAsync (cancellationToken, item).ConfigureAwait (false);
+                await this.SendAsync (item, cancellationToken).ConfigureAwait (false);
 
             await this.CompleteAsync ().ConfigureAwait (false);
         }
@@ -114,7 +114,7 @@ namespace Rocks.Dataflow
         ///     Sends data into the dataflow for processing.
         ///     Returns true if dataflow is accepts and consumes the specified <paramref name="item" />.
         /// </summary>
-        public Task<bool> SendAsync (CancellationToken cancellationToken, TInput item)
+        public Task<bool> SendAsync (TInput item, CancellationToken cancellationToken = default (CancellationToken))
         {
             if (this.status != DataflowStatus.InProgress)
                 throw new InvalidDataflowStatusException (this.status);
