@@ -89,7 +89,7 @@ namespace Rocks.Dataflow
             this.Start ();
 
             foreach (var item in items)
-                await this.SendAsync (item, cancellationToken).ConfigureAwait (false);
+                await this.startingBlock.SendAsync (item, cancellationToken).ConfigureAwait (false);
 
             await this.CompleteAsync ().ConfigureAwait (false);
         }
