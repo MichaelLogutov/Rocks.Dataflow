@@ -96,36 +96,6 @@ namespace Rocks.Dataflow
 
 
         /// <summary>
-        ///     Sends data into the dataflow for processing.
-        ///     Returns true if dataflow is accepts and consumes the specified <paramref name="item" />.
-        /// </summary>
-        public Task<bool> SendAsync (CancellationToken cancellationToken, TInput item)
-        {
-            return this.startingBlock.SendAsync (item, cancellationToken);
-        }
-
-
-        /// <summary>
-        ///     Signals the completion of data sending.
-        ///     Returns the task that will be completed when remaining data in dataflow is processed.
-        /// </summary>
-        public async Task CompleteAsync ()
-        {
-            this.startingBlock.Complete ();
-            this.status = DataflowStatus.AllDataSent;
-
-            var completion = this.startingBlock == this.finalBlock
-                                 ? this.finalBlock.Completion
-                                 : Task.WhenAll (this.startingBlock.Completion, this.finalBlock.Completion);
-
-            await completion.ConfigureAwait (false);
-
-            this.stopwatch.Stop ();
-            this.status = DataflowStatus.Completed;
-        }
-
-
-        /// <summary>
         ///     Changes the dataflow <see cref="Status" /> to <see cref="DataflowStatus.InProgress" />.
         /// </summary>
         public void Start ()
@@ -137,6 +107,42 @@ namespace Rocks.Dataflow
             this.stopwatch.Start ();
 
             this.status = DataflowStatus.InProgress;
+        }
+
+
+        /// <summary>
+        ///     Sends data into the dataflow for processing.
+        ///     Returns true if dataflow is accepts and consumes the specified <paramref name="item" />.
+        /// </summary>
+        public Task<bool> SendAsync (CancellationToken cancellationToken, TInput item)
+        {
+            if (this.status != DataflowStatus.InProgress)
+                throw new InvalidDataflowStatusException (this.status);
+
+            return this.startingBlock.SendAsync (item, cancellationToken);
+        }
+
+
+        /// <summary>
+        ///     Signals the completion of data sending.
+        ///     Returns the task that will be completed when remaining data in dataflow is processed.
+        /// </summary>
+        public async Task CompleteAsync ()
+        {
+            if (this.status != DataflowStatus.InProgress)
+                throw new InvalidDataflowStatusException (this.status);
+
+            this.startingBlock.Complete ();
+            this.status = DataflowStatus.AllDataSent;
+
+            var completion = this.startingBlock == this.finalBlock
+                                 ? this.finalBlock.Completion
+                                 : Task.WhenAll (this.startingBlock.Completion, this.finalBlock.Completion);
+
+            await completion.ConfigureAwait (false);
+
+            this.stopwatch.Stop ();
+            this.status = DataflowStatus.Completed;
         }
 
         #endregion
