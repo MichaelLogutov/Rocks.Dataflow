@@ -10,106 +10,135 @@ using Rocks.Dataflow.Exceptions;
 
 namespace Rocks.Dataflow
 {
-	/// <summary>
-	///     A dataflow incapulation.
-	/// </summary>
-	[DebuggerDisplay ("{Status}")]
-	public class Dataflow<TInput>
-	{
-		#region Private fields
+    /// <summary>
+    ///     A dataflow incapulation.
+    /// </summary>
+    [DebuggerDisplay ("{Status}")]
+    public class Dataflow<TInput>
+    {
+        #region Private fields
 
-		private readonly ITargetBlock<TInput> startingBlock;
-		private readonly IDataflowBlock finalBlock;
+        private readonly ITargetBlock<TInput> startingBlock;
+        private readonly IDataflowBlock finalBlock;
+        private DataflowStatus status;
+        private Stopwatch stopwatch;
 
-		private DataflowStatus status;
-		private Stopwatch stopwatch;
+        #endregion
 
-		#endregion
+        #region Construct
 
-		#region Construct
+        public Dataflow ([NotNull] ITargetBlock<TInput> startingBlock, [NotNull] IDataflowBlock finalBlock)
+        {
+            if (startingBlock == null)
+                throw new ArgumentNullException ("startingBlock");
 
-		public Dataflow ([NotNull] ITargetBlock<TInput> startingBlock, [NotNull] IDataflowBlock finalBlock)
-		{
-			if (startingBlock == null)
-				throw new ArgumentNullException ("startingBlock");
+            if (finalBlock == null)
+                throw new ArgumentNullException ("finalBlock");
 
-			if (finalBlock == null)
-				throw new ArgumentNullException ("finalBlock");
+            if (finalBlock.GetType ().GetInterfaces ().Any (type => type.IsGenericType &&
+                                                                    type.GetGenericTypeDefinition () == typeof (ISourceBlock<>)))
+            {
+                throw new ArgumentException (string.Format ("Dataflow can not have final block of type {0} " +
+                                                            "because it can not be awaited after completition of it's input.",
+                                                            finalBlock.GetType ()),
+                                             "finalBlock");
+            }
 
-			if (finalBlock.GetType ().GetInterfaces ().Any (type => type.IsGenericType &&
-			                                                        type.GetGenericTypeDefinition () == typeof (ISourceBlock<>)))
-			{
-				throw new ArgumentException (string.Format ("Dataflow can not have final block of type {0} " +
-				                                            "because it can not be awaited after completition of it's input.",
-				                                            finalBlock.GetType ()),
-				                             "finalBlock");
-			}
+            this.startingBlock = startingBlock;
+            this.finalBlock = finalBlock;
 
-			this.startingBlock = startingBlock;
-			this.finalBlock = finalBlock;
+            this.status = DataflowStatus.NotStarted;
+        }
 
-			this.status = DataflowStatus.NotStarted;
-		}
+        #endregion
 
-		#endregion
+        #region Public properties
 
-		#region Public properties
+        /// <summary>
+        ///     Current dataflow status.
+        /// </summary>
+        public DataflowStatus Status
+        {
+            get { return this.status; }
+        }
 
-		/// <summary>
-		///     Current dataflow status.
-		/// </summary>
-		public DataflowStatus Status { get { return this.status; } }
+        /// <summary>
+        ///     Elapsed time for processing whole dataflow.
+        ///     Throws <see cref="InvalidDataflowStatusException" /> if dataflow has not started yet.
+        /// </summary>
+        public TimeSpan Elapsed
+        {
+            get
+            {
+                if (this.status == DataflowStatus.NotStarted)
+                    throw new InvalidDataflowStatusException (this.status);
+
+                return this.stopwatch.Elapsed;
+            }
+        }
+
+        #endregion
+
+        #region Public methods
+
+        /// <summary>
+        ///     Performs asynchronous processing of all data <paramref name="items" />.
+        /// </summary>
+        public async Task ProcessAsync ([NotNull] IEnumerable<TInput> items, CancellationToken cancellationToken = default (CancellationToken))
+        {
+            this.Start ();
+
+            foreach (var item in items)
+                await this.SendAsync (cancellationToken, item).ConfigureAwait (false);
+
+            await this.CompleteAsync ().ConfigureAwait (false);
+        }
 
 
-		/// <summary>
-		///     Elapsed time for processing whole dataflow.
-		///		Throws <see cref="InvalidDataflowStatusException"/> if dataflow has not started yet.
-		/// </summary>
-		public TimeSpan Elapsed
-		{
-			get
-			{
-				if (this.status == DataflowStatus.NotStarted)
-					throw new InvalidDataflowStatusException (this.status);
+        /// <summary>
+        ///     Sends data into the dataflow for processing.
+        ///     Returns true if dataflow is accepts and consumes the specified <paramref name="item" />.
+        /// </summary>
+        public Task<bool> SendAsync (CancellationToken cancellationToken, TInput item)
+        {
+            return this.startingBlock.SendAsync (item, cancellationToken);
+        }
 
-				return this.stopwatch.Elapsed;
-			}
-		}
 
-		#endregion
+        /// <summary>
+        ///     Signals the completion of data sending.
+        ///     Returns the task that will be completed when remaining data in dataflow is processed.
+        /// </summary>
+        public async Task CompleteAsync ()
+        {
+            this.startingBlock.Complete ();
+            this.status = DataflowStatus.AllDataSent;
 
-		#region Public methods
+            var completion = this.startingBlock == this.finalBlock
+                                 ? this.finalBlock.Completion
+                                 : Task.WhenAll (this.startingBlock.Completion, this.finalBlock.Completion);
 
-		/// <summary>
-		///     Performs asynchronous processing of all data <paramref name="items" />.
-		///		This method is not thread safe.
-		/// </summary>
-		public async Task Process ([NotNull] IEnumerable<TInput> items, CancellationToken cancellationToken = default (CancellationToken))
-		{
-			if (this.status != DataflowStatus.NotStarted)
-				throw new InvalidDataflowStatusException (this.status);
+            await completion.ConfigureAwait (false);
 
-			this.stopwatch = new Stopwatch ();
-			this.stopwatch.Start ();
+            this.stopwatch.Stop ();
+            this.status = DataflowStatus.Completed;
+        }
 
-			this.status = DataflowStatus.InProgress;
 
-			foreach (var item in items)
-				await this.startingBlock.SendAsync (item, cancellationToken).ConfigureAwait (false);
+        /// <summary>
+        ///     Changes the dataflow <see cref="Status" /> to <see cref="DataflowStatus.InProgress" />.
+        /// </summary>
+        public void Start ()
+        {
+            if (this.status != DataflowStatus.NotStarted)
+                throw new InvalidDataflowStatusException (this.status);
 
-			this.startingBlock.Complete ();
-			this.status = DataflowStatus.AllDataSent;
+            this.stopwatch = new Stopwatch ();
+            this.stopwatch.Start ();
 
-			var completion = this.startingBlock == this.finalBlock
-				                 ? this.finalBlock.Completion
-				                 : Task.WhenAll (this.startingBlock.Completion, this.finalBlock.Completion);
+            this.status = DataflowStatus.InProgress;
+        }
 
-			await completion.ConfigureAwait (false);
-
-			this.stopwatch.Stop ();
-			this.status = DataflowStatus.Completed;
-		}
-
-		#endregion
-	}
+        #endregion
+    }
 }

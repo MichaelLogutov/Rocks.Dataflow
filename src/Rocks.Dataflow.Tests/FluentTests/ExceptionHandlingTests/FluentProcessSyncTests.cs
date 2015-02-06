@@ -29,7 +29,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.ExceptionHandlingTests
 
 
 			// act
-			await sut.Process (new[] { "a", "b", "c" });
+			await sut.ProcessAsync (new[] { "a", "b", "c" });
 
 
 			// assert
@@ -62,7 +62,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.ExceptionHandlingTests
 
 
 			// act
-			await sut.Process (new[] { "a", "b", "c" });
+			await sut.ProcessAsync (new[] { "a", "b", "c" });
 
 
 			// assert

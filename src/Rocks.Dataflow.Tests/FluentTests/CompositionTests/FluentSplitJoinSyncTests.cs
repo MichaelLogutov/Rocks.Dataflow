@@ -31,7 +31,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 
 			// act
 			var dataflow = sut.CreateDataflow ();
-			await dataflow.Process (new[] { "a", "ab", "abc" });
+			await dataflow.ProcessAsync (new[] { "a", "ab", "abc" });
 
 
 			// assert
@@ -54,7 +54,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 
 			// act
 			var dataflow = sut.CreateDataflow ();
-			await dataflow.Process (new[] { "a", "ab", "abc" });
+			await dataflow.ProcessAsync (new[] { "a", "ab", "abc" });
 
 
 			// assert
@@ -81,7 +81,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 
 			// act
 			var dataflow = sut.CreateDataflow ();
-			await dataflow.Process (new[] { "a", "ab", "abc" });
+			await dataflow.ProcessAsync (new[] { "a", "ab", "abc" });
 
 
 			// assert
@@ -104,7 +104,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 
 			// act
 			var dataflow = sut.CreateDataflow ();
-			await dataflow.Process (new[] { "a", "ab", "abc" });
+			await dataflow.ProcessAsync (new[] { "a", "ab", "abc" });
 
 
 			// assert
@@ -129,7 +129,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 
 			// act
 			var dataflow = sut.CreateDataflow ();
-			await dataflow.Process (new[] { "a", "ab", "abc" });
+			await dataflow.ProcessAsync (new[] { "a", "ab", "abc" });
 
 
 			// assert
@@ -155,7 +155,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 
 			// act
 			var dataflow = sut.CreateDataflow ();
-			await dataflow.Process (new[] { "a", "ab", "abc" });
+			await dataflow.ProcessAsync (new[] { "a", "ab", "abc" });
 
 
 			// assert
@@ -185,7 +185,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 
 			// act
 			var dataflow = sut.CreateDataflow ();
-			await dataflow.Process (new[] { "a", "ab", "abc" });
+			await dataflow.ProcessAsync (new[] { "a", "ab", "abc" });
 
 
 			// assert
@@ -211,7 +211,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 
 			// act
 			var dataflow = sut.CreateDataflow ();
-			await dataflow.Process (new[] { "a", "ab", "abc" });
+			await dataflow.ProcessAsync (new[] { "a", "ab", "abc" });
 
 
 			// assert
@@ -248,7 +248,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 
 			// act
 			var dataflow = sut.CreateDataflow ();
-			await dataflow.Process (new[] { "a", "ab", "abc" });
+			await dataflow.ProcessAsync (new[] { "a", "ab", "abc" });
 
 
 			// assert
@@ -281,7 +281,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 
 			// act
 			var dataflow = sut.CreateDataflow ();
-			await dataflow.Process (new[] { "a", "ab", "abc" });
+			await dataflow.ProcessAsync (new[] { "a", "ab", "abc" });
 
 
 			// assert
@@ -320,7 +320,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 
 			// act
 			var dataflow = sut.CreateDataflow ();
-			await dataflow.Process (contexts);
+			await dataflow.ProcessAsync (contexts);
 
 
 			// assert

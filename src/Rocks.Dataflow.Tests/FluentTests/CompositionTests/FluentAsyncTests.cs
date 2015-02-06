@@ -36,7 +36,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 
 			// act
 			var dataflow = sut.CreateDataflow ();
-			await dataflow.Process (new[] { 1, 2, 3 });
+			await dataflow.ProcessAsync (new[] { 1, 2, 3 });
 
 
 			// assert
@@ -68,7 +68,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 
 			// act
 			var dataflow = sut.CreateDataflow ();
-			await dataflow.Process (new[] { 1, 2, 3 }.CreateDataflowContexts ());
+			await dataflow.ProcessAsync (new[] { 1, 2, 3 }.CreateDataflowContexts ());
 
 
 			// assert
@@ -105,7 +105,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 
 			// act
 			var dataflow = sut.CreateDataflow ();
-			await dataflow.Process (new[] { 1, 2, 3 });
+			await dataflow.ProcessAsync (new[] { 1, 2, 3 });
 
 
 			// assert
@@ -142,7 +142,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 
 			// act
 			var dataflow = sut.CreateDataflow ();
-			await dataflow.Process (new[] { 1, 2, 3 });
+			await dataflow.ProcessAsync (new[] { 1, 2, 3 });
 
 
 			// assert
@@ -178,7 +178,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 
 			// act
 			var dataflow = sut.CreateDataflow ();
-			await dataflow.Process (new[] { 1, 2, 3 }.CreateDataflowContexts ());
+			await dataflow.ProcessAsync (new[] { 1, 2, 3 }.CreateDataflowContexts ());
 
 
 			// assert
@@ -210,7 +210,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 
 			// act
 			var dataflow = sut.CreateDataflow ();
-			await dataflow.Process (new[] { 1, 2, 3 }.CreateDataflowContexts ());
+			await dataflow.ProcessAsync (new[] { 1, 2, 3 }.CreateDataflowContexts ());
 
 
 			// assert
@@ -238,7 +238,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 
 			// act
 			var dataflow = sut.CreateDataflow ();
-			await dataflow.Process (new[] { 1, 2, 3 });
+			await dataflow.ProcessAsync (new[] { 1, 2, 3 });
 
 
 			// assert
@@ -267,7 +267,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 
 			// act
 			var dataflow = sut.CreateDataflow ();
-			await dataflow.Process (new[] { 1, 2, 3 });
+			await dataflow.ProcessAsync (new[] { 1, 2, 3 });
 
 
 			// assert
