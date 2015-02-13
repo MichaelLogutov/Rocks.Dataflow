@@ -48,7 +48,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 			var sut = DataflowFluent
 				.ReceiveDataOfType<string> ()
 				.SplitTo<char> (s => s.ToCharArray ())
-				.SplitJoinInto (x => new string (x.SucceffullyCompletedItems.ToArray ()))
+				.SplitJoinInto (x => new string (x.SuccessfullyCompletedItems.ToArray ()))
 				.Action (result.Add);
 
 
@@ -123,7 +123,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 				.ReceiveDataOfType<string> ()
 				.SplitTo<char> (s => s.ToCharArray ())
 				.SplitProcess ((s, c) => process.Add (c))
-				.SplitJoinInto (x => new string (x.SucceffullyCompletedItems.ToArray ()))
+				.SplitJoinInto (x => new string (x.SuccessfullyCompletedItems.ToArray ()))
 				.Action (result.Add);
 
 
@@ -179,7 +179,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 				.SplitTransform ((s, c) => (int) c)
 				.SplitProcess ((s, n) => process2.Add (n))
 				.SplitTransform ((s, n) => (char) n)
-				.SplitJoinInto (x => new string (x.SucceffullyCompletedItems.ToArray ()))
+				.SplitJoinInto (x => new string (x.SuccessfullyCompletedItems.ToArray ()))
 				.Action (result.Add);
 
 
@@ -205,7 +205,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 				.SplitTo (s => s.ToCharArray ())
 				.SplitTransform ((s, c) => (int) c)
 				.SplitTransform ((s, i) => (char) i)
-				.SplitJoinInto (x => new string (x.SucceffullyCompletedItems.ToArray ()))
+				.SplitJoinInto (x => new string (x.SuccessfullyCompletedItems.ToArray ()))
 				.Action (result.Add);
 
 
@@ -241,7 +241,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 				.SplitJoinInto (x =>
 				{
 					exceptions.AddRange (x.FailedItems.Select (f => f.Exception));
-					return new string (x.SucceffullyCompletedItems.ToArray ());
+					return new string (x.SuccessfullyCompletedItems.ToArray ());
 				})
 				.Action (result.Add);
 
@@ -311,7 +311,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 					failed_items_exceptions.AddRange (splitJoinResult.FailedItems.Select (x => x.Exception));
 					split_items_exceptions.AddRange (splitJoinResult.FailedItems.SelectMany (x => x.Item.Exceptions));
 
-					result.AddRange (splitJoinResult.SucceffullyCompletedItems.Select (x => x.Data));
+					result.AddRange (splitJoinResult.SuccessfullyCompletedItems.Select (x => x.Data));
 				});
 
 

@@ -81,7 +81,7 @@ namespace Rocks.Dataflow.Tests.CoreTests
 			var split_block = DataflowSplitJoin.CreateSplitBlock<string, char> (s => s.ToCharArray ());
 			var process_block = DataflowSplitJoin.CreateProcessBlock<string, char> ((s, c) => process.Add (c));
 			var join_block = DataflowSplitJoin.CreateJoinBlock<string, char> ();
-			var final_block = new ActionBlock<SplitJoinResult<string, char>> (x => result.Add (new string (x.SucceffullyCompletedItems.ToArray ())));
+			var final_block = new ActionBlock<SplitJoinResult<string, char>> (x => result.Add (new string (x.SuccessfullyCompletedItems.ToArray ())));
 
 			split_block.LinkWithCompletionPropagation (process_block);
 			process_block.LinkWithCompletionPropagation (join_block);
@@ -114,7 +114,7 @@ namespace Rocks.Dataflow.Tests.CoreTests
 			var process_block = DataflowSplitJoin.CreateProcessBlock<string, char> ((s, c) => process.Add (c));
 			var process_block2 = DataflowSplitJoin.CreateProcessBlock<string, char> ((s, c) => process2.Add (c));
 			var join_block = DataflowSplitJoin.CreateJoinBlock<string, char> ();
-			var final_block = new ActionBlock<SplitJoinResult<string, char>> (x => result.Add (new string (x.SucceffullyCompletedItems.ToArray ())));
+			var final_block = new ActionBlock<SplitJoinResult<string, char>> (x => result.Add (new string (x.SuccessfullyCompletedItems.ToArray ())));
 
 			split_block.LinkWithCompletionPropagation (process_block);
 			process_block.LinkWithCompletionPropagation (process_block2);
@@ -157,7 +157,7 @@ namespace Rocks.Dataflow.Tests.CoreTests
 			var join_block = DataflowSplitJoin.CreateJoinBlock<string, string> ();
 			var final_block = new ActionBlock<SplitJoinResult<string, string>> (x =>
 			{
-				foreach (var item in x.SucceffullyCompletedItems)
+				foreach (var item in x.SuccessfullyCompletedItems)
 					result.Add (item);
 			});
 

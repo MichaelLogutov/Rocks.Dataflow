@@ -109,7 +109,7 @@ namespace Rocks.Dataflow.Tests.CoreTests
 			var final_block = new ActionBlock<SplitJoinResult<string, char>> (async x =>
 			{
 				await Task.Yield ();
-				result.Add (new string (x.SucceffullyCompletedItems.ToArray ()));
+				result.Add (new string (x.SuccessfullyCompletedItems.ToArray ()));
 			});
 
 			split_block.LinkWithCompletionPropagation (process_block);
@@ -162,7 +162,7 @@ namespace Rocks.Dataflow.Tests.CoreTests
 			var final_block = new ActionBlock<SplitJoinResult<string, char>> (async x =>
 			{
 				await Task.Yield ();
-				result.Add (new string (x.SucceffullyCompletedItems.ToArray ()));
+				result.Add (new string (x.SuccessfullyCompletedItems.ToArray ()));
 			});
 
 			split_block.LinkWithCompletionPropagation (process_block);
@@ -219,7 +219,7 @@ namespace Rocks.Dataflow.Tests.CoreTests
 			{
 				await Task.Yield ();
 
-				foreach (var item in x.SucceffullyCompletedItems)
+				foreach (var item in x.SuccessfullyCompletedItems)
 					result.Add (item);
 			});
 

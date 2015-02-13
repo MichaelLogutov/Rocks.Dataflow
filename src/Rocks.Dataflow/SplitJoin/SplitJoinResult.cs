@@ -8,13 +8,13 @@ namespace Rocks.Dataflow.SplitJoin
 	/// <summary>
 	///     The merged result of the processing splitted items.
 	/// </summary>
-	[DebuggerDisplay ("Parent = {Parent}, Succeffully completed {SucceffullyCompletedItems.Count} of {TotalItemsCount}")]
+	[DebuggerDisplay ("Parent = {Parent}, Successfully completed {SuccessfullyCompletedItems.Count} of {TotalItemsCount}")]
 	public class SplitJoinResult<TParent, TItem>
 	{
 		#region Private fields
 
 		private readonly TParent parent;
-		private readonly IReadOnlyList<TItem> succeffullyCompletedItems;
+		private readonly IReadOnlyList<TItem> successfullyCompletedItems;
 		private readonly IReadOnlyList<SplitJoinFailedItem<TItem>> failedItems;
 		private readonly int totalItemsCount;
 
@@ -23,12 +23,12 @@ namespace Rocks.Dataflow.SplitJoin
 		#region Construct
 
 		public SplitJoinResult (TParent parent,
-		                        [NotNull] IReadOnlyList<TItem> succeffullyCompletedItems,
+		                        [NotNull] IReadOnlyList<TItem> successfullyCompletedItems,
 		                        [NotNull] IReadOnlyList<SplitJoinFailedItem<TItem>> failedItems,
 		                        int totalItemsCount)
 		{
-			if (succeffullyCompletedItems == null)
-				throw new ArgumentNullException ("succeffullyCompletedItems");
+			if (successfullyCompletedItems == null)
+				throw new ArgumentNullException ("successfullyCompletedItems");
 
 			if (failedItems == null)
 				throw new ArgumentNullException ("failedItems");
@@ -42,7 +42,7 @@ namespace Rocks.Dataflow.SplitJoin
 			}
 
 			this.parent = parent;
-			this.succeffullyCompletedItems = succeffullyCompletedItems;
+			this.successfullyCompletedItems = successfullyCompletedItems;
 			this.failedItems = failedItems;
 			this.totalItemsCount = totalItemsCount;
 		}
@@ -51,7 +51,7 @@ namespace Rocks.Dataflow.SplitJoin
 		internal SplitJoinResult (TParent parent, SplitJoinIntermediateResult<TItem> intermediateResult)
 		{
 			this.parent = parent;
-			this.succeffullyCompletedItems = intermediateResult.GetSucceffullyCompletedItems ();
+			this.successfullyCompletedItems = intermediateResult.GetSucceffullyCompletedItems ();
 			this.failedItems = intermediateResult.GetFailedItems ();
 			this.totalItemsCount = intermediateResult.TotalItemsCount;
 		}
@@ -70,7 +70,7 @@ namespace Rocks.Dataflow.SplitJoin
 		///     A list of all successfully completed items.
 		/// </summary>
 		[NotNull]
-		public IReadOnlyList<TItem> SucceffullyCompletedItems { get { return this.succeffullyCompletedItems; } }
+		public IReadOnlyList<TItem> SuccessfullyCompletedItems { get { return this.successfullyCompletedItems; } }
 
 
 		/// <summary>

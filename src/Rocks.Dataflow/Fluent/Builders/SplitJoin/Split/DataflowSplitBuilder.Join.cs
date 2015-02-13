@@ -19,6 +19,7 @@ namespace Rocks.Dataflow.Fluent.Builders.SplitJoin.Split
 
 		/// <summary>
 		///     Ends the dataflow with the block that joins the splitted items.
+		///     The <paramref name="process "/> will be called without parallelism and thus can be not thread safe.
 		/// </summary>
 		public DataflowSplitJoinFinalBuilder<TStart, TInput, TItem> SplitJoinAsync ([NotNull] Func<SplitJoinResult<TInput, TItem>, Task> process)
 		{
@@ -28,6 +29,7 @@ namespace Rocks.Dataflow.Fluent.Builders.SplitJoin.Split
 
 		/// <summary>
 		///     Ends the dataflow with the block that joins the splitted items.
+		///     The <paramref name="process "/> will be called without parallelism and thus can be not thread safe.
 		/// </summary>
 		public DataflowSplitJoinFinalBuilder<TStart, TInput, TItem> SplitJoin ([NotNull] Action<SplitJoinResult<TInput, TItem>> process)
 		{
