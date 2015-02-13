@@ -89,7 +89,12 @@ namespace Rocks.Dataflow
             this.Start ();
 
             foreach (var item in items)
+            {
+                if (cancellationToken.IsCancellationRequested)
+                    break;
+
                 await this.startingBlock.SendAsync (item, cancellationToken).ConfigureAwait (false);
+            }
 
             await this.CompleteAsync ().ConfigureAwait (false);
         }
@@ -118,6 +123,9 @@ namespace Rocks.Dataflow
         {
             if (this.status != DataflowStatus.InProgress)
                 throw new InvalidDataflowStatusException (this.status);
+
+            if (cancellationToken.IsCancellationRequested)
+                return Task.FromResult (false);
 
             return this.startingBlock.SendAsync (item, cancellationToken);
         }
