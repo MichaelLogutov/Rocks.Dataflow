@@ -1,6 +1,6 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -273,5 +273,23 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 			// assert
 			result.Should ().BeEquivalentTo (1, 2, 3);
 		}
+
+
+        [TestMethod]
+        public void ActionActionAsync_Throws ()
+        {
+            // arrange
+
+            // act
+            Action action = () => DataflowFluent
+                                      .ReceiveDataOfType<int> ()
+                                      .ActionAsync (async x => { await Task.Yield (); })
+                                      .ActionAsync (async x => { await Task.Yield (); })
+                                      .CreateDataflow ();
+
+
+            // assert
+            action.ShouldThrow<InvalidOperationException> ();
+        }
 	}
 }

@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dataflow.cs" />
+    <Compile Include="Extensions\Helpers.cs" />
     <Compile Include="Fluent\Builders\DataflowBuilder.Split.cs" />
     <Compile Include="Fluent\Builders\DataflowBuilder.Process.cs" />
     <Compile Include="Fluent\Builders\DataflowBuilder.TransformMany.cs" />
