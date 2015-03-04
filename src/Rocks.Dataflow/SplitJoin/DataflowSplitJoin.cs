@@ -33,6 +33,8 @@ namespace Rocks.Dataflow.SplitJoin
 					try
 					{
 						var items = await getItems (parent).ConfigureAwait (false);
+                        if (items == null)
+                            return new SplitJoinItem<TParent, TItem>[0];
 
 						var split_join_items = items.Select (item => new SplitJoinItem<TParent, TItem> (parent, item, items.Count))
 						                            .ToList ();
@@ -80,6 +82,8 @@ namespace Rocks.Dataflow.SplitJoin
 					try
 					{
 						var items = getItems (parent);
+                        if (items == null)
+                            return new SplitJoinItem<TParent, TItem>[0];
 
 						var split_join_items = items.Select (item => new SplitJoinItem<TParent, TItem> (parent, item, items.Count))
 						                            .ToList ();
