@@ -5,17 +5,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Rocks.Dataflow.Extensions;
 using Rocks.Dataflow.SplitJoin;
 
 namespace Rocks.Dataflow.Tests.CoreTests
 {
-    [TestClass]
     public class SplitJoinAsyncTests
     {
-        [TestMethod]
-        public async Task SplitJoin_CorrectlyBuilded ()
+        [Fact]
+        public async Task SplitJoin_CorrectlyBuild ()
         {
             // arrange
             var process = new ConcurrentBag<string> ();
@@ -45,8 +44,8 @@ namespace Rocks.Dataflow.Tests.CoreTests
         }
 
 
-        [TestMethod]
-        public async Task SplitProcessJoin_CorrectlyBuilded ()
+        [Fact]
+        public async Task SplitProcessJoin_CorrectlyBuild ()
         {
             // arrange
             var process = new ConcurrentBag<char> ();
@@ -83,8 +82,8 @@ namespace Rocks.Dataflow.Tests.CoreTests
         }
 
 
-        [TestMethod]
-        public async Task SplitProcessJoinAction_CorrectlyBuilded ()
+        [Fact]
+        public async Task SplitProcessJoinAction_CorrectlyBuild ()
         {
             // arrange
             var result = new ConcurrentBag<string> ();
@@ -130,8 +129,8 @@ namespace Rocks.Dataflow.Tests.CoreTests
         }
 
 
-        [TestMethod]
-        public async Task SplitProcessProcessJoinAction_CorrectlyBuilded ()
+        [Fact]
+        public async Task SplitProcessProcessJoinAction_CorrectlyBuild ()
         {
             // arrange
             var result = new ConcurrentBag<string> ();
@@ -186,8 +185,8 @@ namespace Rocks.Dataflow.Tests.CoreTests
         }
 
 
-        [TestMethod]
-        public async Task SplitProcessTransformJoinAction_CorrectlyBuilded ()
+        [Fact]
+        public async Task SplitProcessTransformJoinAction_CorrectlyBuild ()
         {
             // arrange
             var result = new ConcurrentBag<string> ();
@@ -246,33 +245,36 @@ namespace Rocks.Dataflow.Tests.CoreTests
         }
 
 
-        [TestMethod]
+        [Fact]
         public async Task SplitProcessJoinAction_ProcessThrowsOnOneItem_ExecutedWithFailedItemHavingTheException ()
         {
             // arrange
             var result = new ConcurrentBag<SplitJoinResult<string, char>> ();
 
-            var split_block = DataflowSplitJoin.CreateSplitBlockAsync<string, char> (async s =>
-                                                                                           {
-                                                                                               await Task.Yield ();
-                                                                                               return s.ToCharArray ();
-                                                                                           });
+            var split_block = DataflowSplitJoin.CreateSplitBlockAsync<string, char>
+                (async s =>
+                       {
+                           await Task.Yield ();
+                           return s.ToCharArray ();
+                       });
 
-            var process_block = DataflowSplitJoin.CreateProcessBlockAsync<string, char> (async (s, c) =>
-                                                                                               {
-                                                                                                   await Task.Yield ();
+            var process_block = DataflowSplitJoin.CreateProcessBlockAsync<string, char>
+                (async (s, c) =>
+                       {
+                           await Task.Yield ();
 
-                                                                                                   if (c == 'b')
-                                                                                                       throw new TestException ();
-                                                                                               });
+                           if (c == 'b')
+                               throw new TestException ();
+                       });
 
             var join_block = DataflowSplitJoin.CreateJoinBlock<string, char> ();
 
-            var final_block = new ActionBlock<SplitJoinResult<string, char>> (async x =>
-                                                                                    {
-                                                                                        await Task.Yield ();
-                                                                                        result.Add (x);
-                                                                                    });
+            var final_block = new ActionBlock<SplitJoinResult<string, char>>
+                (async x =>
+                       {
+                           await Task.Yield ();
+                           result.Add (x);
+                       });
 
 
             split_block.LinkWithCompletionPropagation (process_block);
@@ -292,40 +294,43 @@ namespace Rocks.Dataflow.Tests.CoreTests
             result.ShouldAllBeEquivalentTo
                 (new[]
                  {
-                     new SplitJoinResult<string, char> ("a",
-                                                        new[] { 'a' },
-                                                        new SplitJoinFailedItem<char>[0],
-                                                        1),
-                     new SplitJoinResult<string, char> ("bc",
-                                                        new[] { 'c' },
-                                                        new[] { new SplitJoinFailedItem<char> ('b', new TestException ()) },
-                                                        2)
+                     new SplitJoinResult<string, char>
+                         ("a",
+                          new[] { 'a' },
+                          new SplitJoinFailedItem<char>[0],
+                          1),
+                     new SplitJoinResult<string, char>
+                         ("bc",
+                          new[] { 'c' },
+                          new[] { new SplitJoinFailedItem<char> ('b', new TestException ()) },
+                          2)
                  },
-                 options => options.Using<Exception> (x => x.Subject.ShouldBeEquivalentTo (x.Expectation,
-                                                                                           o => o.Including (p => p.Message)))
+                 options => options.Using<Exception> (x => x.Subject.Should ().BeOfType<TestException> ())
                                    .WhenTypeIs<Exception> ());
         }
 
 
-        [TestMethod]
+        [Fact]
         public async Task SplitProcessTransformJoinAction_ProcessThrowsOnOneItem_ExecutedWithFailedItemHavingTheException ()
         {
             // arrange
             var result = new ConcurrentBag<SplitJoinResult<string, string>> ();
 
-            var split_block = DataflowSplitJoin.CreateSplitBlockAsync<string, char> (async s =>
-                                                                                           {
-                                                                                               await Task.Yield ();
-                                                                                               return s.ToCharArray ();
-                                                                                           });
+            var split_block = DataflowSplitJoin.CreateSplitBlockAsync<string, char>
+                (async s =>
+                       {
+                           await Task.Yield ();
+                           return s.ToCharArray ();
+                       });
 
-            var process_block = DataflowSplitJoin.CreateProcessBlockAsync<string, char> (async (s, c) =>
-                                                                                               {
-                                                                                                   await Task.Yield ();
+            var process_block = DataflowSplitJoin.CreateProcessBlockAsync<string, char>
+                (async (s, c) =>
+                       {
+                           await Task.Yield ();
 
-                                                                                                   if (c == 'b')
-                                                                                                       throw new TestException ();
-                                                                                               });
+                           if (c == 'b')
+                               throw new TestException ();
+                       });
 
             var transform_block = DataflowSplitJoin.CreateTransformBlockAsync<string, char, string>
                 (async (s, c) =>
@@ -365,13 +370,12 @@ namespace Rocks.Dataflow.Tests.CoreTests
                                                           new[] { new SplitJoinFailedItem<string> (null, new TestException ()) },
                                                           2)
                  },
-                 options => options.Using<Exception> (x => x.Subject.ShouldBeEquivalentTo (x.Expectation,
-                                                                                           o => o.Including (p => p.Message)))
+                 options => options.Using<Exception> (x => x.Subject.Should ().BeOfType<TestException> ())
                                    .WhenTypeIs<Exception> ());
         }
 
 
-        [TestMethod]
+        [Fact]
         public async Task SplitJoin_SplitReturnsNull_DoesNotThrow ()
         {
             // arrange
@@ -402,3 +406,5 @@ namespace Rocks.Dataflow.Tests.CoreTests
         }
     }
 }
+
+

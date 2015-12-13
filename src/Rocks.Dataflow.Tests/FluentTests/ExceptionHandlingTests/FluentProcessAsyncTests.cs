@@ -2,15 +2,14 @@
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Rocks.Dataflow.Fluent;
 
 namespace Rocks.Dataflow.Tests.FluentTests.ExceptionHandlingTests
 {
-	[TestClass]
 	public class FluentProcessAsyncTests
 	{
-		[TestMethod]
+		[Fact]
 		public async Task OneItemThrows_ProceedTheRest ()
 		{
 			// arrange
@@ -43,7 +42,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.ExceptionHandlingTests
 		}
 
 
-		[TestMethod]
+		[Fact]
 		public async Task WithDefaultExceptionLogger_OneItemThrows_LogsTheException ()
 		{
 			// arrange
@@ -82,3 +81,5 @@ namespace Rocks.Dataflow.Tests.FluentTests.ExceptionHandlingTests
 		}
 	}
 }
+
+

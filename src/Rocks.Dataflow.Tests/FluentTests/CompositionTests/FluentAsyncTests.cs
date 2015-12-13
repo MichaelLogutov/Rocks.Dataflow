@@ -3,17 +3,16 @@ using System.Collections.Concurrent;
 using System.Globalization;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Rocks.Dataflow.Fluent;
 using Rocks.Dataflow.Tests.FluentTests.Infrastructure;
 
 namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 {
-	[TestClass]
 	public class FluentAsyncTests
 	{
-		[TestMethod]
-		public async Task TransformAction_CorrectlyBuilded ()
+		[Fact]
+		public async Task TransformAction_CorrectlyBuild ()
 		{
 			// arrange
 			var result = new ConcurrentBag<string> ();
@@ -44,8 +43,8 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 		}
 
 
-		[TestMethod]
-		public async Task TransformManyAction_CorrectlyBuilded ()
+		[Fact]
+		public async Task TransformManyAction_CorrectlyBuild ()
 		{
 			// arrange
 			var result = new ConcurrentBag<string> ();
@@ -76,8 +75,8 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 		}
 
 
-		[TestMethod]
-		public async Task TransformTransformAction_CorrectlyBuilded ()
+		[Fact]
+		public async Task TransformTransformAction_CorrectlyBuild ()
 		{
 			// arrange
 			var result = new ConcurrentBag<int> ();
@@ -113,8 +112,8 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 		}
 
 
-		[TestMethod]
-		public async Task TransformTransformManyAction_CorrectlyBuilded ()
+		[Fact]
+		public async Task TransformTransformManyAction_CorrectlyBuild ()
 		{
 			// arrange
 			var result = new ConcurrentBag<char> ();
@@ -150,7 +149,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 		}
 
 
-		[TestMethod]
+		[Fact]
 		public async Task TransformAction_WithNullReturn_CorrectlyExecuted ()
 		{
 			// arrange
@@ -186,7 +185,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 		}
 
 
-		[TestMethod]
+		[Fact]
 		public async Task TransformActionSync_WithNullReturn_CorrectlyExecuted ()
 		{
 			// arrange
@@ -218,8 +217,8 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 		}
 
 
-		[TestMethod]
-		public async Task ProcessAction_CorrectlyBuilded ()
+		[Fact]
+		public async Task ProcessAction_CorrectlyBuild ()
 		{
 			// arrange
 			var result = new ConcurrentBag<int> ();
@@ -246,8 +245,8 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 		}
 
 
-		[TestMethod]
-		public async Task ProcessProcessAction_CorrectlyBuilded ()
+		[Fact]
+		public async Task ProcessProcessAction_CorrectlyBuild ()
 		{
 			// arrange
 			var result = new ConcurrentBag<int> ();
@@ -275,7 +274,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 		}
 
 
-        [TestMethod]
+        [Fact]
         public void ActionActionAsync_Throws ()
         {
             // arrange
@@ -293,3 +292,5 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
         }
 	}
 }
+
+

@@ -5,17 +5,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Rocks.Dataflow.Extensions;
 using Rocks.Dataflow.SplitJoin;
 
 namespace Rocks.Dataflow.Tests.CoreTests
 {
-    [TestClass]
     public class SplitJoinSyncTests
     {
-        [TestMethod]
-        public async Task SplitJoin_CorrectlyBuilded ()
+        [Fact]
+        public async Task SplitJoin_CorrectlyBuild ()
         {
             // arrange
             var process = new ConcurrentBag<string> ();
@@ -44,8 +43,8 @@ namespace Rocks.Dataflow.Tests.CoreTests
         }
 
 
-        [TestMethod]
-        public async Task SplitProcessJoin_CorrectlyBuilded ()
+        [Fact]
+        public async Task SplitProcessJoin_CorrectlyBuild ()
         {
             // arrange
             var process = new ConcurrentBag<char> ();
@@ -71,8 +70,8 @@ namespace Rocks.Dataflow.Tests.CoreTests
         }
 
 
-        [TestMethod]
-        public async Task SplitProcessJoinAction_CorrectlyBuilded ()
+        [Fact]
+        public async Task SplitProcessJoinAction_CorrectlyBuild ()
         {
             // arrange
             var result = new ConcurrentBag<string> ();
@@ -102,8 +101,8 @@ namespace Rocks.Dataflow.Tests.CoreTests
         }
 
 
-        [TestMethod]
-        public async Task SplitProcessProcessJoinAction_CorrectlyBuilded ()
+        [Fact]
+        public async Task SplitProcessProcessJoinAction_CorrectlyBuild ()
         {
             // arrange
             var result = new ConcurrentBag<string> ();
@@ -137,8 +136,8 @@ namespace Rocks.Dataflow.Tests.CoreTests
         }
 
 
-        [TestMethod]
-        public async Task SplitProcessTransformJoinAction_CorrectlyBuilded ()
+        [Fact]
+        public async Task SplitProcessTransformJoinAction_CorrectlyBuild ()
         {
             // arrange
             var result = new ConcurrentBag<string> ();
@@ -182,7 +181,7 @@ namespace Rocks.Dataflow.Tests.CoreTests
         }
 
 
-        [TestMethod]
+        [Fact]
         public async Task SplitProcessJoinAction_ProcessThrowsOnOneItem_ExecutedWithFailedItemHavingTheException ()
         {
             // arrange
@@ -190,11 +189,12 @@ namespace Rocks.Dataflow.Tests.CoreTests
 
             var split_block = DataflowSplitJoin.CreateSplitBlock<string, char> (s => s.ToCharArray ());
 
-            var process_block = DataflowSplitJoin.CreateProcessBlock<string, char> ((s, c) =>
-                                                                                    {
-                                                                                        if (c == 'b')
-                                                                                            throw new TestException ();
-                                                                                    });
+            var process_block = DataflowSplitJoin.CreateProcessBlock<string, char>
+                ((s, c) =>
+                 {
+                     if (c == 'b')
+                         throw new TestException ();
+                 });
 
             var join_block = DataflowSplitJoin.CreateJoinBlock<string, char> ();
             var final_block = new ActionBlock<SplitJoinResult<string, char>> (x => result.Add (x));
@@ -226,13 +226,12 @@ namespace Rocks.Dataflow.Tests.CoreTests
                                                         new[] { new SplitJoinFailedItem<char> ('b', new TestException ()) },
                                                         2)
                  },
-                 options => options.Using<Exception> (x => x.Subject.ShouldBeEquivalentTo (x.Expectation,
-                                                                                           o => o.Including (p => p.Message)))
+                 options => options.Using<Exception> (x => x.Subject.Should ().BeOfType<TestException> ())
                                    .WhenTypeIs<Exception> ());
         }
 
 
-        [TestMethod]
+        [Fact]
         public async Task SplitProcessTransformJoinAction_ProcessThrowsOnOneItem_ExecutedWithFailedItemHavingTheException ()
         {
             // arrange
@@ -240,11 +239,12 @@ namespace Rocks.Dataflow.Tests.CoreTests
 
             var split_block = DataflowSplitJoin.CreateSplitBlock<string, char> (s => s.ToCharArray ());
 
-            var process_block = DataflowSplitJoin.CreateProcessBlock<string, char> ((s, c) =>
-                                                                                    {
-                                                                                        if (c == 'b')
-                                                                                            throw new TestException ();
-                                                                                    });
+            var process_block = DataflowSplitJoin.CreateProcessBlock<string, char>
+                ((s, c) =>
+                 {
+                     if (c == 'b')
+                         throw new TestException ();
+                 });
 
             var transform_block = DataflowSplitJoin.CreateTransformBlock<string, char, string>
                 ((s, c) => c.ToString (CultureInfo.InvariantCulture));
@@ -280,13 +280,12 @@ namespace Rocks.Dataflow.Tests.CoreTests
                                                           new[] { new SplitJoinFailedItem<string> (null, new TestException ()) },
                                                           2)
                  },
-                 options => options.Using<Exception> (x => x.Subject.ShouldBeEquivalentTo (x.Expectation,
-                                                                                           o => o.Including (p => p.Message)))
+                 options => options.Using<Exception> (x => x.Subject.Should ().BeOfType<TestException> ())
                                    .WhenTypeIs<Exception> ());
         }
 
 
-        [TestMethod]
+        [Fact]
         public async Task SplitJoin_SplitReturnsNull_DoesNotThrow ()
         {
             // arrange
@@ -310,3 +309,5 @@ namespace Rocks.Dataflow.Tests.CoreTests
         }
     }
 }
+
+

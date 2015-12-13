@@ -3,15 +3,14 @@ using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Rocks.Dataflow.Extensions;
 
 namespace Rocks.Dataflow.Tests.CoreTests
 {
-	[TestClass]
 	public class DataflowTests
 	{
-		[TestMethod]
+		[Fact]
 		public void EndsWithSourceBlock_Throws ()
 		{
 			// arrange
@@ -30,7 +29,7 @@ namespace Rocks.Dataflow.Tests.CoreTests
 		}
 
 
-		[TestMethod]
+		[Fact]
 		public async Task ActionBlock_CorrectlyProceed ()
 		{
 			// arrange
@@ -50,7 +49,7 @@ namespace Rocks.Dataflow.Tests.CoreTests
 		}
 
 
-		[TestMethod]
+		[Fact]
 		public async Task ActionThenTransformBlock_CorrectlyProceed ()
 		{
 			// arrange
@@ -73,3 +72,5 @@ namespace Rocks.Dataflow.Tests.CoreTests
 		}
 	}
 }
+
+

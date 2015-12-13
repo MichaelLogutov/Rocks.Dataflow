@@ -5,7 +5,8 @@ namespace Rocks.Dataflow.Tests
 	/// <summary>
 	///     Test exception.
 	/// </summary>
-	public class TestException : Exception
+	[Serializable]
+	public sealed class TestException : Exception
 	{
 		public TestException (Exception innerException = null)
 			: base ("Test exception.", innerException)

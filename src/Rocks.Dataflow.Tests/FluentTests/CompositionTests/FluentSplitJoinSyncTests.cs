@@ -4,17 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Rocks.Dataflow.Fluent;
 using Rocks.Dataflow.Tests.FluentTests.Infrastructure;
 
 namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 {
-	[TestClass]
 	public class FluentSplitJoinSyncTests
 	{
-		[TestMethod]
-		public async Task SplitJoin_CorrectlyBuilded ()
+		[Fact]
+		public async Task SplitJoin_CorrectlyBuild ()
 		{
 			// arrange
 			var process = new ConcurrentBag<string> ();
@@ -39,8 +38,8 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 		}
 
 
-		[TestMethod]
-		public async Task SplitJoinInto_CorrectlyBuilded ()
+		[Fact]
+		public async Task SplitJoinInto_CorrectlyBuild ()
 		{
 			// arrange
 			var result = new ConcurrentBag<string> ();
@@ -62,8 +61,8 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 		}
 
 
-		[TestMethod]
-		public async Task SplitTransformJoin_CorrectlyBuilded ()
+		[Fact]
+		public async Task SplitTransformJoin_CorrectlyBuild ()
 		{
 			// arrange
 			var process = new ConcurrentBag<char> ();
@@ -89,8 +88,8 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 		}
 
 
-		[TestMethod]
-		public async Task SplitProcessJoin_CorrectlyBuilded ()
+		[Fact]
+		public async Task SplitProcessJoin_CorrectlyBuild ()
 		{
 			// arrange
 			var process = new ConcurrentBag<char> ();
@@ -112,8 +111,8 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 		}
 
 
-		[TestMethod]
-		public async Task SplitProcessJoinInto_CorrectlyBuilded ()
+		[Fact]
+		public async Task SplitProcessJoinInto_CorrectlyBuild ()
 		{
 			// arrange
 			var process = new ConcurrentBag<char> ();
@@ -138,8 +137,8 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 		}
 
 
-		[TestMethod]
-		public async Task SplitProcessProcessJoin_CorrectlyBuilded ()
+		[Fact]
+		public async Task SplitProcessProcessJoin_CorrectlyBuild ()
 		{
 			// arrange
 			var process = new ConcurrentBag<char> ();
@@ -164,8 +163,8 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 		}
 
 
-		[TestMethod]
-		public async Task SplitJoinWithAllBlockTypes_CorrectlyBuilded ()
+		[Fact]
+		public async Task SplitJoinWithAllBlockTypes_CorrectlyBuild ()
 		{
 			// arrange
 			var result = new ConcurrentBag<string> ();
@@ -194,8 +193,8 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 		}
 
 
-		[TestMethod]
-		public async Task Split_SplitTransform_Join_Action_CorrectlyBuilded ()
+		[Fact]
+		public async Task Split_SplitTransform_Join_Action_CorrectlyBuild ()
 		{
 			// arrange
 			var result = new ConcurrentBag<string> ();
@@ -219,8 +218,8 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 		}
 
 
-		[TestMethod]
-		public async Task Split_SplitTransform_Join_Action_WithFailedItems_CorrectlyBuilded ()
+		[Fact]
+		public async Task Split_SplitTransform_Join_Action_WithFailedItems_CorrectlyBuild ()
 		{
 			// arrange
 			var result = new ConcurrentBag<string> ();
@@ -257,8 +256,8 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 		}
 
 
-		[TestMethod]
-		public async Task TransformSplitJoin_CorrectlyBuilded ()
+		[Fact]
+		public async Task TransformSplitJoin_CorrectlyBuild ()
 		{
 			// arrange
 			var process = new ConcurrentBag<string> ();
@@ -290,7 +289,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 		}
 
 
-		[TestMethod]
+		[Fact]
 		public async Task SplitProcessJoin_WithException_PassTheExceptionToChildContext ()
 		{
 			// arrange
@@ -333,3 +332,5 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 		}
 	}
 }
+
+
