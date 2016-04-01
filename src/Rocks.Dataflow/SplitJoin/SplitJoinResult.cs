@@ -28,14 +28,14 @@ namespace Rocks.Dataflow.SplitJoin
 		                        int totalItemsCount)
 		{
 			if (successfullyCompletedItems == null)
-				throw new ArgumentNullException ("successfullyCompletedItems");
+				throw new ArgumentNullException (nameof(successfullyCompletedItems));
 
 			if (failedItems == null)
-				throw new ArgumentNullException ("failedItems");
+				throw new ArgumentNullException (nameof(failedItems));
 
 			if (totalItemsCount <= 0)
 			{
-				throw new ArgumentOutOfRangeException ("totalItemsCount",
+				throw new ArgumentOutOfRangeException (nameof(totalItemsCount),
 				                                       totalItemsCount,
 				                                       "totalItemsCount can not be less or equal than zero " +
 				                                       "and it's having value of " + totalItemsCount);

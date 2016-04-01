@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Rocks.Dataflow.Fluent;
@@ -338,6 +339,50 @@ namespace Rocks.Dataflow.Tests.FluentTests.ExceptionHandlingTests
                  },
                  options => options.Using<Exception> (x => x.Subject.Should ().BeOfType (x.Expectation.GetType ()))
                                    .WhenTypeIs<Exception> ());
+        }
+
+
+        [Fact]
+        public void SplitProcessJoinAction_TwoItems_SecondWaitsForTheFirst_DataflowEndedOnlyAfterBothProcessed ()
+        {
+            // arrange
+            var first_item_finished = new SemaphoreSlim (0, 1);
+            var completed_items = new ConcurrentBag<string> ();
+
+            var sut = DataflowFluent
+                .ReceiveDataOfType<string> ()
+                .SplitToAsync<char> (async x =>
+                                           {
+                                               await Task.Yield ();
+                                               return x.ToCharArray ();
+                                           })
+                .SplitProcessAsync (async (s, c) =>
+                                          {
+                                              await Task.Yield ();
+
+                                              if (c == '1')
+                                                  await Task.Delay (100);
+                                              else if (c == '2')
+                                                  await first_item_finished.WaitAsync ();
+                                          })
+                .SplitJoinInto (result => result.Parent)
+                .ActionAsync (async x =>
+                                    {
+                                        await Task.Yield ();
+                                        if (x == "111")
+                                            first_item_finished.Release ();
+                                        completed_items.Add (x);
+                                    })
+                .CreateDataflow ();
+
+
+            // act
+            if (!sut.ProcessAsync (new[] { "111", "2" }).Wait (1000))
+                throw new TimeoutException ();
+
+
+            // assert
+            completed_items.Should ().BeEquivalentTo ("111", "2");
         }
     }
 }

@@ -18,10 +18,10 @@ namespace Rocks.Dataflow.Fluent.BuildResults
 		public DataflowFinalBuilderBuildResult ([NotNull] ITargetBlock<TInput> startingBlock, [NotNull] IDataflowBlock finalBlock)
 		{
 			if (startingBlock == null)
-				throw new ArgumentNullException ("startingBlock");
+				throw new ArgumentNullException (nameof(startingBlock));
 
 			if (finalBlock == null)
-				throw new ArgumentNullException ("finalBlock");
+				throw new ArgumentNullException (nameof(finalBlock));
 
 			this.startingBlock = startingBlock;
 			this.finalBlock = finalBlock;

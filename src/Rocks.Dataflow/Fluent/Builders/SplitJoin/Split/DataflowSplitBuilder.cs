@@ -25,7 +25,7 @@ namespace Rocks.Dataflow.Fluent.Builders.SplitJoin.Split
 			: base (previousBuilder)
 		{
 			if (getItemsAsync == null)
-				throw new ArgumentNullException ("getItemsAsync");
+				throw new ArgumentNullException (nameof(getItemsAsync));
 
 			this.getItemsAsync = getItemsAsync;
 		}
@@ -36,7 +36,7 @@ namespace Rocks.Dataflow.Fluent.Builders.SplitJoin.Split
 			: base (previousBuilder)
 		{
 			if (getItemsSync == null)
-				throw new ArgumentNullException ("getItemsSync");
+				throw new ArgumentNullException (nameof(getItemsSync));
 
 			this.getItemsSync = getItemsSync;
 		}

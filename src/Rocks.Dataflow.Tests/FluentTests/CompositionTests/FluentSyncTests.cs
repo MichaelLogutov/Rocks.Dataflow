@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Globalization;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using FluentAssertions;
+using Rocks.Dataflow.Extensions;
 using Xunit;
 using Rocks.Dataflow.Fluent;
 using Rocks.Dataflow.Tests.FluentTests.Infrastructure;
@@ -198,7 +201,95 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
             // assert
             action.ShouldThrow<InvalidOperationException> ();
         }
+
+
+    [Fact]
+    public void ProcessAction_FirstWaitsForTheSecond_DataflowEndedOnlyAfterBothProcessed ()
+    {
+        // arrange
+        var second_item_finished = new SemaphoreSlim (0, 1);
+        var completed_items = new ConcurrentBag<string> ();
+
+        var starting_block = new TransformBlock<string, string>
+            (x =>
+                {
+                    if (x == "1")
+                        second_item_finished.Wait ();
+
+                    return x;
+                },
+                new ExecutionDataflowBlockOptions
+                {
+                    BoundedCapacity = 100,
+                    MaxDegreeOfParallelism = 4
+                });
+
+        var ending_block = new ActionBlock<string>
+            (x =>
+                {
+                    completed_items.Add (x);
+
+                    if (x == "2")
+                        second_item_finished.Release ();
+                },
+                new ExecutionDataflowBlockOptions
+                {
+                    BoundedCapacity = 100,
+                    MaxDegreeOfParallelism = 4
+                });
+
+        starting_block.LinkTo (ending_block, new DataflowLinkOptions { PropagateCompletion = true });
+
+
+        // act
+        foreach (var data in new[] { "1", "2" })
+        {
+            if (!starting_block.SendAsync (data).Wait (1000))
+                throw new TimeoutException ();
+        }
+
+        starting_block.Complete ();
+
+        if (!Task.WaitAll (new[] { starting_block.Completion, ending_block.Completion }, 2000))
+            throw new TimeoutException ();
+
+
+        // assert
+        completed_items.Should ().Equal ("2", "1");
+    }
+
+
+        //[Fact]
+        //public void ProcessAction_FirstWaitsForTheSecond_DataflowEndedOnlyAfterBothProcessed ()
+        //{
+        //    // arrange
+        //    var second_item_finished = new SemaphoreSlim (0, 1);
+        //    var completed_items = new ConcurrentBag<string> ();
+
+        //    var sut = DataflowFluent
+        //        .ReceiveDataOfType<string> ()
+        //        .Process (x =>
+        //                  {
+        //                      if (x == "1")
+        //                          second_item_finished.Wait ();
+        //                  })
+        //        .Action (x =>
+        //                 {
+        //                     completed_items.Add (x);
+
+        //                     if (x == "2")
+        //                         second_item_finished.Release ();
+        //                 })
+        //        .CreateDataflow ();
+
+
+        //    // act
+        //    if (!sut.ProcessAsync (new[] { "1", "2" }).Wait (1000))
+        //        throw new TimeoutException ();
+
+
+        //    // assert
+        //    completed_items.Should ().Equal ("2", "1");
+        //}
     }
 }
-
-

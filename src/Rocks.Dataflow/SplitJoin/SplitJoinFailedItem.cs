@@ -23,7 +23,7 @@ namespace Rocks.Dataflow.SplitJoin
 		public SplitJoinFailedItem (TItem item, [NotNull] Exception exception)
 		{
 			if (exception == null)
-				throw new ArgumentNullException ("exception");
+				throw new ArgumentNullException (nameof(exception));
 
 			this.item = item;
 			this.exception = exception;

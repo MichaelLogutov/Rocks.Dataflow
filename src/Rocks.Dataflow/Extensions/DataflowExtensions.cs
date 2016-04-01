@@ -51,7 +51,7 @@ namespace Rocks.Dataflow.Extensions
 		public static DataflowBlockOptions Clone ([NotNull] this DataflowBlockOptions source)
 		{
 			if (source == null)
-				throw new ArgumentNullException ("source");
+				throw new ArgumentNullException (nameof(source));
 
 			var result = new DataflowBlockOptions
 			             {
@@ -72,7 +72,7 @@ namespace Rocks.Dataflow.Extensions
 		public static ExecutionDataflowBlockOptions Clone ([NotNull] this ExecutionDataflowBlockOptions source)
 		{
 			if (source == null)
-				throw new ArgumentNullException ("source");
+				throw new ArgumentNullException (nameof(source));
 
 			var result = new ExecutionDataflowBlockOptions
 			             {
@@ -95,7 +95,7 @@ namespace Rocks.Dataflow.Extensions
 		public static GroupingDataflowBlockOptions Clone ([NotNull] this GroupingDataflowBlockOptions source)
 		{
 			if (source == null)
-				throw new ArgumentNullException ("source");
+				throw new ArgumentNullException (nameof(source));
 
 			var result = new GroupingDataflowBlockOptions
 			             {

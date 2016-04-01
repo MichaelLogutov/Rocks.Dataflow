@@ -26,7 +26,7 @@ namespace Rocks.Dataflow.SplitJoin
 		{
 			if (totalItemsCount <= 0)
 			{
-				throw new ArgumentOutOfRangeException ("totalItemsCount",
+				throw new ArgumentOutOfRangeException (nameof(totalItemsCount),
 				                                       totalItemsCount,
 				                                       "totalItemsCount can not be less or equal than zero " +
 				                                       "and it's having value of " + totalItemsCount);
@@ -94,7 +94,7 @@ namespace Rocks.Dataflow.SplitJoin
 		public void Failed ([NotNull] Exception exception)
 		{
 			if (exception == null)
-				throw new ArgumentNullException ("exception");
+				throw new ArgumentNullException (nameof(exception));
 
 			this.result = SplitJoinItemResult.Failure;
 			this.Exception = exception;

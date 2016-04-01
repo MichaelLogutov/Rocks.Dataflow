@@ -23,7 +23,7 @@ namespace Rocks.Dataflow.Fluent.Builders.SplitJoin.Process
 			: base (previousBuilder)
 		{
 			if (processAsync == null)
-				throw new ArgumentNullException ("processAsync");
+				throw new ArgumentNullException (nameof(processAsync));
 
 			this.processAsync = processAsync;
 		}
@@ -34,7 +34,7 @@ namespace Rocks.Dataflow.Fluent.Builders.SplitJoin.Process
 			: base (previousBuilder)
 		{
 			if (processSync == null)
-				throw new ArgumentNullException ("processSync");
+				throw new ArgumentNullException (nameof(processSync));
 
 			this.processSync = processSync;
 		}

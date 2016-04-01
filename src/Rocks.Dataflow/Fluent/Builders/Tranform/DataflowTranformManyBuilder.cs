@@ -6,120 +6,120 @@ using JetBrains.Annotations;
 
 namespace Rocks.Dataflow.Fluent.Builders.Tranform
 {
-	public class DataflowTranformManyBuilder<TStart, TInput, TOutput> :
-		DataflowBuilder<DataflowTranformManyBuilder<TStart, TInput, TOutput>, TStart, TInput, TOutput>
-	{
-		#region Private fields
+    public class DataflowTranformManyBuilder<TStart, TInput, TOutput> :
+        DataflowBuilder<DataflowTranformManyBuilder<TStart, TInput, TOutput>, TStart, TInput, TOutput>
+    {
+        #region Private fields
 
-		private readonly Func<TInput, IEnumerable<TOutput>> processSync;
-		private readonly Func<TInput, Task<IEnumerable<TOutput>>> processAsync;
+        private readonly Func<TInput, IEnumerable<TOutput>> processSync;
+        private readonly Func<TInput, Task<IEnumerable<TOutput>>> processAsync;
 
-		#endregion
+        #endregion
 
-		#region Construct
+        #region Construct
 
-		public DataflowTranformManyBuilder ([CanBeNull] IDataflowBuilder<TStart, TInput> previousBuilder,
-		                                    [NotNull] Func<TInput, Task<IEnumerable<TOutput>>> process)
-			: base (previousBuilder)
-		{
-			if (process == null)
-				throw new ArgumentNullException ("process");
+        public DataflowTranformManyBuilder([CanBeNull] IDataflowBuilder<TStart, TInput> previousBuilder,
+                                           [NotNull] Func<TInput, Task<IEnumerable<TOutput>>> process)
+            : base(previousBuilder)
+        {
+            if (process == null)
+                throw new ArgumentNullException(nameof(process));
 
-			this.processAsync = process;
-		}
+            this.processAsync = process;
+        }
 
 
-		public DataflowTranformManyBuilder ([CanBeNull] IDataflowBuilder<TStart, TInput> previousBuilder,
-		                                    [NotNull] Func<TInput, IEnumerable<TOutput>> process)
-			: base (previousBuilder)
-		{
-			if (process == null)
-				throw new ArgumentNullException ("process");
+        public DataflowTranformManyBuilder([CanBeNull] IDataflowBuilder<TStart, TInput> previousBuilder,
+                                           [NotNull] Func<TInput, IEnumerable<TOutput>> process)
+            : base(previousBuilder)
+        {
+            if (process == null)
+                throw new ArgumentNullException(nameof(process));
 
-			this.processSync = process;
-		}
+            this.processSync = process;
+        }
 
-		#endregion
+        #endregion
 
-		#region Protected properties
+        #region Protected properties
 
-		/// <summary>
-		///     Gets the builder instance that will be returned from the
-		///     <see cref="DataflowExecutionBlockBuilder{TStart,TBuilder,TInput}" /> methods.
-		/// </summary>
-		protected override DataflowTranformManyBuilder<TStart, TInput, TOutput> Builder { get { return this; } }
+        /// <summary>
+        ///     Gets the builder instance that will be returned from the
+        ///     <see cref="DataflowExecutionBlockBuilder{TStart,TBuilder,TInput}" /> methods.
+        /// </summary>
+        protected override DataflowTranformManyBuilder<TStart, TInput, TOutput> Builder => this;
 
-		#endregion
+        #endregion
 
-		#region Protected methods
+        #region Protected methods
 
-		/// <summary>
-		///     Creates a dataflow block from current configuration.
-		/// </summary>
-		protected override IPropagatorBlock<TInput, TOutput> CreateBlock ()
-		{
-			TransformManyBlock<TInput, TOutput> block;
+        /// <summary>
+        ///     Creates a dataflow block from current configuration.
+        /// </summary>
+        protected override IPropagatorBlock<TInput, TOutput> CreateBlock()
+        {
+            TransformManyBlock<TInput, TOutput> block;
 
-			if (this.processAsync != null)
-			{
-				block = new TransformManyBlock<TInput, TOutput>
-					(async input =>
-					{
-						// ReSharper disable once CompareNonConstrainedGenericWithNull
-						if (input == null)
-							return new TOutput[0];
+            if (this.processAsync != null)
+            {
+                block = new TransformManyBlock<TInput, TOutput>
+                    (async input =>
+                           {
+                               // ReSharper disable once CompareNonConstrainedGenericWithNull
+                               if (input == null)
+                                   return new TOutput[0];
 
-						try
-						{
-							var result = await this.processAsync (input).ConfigureAwait (false);
+                               try
+                               {
+                                   var result = await this.processAsync(input).ConfigureAwait(false);
 
-							return result;
-						}
-						catch (Exception ex)
-						{
-							var logger = input as IDataflowErrorLogger;
-							if (logger != null)
-								logger.OnException (ex);
-							else if (this.DefaultExceptionLogger != null)
-								this.DefaultExceptionLogger (ex, input);
+                                   return result;
+                               }
+                               catch (Exception ex)
+                               {
+                                   var logger = input as IDataflowErrorLogger;
+                                   if (logger != null)
+                                       logger.OnException(ex);
+                                   else
+                                       this.DefaultExceptionLogger?.Invoke(ex, input);
 
-							return new TOutput[0];
-						}
-					},
-					 this.options);
-			}
-			else
-			{
-				block = new TransformManyBlock<TInput, TOutput>
-					(input =>
-					{
-						// ReSharper disable once CompareNonConstrainedGenericWithNull
-						if (input == null)
-							return new TOutput[0];
+                                   return new TOutput[0];
+                               }
+                           },
+                     this.options);
+            }
+            else
+            {
+                block = new TransformManyBlock<TInput, TOutput>
+                    (input =>
+                     {
+                         // ReSharper disable once CompareNonConstrainedGenericWithNull
+                         if (input == null)
+                             return new TOutput[0];
 
-						try
-						{
-							var result = this.processSync (input);
+                         try
+                         {
+                             var result = this.processSync(input);
 
-							return result;
-						}
-						catch (Exception ex)
-						{
-							var logger = input as IDataflowErrorLogger;
-							if (logger != null)
-								logger.OnException (ex);
-							else if (this.DefaultExceptionLogger != null)
-								this.DefaultExceptionLogger (ex, input);
+                             return result;
+                         }
+                         catch (Exception ex)
+                         {
+                             var logger = input as IDataflowErrorLogger;
+                             if (logger != null)
+                                 logger.OnException(ex);
+                             else
+                                 this.DefaultExceptionLogger?.Invoke(ex, input);
 
-							return new TOutput[0];
-						}
-					},
-					 this.options);
-			}
+                             return new TOutput[0];
+                         }
+                     },
+                     this.options);
+            }
 
-			return block;
-		}
+            return block;
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 }

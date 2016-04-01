@@ -21,7 +21,7 @@ namespace Rocks.Dataflow.SplitJoin
 			 Action<Exception, object> defaultExceptionLogger = null)
 		{
 			if (getItems == null)
-				throw new ArgumentNullException ("getItems");
+				throw new ArgumentNullException (nameof(getItems));
 
 			var result = new TransformManyBlock<TParent, SplitJoinItem<TParent, TItem>>
 				(async parent =>
@@ -70,7 +70,7 @@ namespace Rocks.Dataflow.SplitJoin
 			 Action<Exception, object> defaultExceptionLogger = null)
 		{
 			if (getItems == null)
-				throw new ArgumentNullException ("getItems");
+				throw new ArgumentNullException (nameof(getItems));
 
 			var result = new TransformManyBlock<TParent, SplitJoinItem<TParent, TItem>>
 				(parent =>
@@ -117,13 +117,13 @@ namespace Rocks.Dataflow.SplitJoin
 			 Action<Exception, SplitJoinItem<TParent, TItem>> defaultExceptionLogger = null)
 		{
 			if (process == null)
-				throw new ArgumentNullException ("process");
+				throw new ArgumentNullException (nameof(process));
 
 			var block = new TransformBlock<SplitJoinItem<TParent, TItem>, SplitJoinItem<TParent, TItem>>
 				(async splitJoinItem =>
 				{
 					if (splitJoinItem == null)
-						throw new ArgumentNullException ("splitJoinItem");
+						throw new ArgumentNullException (nameof(splitJoinItem));
 
 					if (splitJoinItem.Result == SplitJoinItemResult.Failure)
 						return splitJoinItem;
@@ -167,13 +167,13 @@ namespace Rocks.Dataflow.SplitJoin
 			 Action<Exception, SplitJoinItem<TParent, TItem>> defaultExceptionLogger = null)
 		{
 			if (process == null)
-				throw new ArgumentNullException ("process");
+				throw new ArgumentNullException (nameof(process));
 
 			var block = new TransformBlock<SplitJoinItem<TParent, TItem>, SplitJoinItem<TParent, TItem>>
 				(splitJoinItem =>
 				{
 					if (splitJoinItem == null)
-						throw new ArgumentNullException ("splitJoinItem");
+						throw new ArgumentNullException (nameof(splitJoinItem));
 
 					if (splitJoinItem.Result == SplitJoinItemResult.Failure)
 						return splitJoinItem;
@@ -216,13 +216,13 @@ namespace Rocks.Dataflow.SplitJoin
 			 Action<Exception, SplitJoinItem<TParent, TInputItem>> defaultExceptionLogger = null)
 		{
 			if (process == null)
-				throw new ArgumentNullException ("process");
+				throw new ArgumentNullException (nameof(process));
 
 			var block = new TransformBlock<SplitJoinItem<TParent, TInputItem>, SplitJoinItem<TParent, TOutputItem>>
 				(async splitJoinItem =>
 				{
 					if (splitJoinItem == null)
-						throw new ArgumentNullException ("splitJoinItem");
+						throw new ArgumentNullException (nameof(splitJoinItem));
 
 					if (splitJoinItem.Result == SplitJoinItemResult.Failure)
 					{
@@ -281,13 +281,13 @@ namespace Rocks.Dataflow.SplitJoin
 			 Action<Exception, SplitJoinItem<TParent, TInputItem>> defaultExceptionLogger = null)
 		{
 			if (process == null)
-				throw new ArgumentNullException ("process");
+				throw new ArgumentNullException (nameof(process));
 
 			var block = new TransformBlock<SplitJoinItem<TParent, TInputItem>, SplitJoinItem<TParent, TOutputItem>>
 				(splitJoinItem =>
 				{
 					if (splitJoinItem == null)
-						throw new ArgumentNullException ("splitJoinItem");
+						throw new ArgumentNullException (nameof(splitJoinItem));
 
 					if (splitJoinItem.Result == SplitJoinItemResult.Failure)
 					{
@@ -359,7 +359,7 @@ namespace Rocks.Dataflow.SplitJoin
 			Action<Exception, SplitJoinResult<TParent, TItem>> defaultExceptionLogger = null)
 		{
 			if (process == null)
-				throw new ArgumentNullException ("process");
+				throw new ArgumentNullException (nameof(process));
 
 			var intermediate_results = new Dictionary<TParent, SplitJoinIntermediateResult<TItem>> ();
 
@@ -415,7 +415,7 @@ namespace Rocks.Dataflow.SplitJoin
 			Action<Exception, SplitJoinResult<TParent, TItem>> defaultExceptionLogger = null)
 		{
 			if (process == null)
-				throw new ArgumentNullException ("process");
+				throw new ArgumentNullException (nameof(process));
 
 			var intermediate_results = new Dictionary<TParent, SplitJoinIntermediateResult<TItem>> ();
 
@@ -510,7 +510,7 @@ namespace Rocks.Dataflow.SplitJoin
 			 Action<Exception, SplitJoinResult<TParent, TItem>> defaultExceptionLogger = null)
 		{
 			if (process == null)
-				throw new ArgumentNullException ("process");
+				throw new ArgumentNullException (nameof(process));
 
 			var intermediate_results = new Dictionary<TParent, SplitJoinIntermediateResult<TItem>> ();
 
