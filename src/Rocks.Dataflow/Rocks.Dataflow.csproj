@@ -1,126 +1,29 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{443C4D55-86FB-4EF2-B5E3-991A9E766844}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Rocks.Dataflow</RootNamespace>
-    <AssemblyName>Rocks.Dataflow</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>false</RestorePackages>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>bin\Debug\Rocks.Dataflow.XML</DocumentationFile>
-    <NoWarn>1591,1574</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>bin\Release\Rocks.Dataflow.XML</DocumentationFile>
-    <NoWarn>1591,1574</NoWarn>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="JetBrains.Annotations, Version=10.0.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>..\packages\JetBrains.Annotations.10.0.0\lib\net20\JetBrains.Annotations.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Threading.Tasks.Dataflow, Version=4.5.24.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Tpl.Dataflow.4.5.24\lib\portable-net45+win8+wpa81\System.Threading.Tasks.Dataflow.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Dataflow.cs" />
-    <Compile Include="Extensions\Helpers.cs" />
-    <Compile Include="Fluent\Builders\DataflowBuilder.Split.cs" />
-    <Compile Include="Fluent\Builders\DataflowBuilder.Process.cs" />
-    <Compile Include="Fluent\Builders\DataflowBuilder.TransformMany.cs" />
-    <Compile Include="Fluent\Builders\DataflowBuilder.Transform.cs" />
-    <Compile Include="Fluent\Builders\DataflowBuilder.cs" />
-    <Compile Include="Fluent\Builders\SplitJoin\Process\DataflowSplitProcessBuilder.Transform.cs" />
-    <Compile Include="Fluent\Builders\SplitJoin\Transform\DataflowSplitProcessTransformBuilder.Transform.cs" />
-    <Compile Include="Fluent\Builders\SplitJoin\Split\DataflowSplitBuilder.Transform.cs" />
-    <Compile Include="Fluent\Builders\SplitJoin\Split\DataflowSplitBuilder.Join.cs" />
-    <Compile Include="Fluent\Builders\SplitJoin\Process\DataflowSplitProcessBuilder.Join.cs" />
-    <Compile Include="Fluent\Builders\SplitJoin\Transform\DataflowSplitProcessTransformBuilder.Join.cs" />
-    <Compile Include="Fluent\Builders\Start\DataflowStartBuilder.cs" />
-    <Compile Include="Fluent\Builders\Start\DataflowStartBuilder.Process.cs" />
-    <Compile Include="Fluent\Builders\Start\DataflowStartBuilder.Transform.cs" />
-    <Compile Include="Fluent\Builders\Start\DataflowStartBuilder.Action.cs" />
-    <Compile Include="Fluent\Builders\Start\DataflowStartBuilder.Split.cs" />
-    <Compile Include="Fluent\Builders\Start\DataflowStartBuilder.TransformMany.cs" />
-    <Compile Include="Fluent\Builders\SplitJoin\Split\DataflowSplitBuilder.cs" />
-    <Compile Include="Fluent\Builders\SplitJoin\Join\DataflowSplitJoinBuilder.cs" />
-    <Compile Include="Fluent\Builders\SplitJoin\Transform\DataflowSplitProcessTransformBuilder.cs" />
-    <Compile Include="Fluent\Builders\SplitJoin\Process\DataflowSplitProcessBuilder.cs" />
-    <Compile Include="Fluent\Builders\SplitJoin\Join\DataflowSplitJoinFinalBuilder.cs" />
-    <Compile Include="Fluent\Builders\Tranform\DataflowProcessBuilder.cs" />
-    <Compile Include="Fluent\IDataflowStartBuilder.cs" />
-    <Compile Include="SplitJoin\DataflowSplitJoin.cs" />
-    <Compile Include="SplitJoin\SplitJoinFailedItem.cs" />
-    <Compile Include="SplitJoin\SplitJoinIntermediateResult.cs" />
-    <Compile Include="SplitJoin\SplitJoinItem.cs" />
-    <Compile Include="SplitJoin\SplitJoinItemResult.cs" />
-    <Compile Include="SplitJoin\SplitJoinResult.cs" />
-    <Compile Include="DataflowStatus.cs" />
-    <Compile Include="Exceptions\DataflowException.cs" />
-    <Compile Include="Exceptions\InvalidDataflowStatusException.cs" />
-    <Compile Include="Fluent\Builders\Action\DataflowActionBuilder.cs" />
-    <Compile Include="Fluent\IDataflowFinalBuilder.cs" />
-    <Compile Include="Fluent\Builders\DataflowFinalBuilder.cs" />
-    <Compile Include="Fluent\Builders\DataflowBuilder.Action.cs" />
-    <Compile Include="Fluent\IDataflowBuilder.cs" />
-    <Compile Include="Fluent\BuildResults\DataflowFinalBuilderBuildResult.cs" />
-    <Compile Include="Fluent\BuildResults\DataflowBuilderBuildResult.cs" />
-    <Compile Include="Fluent\DataflowFluent.cs" />
-    <Compile Include="Fluent\Builders\DataflowExecutionBlockBuilder.cs" />
-    <Compile Include="Fluent\Builders\Tranform\DataflowTranformManyBuilder.cs" />
-    <Compile Include="Fluent\Builders\Tranform\DataflowTranformBuilder.cs" />
-    <Compile Include="Fluent\IDataflowErrorLogger.cs" />
-    <Compile Include="Fluent\IDataflowBuilderBuildResult.cs" />
-    <Compile Include="Fluent\IDataflowFinalBuilderBuildResult.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Extensions\DataflowExtensions.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Package.nuspec" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <!-- Properties -->
+    <PropertyGroup>
+        <DefaultItemExcludes>$(DefaultItemExcludes);**\*.v3.ncrunchproject;**\*.v3.ncrunchproject.user
+        </DefaultItemExcludes>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <Version>2.0.0</Version>
+        <FileVersion>$(Version)</FileVersion>
+        <AssemblyVersion>$(Version)</AssemblyVersion>
+        <Authors>Michael Logutov</Authors>
+        <Company>Michael Logutov</Company>
+        <Description>A collection of extensions over Microsoft TPL Dataflow library.</Description>
+        <Copyright>Copyright © Michael Logutov 2017</Copyright>
+    </PropertyGroup>
+    <!-- Properties for NuGet package -->
+    <PropertyGroup>
+        <IsPackable>true</IsPackable>
+        <PackageId>Rocks.Dataflow</PackageId>
+        <PackageVersion>$(Version)</PackageVersion>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <PackageProjectUrl>https://github.com/MichaelLogutov/Rocks.Dataflow</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/MichaelLogutov/Rocks.Dataflow/blob/master/LICENSE</PackageLicenseUrl>
+    </PropertyGroup>
+    <!-- NuGet packages -->
+    <ItemGroup>
+        <PackageReference Include="JetBrains.Annotations" Version="11.0.0"/>
+        <PackageReference Include="Microsoft.Tpl.Dataflow" Version="4.5.24"/>
+    </ItemGroup>
 </Project>
