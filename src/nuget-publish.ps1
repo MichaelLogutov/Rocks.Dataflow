@@ -3,11 +3,13 @@ cls
 cd $PSScriptRoot
 
 $id = ((Get-Item -Path ".\..").Name)
-iex "nuget pack -build -Prop Configuration=Release -sym $id\$id.csproj" -ErrorAction Stop
+& 'c:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\MSBuild.exe' /t:clean
+& 'c:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\MSBuild.exe' /t:restore
+& 'c:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\MSBuild.exe' /t:pack /p:Configuration=Release
 
-$package_file = @(Get-ChildItem "*.nupkg" -Exclude "*.symbols.*" | Sort-Object -Property CreationTime -Descending)[0]
+$package_file = @(Get-ChildItem "$id\bin\Release\*.nupkg" -Exclude "*.symbols.*" | Sort-Object -Property CreationTime -Descending)[0]
 $package_file.Name
 
-iex ("nuget push " + $package_file.Name)
+& nuget.exe push $package_file.FullName -source nuget.org
 
-Remove-Item *.nupkg
+$package_file | Remove-Item

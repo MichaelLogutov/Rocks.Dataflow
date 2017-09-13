@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rocks.Dataflow", "Rocks.Dat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rocks.Dataflow.Tests", "Rocks.Dataflow.Tests\Rocks.Dataflow.Tests.csproj", "{42D01BD2-CC67-4495-912F-3AB52571077A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dataflow", "Dataflow", "{2FD2A17D-AF5F-489F-B0A1-15FFB97CAE99}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,7 +26,5 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{443C4D55-86FB-4EF2-B5E3-991A9E766844} = {2FD2A17D-AF5F-489F-B0A1-15FFB97CAE99}
-		{42D01BD2-CC67-4495-912F-3AB52571077A} = {2FD2A17D-AF5F-489F-B0A1-15FFB97CAE99}
 	EndGlobalSection
 EndGlobal
