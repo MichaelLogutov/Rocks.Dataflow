@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <!-- Properties -->
     <PropertyGroup>
-        <DefaultItemExcludes>$(DefaultItemExcludes);**\*.v3.ncrunchproject;**\*.v3.ncrunchproject.user
+        <DefaultItemExcludes>$(DefaultItemExcludes);**\*.v2.ncrunchproject;**\*.v3.ncrunchproject;**\*.nupkg
         </DefaultItemExcludes>
-        <TargetFramework>netcoreapp2.0</TargetFramework>
+        <TargetFrameworks>net461;net471;netcoreapp2.0</TargetFrameworks>
     </PropertyGroup>
     <!-- Properties for NuGet package -->
     <PropertyGroup>
