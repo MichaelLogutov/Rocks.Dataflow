@@ -1,16 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <!-- Properties -->
     <PropertyGroup>
-        <DefaultItemExcludes>$(DefaultItemExcludes);**\*.v3.ncrunchproject;**\*.v3.ncrunchproject.user
+        <DefaultItemExcludes>$(DefaultItemExcludes);**\*.v2.ncrunchproject;**\*.v3.ncrunchproject;**\*.nupkg
         </DefaultItemExcludes>
-        <TargetFramework>netstandard2.0</TargetFramework>
-        <Version>2.1.0</Version>
+        <TargetFrameworks>net461;net471;netstandard2.0</TargetFrameworks>
+        <Version>2.2.0</Version>
         <FileVersion>$(Version)</FileVersion>
         <AssemblyVersion>$(Version)</AssemblyVersion>
         <Authors>Michael Logutov</Authors>
         <Company>Michael Logutov</Company>
         <Description>A collection of extensions over Microsoft TPL Dataflow library.</Description>
         <Copyright>Copyright © Michael Logutov 2017</Copyright>
+        <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Rocks.Dataflow.xml</DocumentationFile>
     </PropertyGroup>
     <!-- Properties for NuGet package -->
     <PropertyGroup>
@@ -24,6 +25,28 @@
     <!-- NuGet packages -->
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations" Version="11.0.0"/>
+    </ItemGroup>
+    <!-- NuGet packages for .NET Framework -->
+    <ItemGroup Condition="$(TargetFramework) == 'net461'">
+        <PackageReference Include="Microsoft.Tpl.Dataflow" Version="4.5.24"/>
+    </ItemGroup>
+    <ItemGroup Condition="$(TargetFramework) == 'net471'">
+        <PackageReference Include="Microsoft.Tpl.Dataflow" Version="4.5.24"/>
+    </ItemGroup>
+    <!-- NuGet packages for .NET Core -->
+    <ItemGroup Condition="$(TargetFramework) == 'netstandard2.0'">
         <PackageReference Include="System.Threading.Tasks.Dataflow" Version="4.8.0"/>
     </ItemGroup>
+    <!-- References for .NET Framework -->
+    <ItemGroup Condition="$(TargetFramework) == 'net461'">
+    </ItemGroup>
+    <ItemGroup Condition="$(TargetFramework) == 'net471'">
+    </ItemGroup>
+    <!-- Documentation -->
+    <Target Name="IncludeDocumentationFiles" BeforeTargets="PrepareForPublish">
+        <ItemGroup>
+            <DocumentationFiles Include="bin\$(Configuration)\$(TargetFramework)\*.xml" />
+        </ItemGroup>
+        <Copy SourceFiles="@(DocumentationFiles)" DestinationFolder="$(PublishDir)" SkipUnchangedFiles="false" />
+    </Target>
 </Project>
