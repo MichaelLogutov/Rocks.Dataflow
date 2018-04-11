@@ -35,11 +35,6 @@
     <!-- NuGet packages for .NET Core -->
     <ItemGroup Condition="$(TargetFramework) == 'netstandard2.0'">
     </ItemGroup>
-    <!-- References for .NET Framework -->
-    <ItemGroup Condition="$(TargetFramework) == 'net461'">
-    </ItemGroup>
-    <ItemGroup Condition="$(TargetFramework) == 'net471'">
-    </ItemGroup>
     <!-- Documentation -->
     <Target Name="IncludeDocumentationFiles" BeforeTargets="PrepareForPublish">
         <ItemGroup>
