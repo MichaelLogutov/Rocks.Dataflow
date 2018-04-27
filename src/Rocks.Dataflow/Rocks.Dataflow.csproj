@@ -1,50 +1,53 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-    <!-- Properties -->
-    <PropertyGroup>
-        <DefaultItemExcludes>$(DefaultItemExcludes);**\*.v2.ncrunchproject;**\*.v3.ncrunchproject;**\*.nupkg
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Properties -->
+  <PropertyGroup>
+    <DefaultItemExcludes>$(DefaultItemExcludes);**\*.v2.ncrunchproject;**\*.v3.ncrunchproject;**\*.nupkg
         </DefaultItemExcludes>
-        <TargetFrameworks>net461;net471;netstandard2.0</TargetFrameworks>
-        <Version>2.3.0</Version>
-        <FileVersion>$(Version)</FileVersion>
-        <AssemblyVersion>$(Version)</AssemblyVersion>
-        <Authors>Michael Logutov</Authors>
-        <Company>Michael Logutov</Company>
-        <Description>A collection of extensions over Microsoft TPL Dataflow library.</Description>
-        <Copyright>Copyright © Michael Logutov 2018</Copyright>
-        <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Rocks.Dataflow.xml</DocumentationFile>
-    </PropertyGroup>
-    <!-- Properties for NuGet package -->
-    <PropertyGroup>
-        <IsPackable>true</IsPackable>
-        <PackageId>Rocks.Dataflow</PackageId>
-        <PackageVersion>$(Version)</PackageVersion>
-        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-        <PackageProjectUrl>https://github.com/MichaelLogutov/Rocks.Dataflow</PackageProjectUrl>
-        <PackageLicenseUrl>https://github.com/MichaelLogutov/Rocks.Dataflow/blob/master/LICENSE</PackageLicenseUrl>
-    </PropertyGroup>
-    <!-- NuGet packages -->
+    <TargetFrameworks>net461;net471;netstandard2.0</TargetFrameworks>
+    <Version>2.4.0</Version>
+    <FileVersion>$(Version)</FileVersion>
+    <AssemblyVersion>$(Version)</AssemblyVersion>
+    <Authors>Michael Logutov</Authors>
+    <Company>Michael Logutov</Company>
+    <Description>A collection of extensions over Microsoft TPL Dataflow library.</Description>
+    <Copyright>Copyright © Michael Logutov 2018</Copyright>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Rocks.Dataflow.xml</DocumentationFile>
+  </PropertyGroup>
+  <!-- Properties for NuGet package -->
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <PackageId>Rocks.Dataflow</PackageId>
+    <PackageVersion>$(Version)</PackageVersion>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://github.com/MichaelLogutov/Rocks.Dataflow</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/MichaelLogutov/Rocks.Dataflow/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/MichaelLogutov/Rocks.Dataflow</RepositoryUrl>
+    <PackageReleaseNotes>2.4.0 (2018-04-27)
+Update packages</PackageReleaseNotes>
+  </PropertyGroup>
+  <!-- NuGet packages -->
+  <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" Version="11.1.0" />
+    <PackageReference Include="System.Threading.Tasks.Dataflow" Version="4.8.0" />
+  </ItemGroup>
+  <!-- NuGet packages for .NET Framework -->
+  <ItemGroup Condition="$(TargetFramework) == 'net461'">
+  </ItemGroup>
+  <ItemGroup Condition="$(TargetFramework) == 'net471'">
+  </ItemGroup>
+  <!-- NuGet packages for .NET Core -->
+  <ItemGroup Condition="$(TargetFramework) == 'netstandard2.0'">
+  </ItemGroup>
+  <!-- References for .NET Framework -->
+  <ItemGroup Condition="$(TargetFramework) == 'net461'">
+  </ItemGroup>
+  <ItemGroup Condition="$(TargetFramework) == 'net471'">
+  </ItemGroup>
+  <!-- Documentation -->
+  <Target Name="IncludeDocumentationFiles" BeforeTargets="PrepareForPublish">
     <ItemGroup>
-        <PackageReference Include="JetBrains.Annotations" Version="11.0.0"/>
-        <PackageReference Include="System.Threading.Tasks.Dataflow" Version="4.8.0"/>
+      <DocumentationFiles Include="bin\$(Configuration)\$(TargetFramework)\*.xml" />
     </ItemGroup>
-    <!-- NuGet packages for .NET Framework -->
-    <ItemGroup Condition="$(TargetFramework) == 'net461'">
-    </ItemGroup>
-    <ItemGroup Condition="$(TargetFramework) == 'net471'">
-    </ItemGroup>
-    <!-- NuGet packages for .NET Core -->
-    <ItemGroup Condition="$(TargetFramework) == 'netstandard2.0'">
-    </ItemGroup>
-    <!-- References for .NET Framework -->
-    <ItemGroup Condition="$(TargetFramework) == 'net461'">
-    </ItemGroup>
-    <ItemGroup Condition="$(TargetFramework) == 'net471'">
-    </ItemGroup>
-    <!-- Documentation -->
-    <Target Name="IncludeDocumentationFiles" BeforeTargets="PrepareForPublish">
-        <ItemGroup>
-            <DocumentationFiles Include="bin\$(Configuration)\$(TargetFramework)\*.xml" />
-        </ItemGroup>
-        <Copy SourceFiles="@(DocumentationFiles)" DestinationFolder="$(PublishDir)" SkipUnchangedFiles="false" />
-    </Target>
+    <Copy SourceFiles="@(DocumentationFiles)" DestinationFolder="$(PublishDir)" SkipUnchangedFiles="false" />
+  </Target>
 </Project>

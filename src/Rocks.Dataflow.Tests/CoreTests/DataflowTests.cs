@@ -25,7 +25,7 @@ namespace Rocks.Dataflow.Tests.CoreTests
 
 
 			// assert
-			action.ShouldThrow<ArgumentException> ();
+			action.Should().Throw<ArgumentException> ();
 		}
 
 

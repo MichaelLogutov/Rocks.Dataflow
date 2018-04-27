@@ -291,7 +291,7 @@ namespace Rocks.Dataflow.Tests.CoreTests
 
 
             // assert
-            result.ShouldAllBeEquivalentTo
+            result.Should().BeEquivalentTo
                 (new[]
                  {
                      new SplitJoinResult<string, char>
@@ -358,7 +358,7 @@ namespace Rocks.Dataflow.Tests.CoreTests
 
 
             // assert
-            result.ShouldAllBeEquivalentTo
+            result.Should().BeEquivalentTo
                 (new[]
                  {
                      new SplitJoinResult<string, string> ("a",

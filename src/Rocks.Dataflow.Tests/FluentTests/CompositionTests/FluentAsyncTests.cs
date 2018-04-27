@@ -304,7 +304,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 
 
             // assert
-            action.ShouldThrow<InvalidOperationException>();
+            action.Should().Throw<InvalidOperationException>();
         }
 
 

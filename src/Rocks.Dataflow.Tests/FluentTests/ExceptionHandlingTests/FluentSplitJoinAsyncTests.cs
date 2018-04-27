@@ -88,7 +88,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.ExceptionHandlingTests
             var expected_failed_item = new SplitJoinItem<string, char> ("b", 'b', 1);
             expected_failed_item.Failed (new TestException ());
 
-            failed_items.ShouldAllBeEquivalentTo
+            failed_items.Should().BeEquivalentTo
                 (new[] { expected_failed_item },
                  options => options.Using<Exception> (x => x.Subject.Should ().BeOfType<TestException> ())
                                    .WhenTypeIs<Exception> ());
@@ -133,7 +133,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.ExceptionHandlingTests
 
             // assert
             exceptions.Should ().HaveCount (1).And.ContainItemsAssignableTo<TestException> ();
-            failed_items.ShouldAllBeEquivalentTo (new[] { new SplitJoinItem<string, char> ("b", 'b', 1) });
+            failed_items.Should().BeEquivalentTo (new[] { new SplitJoinItem<string, char> ("b", 'b', 1) });
         }
 
 
@@ -175,7 +175,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.ExceptionHandlingTests
 
             // assert
             exceptions.Should ().HaveCount (1).And.ContainItemsAssignableTo<TestException> ();
-            failed_items.ShouldAllBeEquivalentTo (new[]
+            failed_items.Should().BeEquivalentTo (new[]
                                                   {
                                                       new SplitJoinResult<string, char> ("b",
                                                                                          new[] { 'b' },
@@ -220,7 +220,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.ExceptionHandlingTests
 
             // assert
             exceptions.Should ().HaveCount (1).And.ContainItemsAssignableTo<TestException> ();
-            failed_items.ShouldAllBeEquivalentTo
+            failed_items.Should().BeEquivalentTo
                 (new[]
                  {
                      new SplitJoinResult<string, char> ("b",
@@ -273,7 +273,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.ExceptionHandlingTests
 
             // assert
             exceptions.Should ().HaveCount (1).And.ContainItemsAssignableTo<TestException> ();
-            failed_items.ShouldAllBeEquivalentTo
+            failed_items.Should().BeEquivalentTo
                 (new[]
                  {
                      new SplitJoinResult<string, char> ("b",
@@ -329,7 +329,7 @@ namespace Rocks.Dataflow.Tests.FluentTests.ExceptionHandlingTests
 
             // assert
             exceptions.Should ().HaveCount (1).And.ContainItemsAssignableTo<TestException> ();
-            failed_items.ShouldAllBeEquivalentTo
+            failed_items.Should().BeEquivalentTo
                 (new[]
                  {
                      new SplitJoinResult<string, char> ("b",
