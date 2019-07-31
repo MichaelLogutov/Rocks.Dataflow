@@ -10,7 +10,7 @@ namespace Rocks.Dataflow.Exceptions
 		private readonly DataflowStatus status;
 
 
-		public DataflowStatus Status { get { return this.status; } }
+		public DataflowStatus Status => this.status;
 
 
 		public InvalidDataflowStatusException (DataflowStatus status, Exception innerException = null)

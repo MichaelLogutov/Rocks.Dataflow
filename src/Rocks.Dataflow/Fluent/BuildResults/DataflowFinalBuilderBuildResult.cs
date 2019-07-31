@@ -6,14 +6,9 @@ namespace Rocks.Dataflow.Fluent.BuildResults
 {
 	public class DataflowFinalBuilderBuildResult<TInput> : IDataflowFinalBuilderBuildResult<TInput>
 	{
-		#region Private fields
-
 		private readonly ITargetBlock<TInput> startingBlock;
 		private readonly IDataflowBlock finalBlock;
 
-		#endregion
-
-		#region Construct
 
 		public DataflowFinalBuilderBuildResult ([NotNull] ITargetBlock<TInput> startingBlock, [NotNull] IDataflowBlock finalBlock)
 		{
@@ -27,20 +22,15 @@ namespace Rocks.Dataflow.Fluent.BuildResults
 			this.finalBlock = finalBlock;
 		}
 
-		#endregion
-
-		#region IDataflowFinalBuilderBuildResult<TInput> Members
 
 		/// <summary>
 		///     The starting block of the dataflow.
 		/// </summary>
-		public ITargetBlock<TInput> StartingBlock { get { return this.startingBlock; } }
+		public ITargetBlock<TInput> StartingBlock => this.startingBlock;
 
 		/// <summary>
 		///     The final block of the dataflow.
 		/// </summary>
-		public IDataflowBlock FinalBlock { get { return this.finalBlock; } }
-
-		#endregion
+		public IDataflowBlock FinalBlock => this.finalBlock;
 	}
 }

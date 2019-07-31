@@ -9,16 +9,11 @@ namespace Rocks.Dataflow.Fluent.Builders
 	public abstract partial class DataflowBuilder<TBuilder, TStart, TInput, TOutput> : DataflowExecutionBlockBuilder<TStart, TBuilder, TInput>,
 	                                                                                   IDataflowBuilder<TStart, TOutput>
 	{
-		#region Construct
-
 		protected DataflowBuilder ([CanBeNull] IDataflowBuilder<TStart, TInput> previousBuilder)
 			: base (previousBuilder)
 		{
 		}
 
-		#endregion
-
-		#region IDataflowBuilder<TStart,TOutput> Members
 
 		/// <summary>
 		///     Builds the starting and final blocks of the dataflow.
@@ -52,15 +47,10 @@ namespace Rocks.Dataflow.Fluent.Builders
 			return result;
 		}
 
-		#endregion
-
-		#region Protected methods
 
 		/// <summary>
 		///     Creates a dataflow block from current configuration.
 		/// </summary>
 		protected abstract IPropagatorBlock<TInput, TOutput> CreateBlock ();
-
-		#endregion
 	}
 }

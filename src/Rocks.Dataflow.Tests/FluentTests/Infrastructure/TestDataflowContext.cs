@@ -8,23 +8,15 @@ namespace Rocks.Dataflow.Tests.FluentTests.Infrastructure
 	[DebuggerDisplay ("{Data}, {Exceptions.Count} exceptions")]
 	internal class TestDataflowContext<TData> : IDataflowErrorLogger
 	{
-		#region Construct
-
 		public TestDataflowContext ()
 		{
 			this.Exceptions = new List<Exception> ();
 		}
 
-		#endregion
-
-		#region Public properties
 
 		public TData Data { get; set; }
 		public IList<Exception> Exceptions { get; set; }
 
-		#endregion
-
-		#region Public methods
 
 		/// <summary>
 		///     Returns a string that represents the current object.
@@ -37,9 +29,6 @@ namespace Rocks.Dataflow.Tests.FluentTests.Infrastructure
 			return string.Format ("{0}", this.Data);
 		}
 
-		#endregion
-
-		#region IDataflowErrorLogger Members
 
 		/// <summary>
 		///     Called when one of the execution dataflow block faulted with the <paramref name="exception" />.
@@ -49,7 +38,5 @@ namespace Rocks.Dataflow.Tests.FluentTests.Infrastructure
 			lock (this.Exceptions)
 				this.Exceptions.Add (exception);
 		}
-
-		#endregion
 	}
 }

@@ -8,14 +8,9 @@ namespace Rocks.Dataflow.Fluent.Builders.Action
     public class DataflowActionBuilder<TStart, TInput> :
         DataflowFinalBuilder<DataflowActionBuilder<TStart, TInput>, TStart, TInput>
     {
-        #region Private fields
-
         private readonly Func<TInput, Task> processAsync;
         private readonly Action<TInput> processSync;
 
-        #endregion
-
-        #region Construct
 
         public DataflowActionBuilder([CanBeNull] IDataflowBuilder<TStart, TInput> previousBuilder,
                                      [NotNull] Func<TInput, Task> processAsync)
@@ -38,9 +33,6 @@ namespace Rocks.Dataflow.Fluent.Builders.Action
             this.processSync = processSync;
         }
 
-        #endregion
-
-        #region Protected properties
 
         /// <summary>
         ///     Gets the builder instance that will be returned from the
@@ -48,9 +40,6 @@ namespace Rocks.Dataflow.Fluent.Builders.Action
         /// </summary>
         protected override DataflowActionBuilder<TStart, TInput> Builder => this;
 
-        #endregion
-
-        #region Protected methods
 
         /// <summary>
         ///     Creates a dataflow block from current configuration.
@@ -110,7 +99,5 @@ namespace Rocks.Dataflow.Fluent.Builders.Action
 
             return block;
         }
-
-        #endregion
     }
 }

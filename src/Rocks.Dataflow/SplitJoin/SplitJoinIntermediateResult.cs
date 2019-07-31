@@ -9,16 +9,11 @@ namespace Rocks.Dataflow.SplitJoin
 	/// </summary>
 	public class SplitJoinIntermediateResult<TItem>
 	{
-		#region Private fields
-
 		private readonly List<TItem> succeffullyCompletedItems;
 		private readonly List<SplitJoinFailedItem<TItem>> failedItems;
 		private readonly int totalItemsCount;
 		private int completedItemsCount;
 
-		#endregion
-
-		#region Construct
 
 		public SplitJoinIntermediateResult (int totalItemsCount)
 		{
@@ -35,18 +30,12 @@ namespace Rocks.Dataflow.SplitJoin
 			this.failedItems = new List<SplitJoinFailedItem<TItem>> ();
 		}
 
-		#endregion
-
-		#region Public properties
 
 		/// <summary>
 		///     The total number of items that was generated (splitted) from parent.
 		/// </summary>
-		public int TotalItemsCount { get { return this.totalItemsCount; } }
+		public int TotalItemsCount => this.totalItemsCount;
 
-		#endregion
-
-		#region Public methods
 
 		/// <summary>
 		///     Notifies that <paramref name="item" /> was processed.
@@ -104,7 +93,5 @@ namespace Rocks.Dataflow.SplitJoin
 		{
 			return this.failedItems.ToArray ();
 		}
-
-		#endregion
 	}
 }

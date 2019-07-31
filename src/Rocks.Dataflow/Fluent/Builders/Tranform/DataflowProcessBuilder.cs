@@ -8,14 +8,9 @@ namespace Rocks.Dataflow.Fluent.Builders.Tranform
 	public class DataflowProcessBuilder<TStart, TInput> :
 		DataflowBuilder<DataflowProcessBuilder<TStart, TInput>, TStart, TInput, TInput>
 	{
-		#region Private fields
-
 		private readonly Func<TInput, Task> processAsync;
 		private readonly Action<TInput> processSync;
 
-		#endregion
-
-		#region Construct
 
 		public DataflowProcessBuilder ([CanBeNull] IDataflowBuilder<TStart, TInput> previousBuilder,
 		                               [NotNull] Func<TInput, Task> processAsync)
@@ -38,19 +33,13 @@ namespace Rocks.Dataflow.Fluent.Builders.Tranform
 			this.processSync = processSync;
 		}
 
-		#endregion
-
-		#region Protected properties
 
 		/// <summary>
 		///     Gets the builder instance that will be returned from the
 		///     <see cref="DataflowExecutionBlockBuilder{TStart,TBuilder,TInput}" /> methods.
 		/// </summary>
-		protected override DataflowProcessBuilder<TStart, TInput> Builder { get { return this; } }
+		protected override DataflowProcessBuilder<TStart, TInput> Builder => this;
 
-		#endregion
-
-		#region Protected methods
 
 		/// <summary>
 		///     Creates a dataflow block from current configuration.
@@ -118,7 +107,5 @@ namespace Rocks.Dataflow.Fluent.Builders.Tranform
 
 			return block;
 		}
-
-		#endregion
 	}
 }

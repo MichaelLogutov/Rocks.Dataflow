@@ -11,14 +11,9 @@ namespace Rocks.Dataflow.Fluent.Builders.SplitJoin.Split
 	public partial class DataflowSplitBuilder<TStart, TInput, TItem> :
 		DataflowBuilder<DataflowSplitBuilder<TStart, TInput, TItem>, TStart, TInput, SplitJoinItem<TInput, TItem>>
 	{
-		#region Private fields
-
 		private readonly Func<TInput, Task<IReadOnlyList<TItem>>> getItemsAsync;
 		private readonly Func<TInput, IReadOnlyList<TItem>> getItemsSync;
 
-		#endregion
-
-		#region Construct
 
 		public DataflowSplitBuilder ([CanBeNull] IDataflowBuilder<TStart, TInput> previousBuilder,
 		                             [NotNull] Func<TInput, Task<IReadOnlyList<TItem>>> getItemsAsync)
@@ -41,19 +36,13 @@ namespace Rocks.Dataflow.Fluent.Builders.SplitJoin.Split
 			this.getItemsSync = getItemsSync;
 		}
 
-		#endregion
-
-		#region Protected properties
 
 		/// <summary>
 		///     Gets the builder instance that will be returned from the
 		///     <see cref="DataflowExecutionBlockBuilder{TStart,TBuilder,TInput}" /> methods.
 		/// </summary>
-		protected override DataflowSplitBuilder<TStart, TInput, TItem> Builder { get { return this; } }
+		protected override DataflowSplitBuilder<TStart, TInput, TItem> Builder => this;
 
-		#endregion
-
-		#region Protected methods
 
 		/// <summary>
 		///     Creates a dataflow block from current configuration.
@@ -66,7 +55,5 @@ namespace Rocks.Dataflow.Fluent.Builders.SplitJoin.Split
 
 			return block;
 		}
-
-		#endregion
 	}
 }

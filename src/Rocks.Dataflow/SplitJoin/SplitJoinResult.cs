@@ -11,16 +11,11 @@ namespace Rocks.Dataflow.SplitJoin
 	[DebuggerDisplay ("Parent = {Parent}, Successfully completed {SuccessfullyCompletedItems.Count} of {TotalItemsCount}")]
 	public class SplitJoinResult<TParent, TItem>
 	{
-		#region Private fields
-
 		private readonly TParent parent;
 		private readonly IReadOnlyList<TItem> successfullyCompletedItems;
 		private readonly IReadOnlyList<SplitJoinFailedItem<TItem>> failedItems;
 		private readonly int totalItemsCount;
 
-		#endregion
-
-		#region Construct
 
 		public SplitJoinResult (TParent parent,
 		                        [NotNull] IReadOnlyList<TItem> successfullyCompletedItems,
@@ -56,46 +51,38 @@ namespace Rocks.Dataflow.SplitJoin
 			this.totalItemsCount = intermediateResult.TotalItemsCount;
 		}
 
-		#endregion
-
-		#region Public properties
 
 		/// <summary>
 		///     The parent of all splitted items.
 		/// </summary>
-		public TParent Parent { get { return this.parent; } }
+		public TParent Parent => this.parent;
 
 
 		/// <summary>
 		///     A list of all successfully completed items.
 		/// </summary>
 		[NotNull]
-		public IReadOnlyList<TItem> SuccessfullyCompletedItems { get { return this.successfullyCompletedItems; } }
+		public IReadOnlyList<TItem> SuccessfullyCompletedItems => this.successfullyCompletedItems;
 
 
 		/// <summary>
 		///     A list of all failed items.
 		/// </summary>
 		[NotNull]
-		public IReadOnlyList<SplitJoinFailedItem<TItem>> FailedItems { get { return this.failedItems; } }
+		public IReadOnlyList<SplitJoinFailedItem<TItem>> FailedItems => this.failedItems;
 
 
 		/// <summary>
 		///     The total number of items that was generated (splitted) from <see cref="Parent" />.
 		///     This number equal to sum of successfull and failed items count.
 		/// </summary>
-		public int TotalItemsCount { get { return this.totalItemsCount; } }
+		public int TotalItemsCount => this.totalItemsCount;
 
-		#endregion
-
-		#region Public methods
 
 		public override string ToString ()
 		{
 			// ReSharper disable once CompareNonConstrainedGenericWithNull
 			return this.Parent == null ? string.Empty : this.Parent.ToString ();
 		}
-
-		#endregion
 	}
 }

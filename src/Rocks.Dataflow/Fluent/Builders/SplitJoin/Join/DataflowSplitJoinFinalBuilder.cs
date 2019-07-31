@@ -9,14 +9,9 @@ namespace Rocks.Dataflow.Fluent.Builders.SplitJoin.Join
 	public class DataflowSplitJoinFinalBuilder<TStart, TParent, TItem> :
 		DataflowFinalBuilder<DataflowSplitJoinFinalBuilder<TStart, TParent, TItem>, TStart, SplitJoinItem<TParent, TItem>>
 	{
-		#region Private fields
-
 		private readonly Func<SplitJoinResult<TParent, TItem>, Task> processAsync;
 		private readonly Action<SplitJoinResult<TParent, TItem>> processSync;
 
-		#endregion
-
-		#region Construct
 
 		public DataflowSplitJoinFinalBuilder ([CanBeNull] IDataflowBuilder<TStart, SplitJoinItem<TParent, TItem>> previousBuilder)
 			: base (previousBuilder)
@@ -39,19 +34,13 @@ namespace Rocks.Dataflow.Fluent.Builders.SplitJoin.Join
 			this.processSync = processSync;
 		}
 
-		#endregion
-
-		#region Protected properties
 
 		/// <summary>
 		///     Gets the builder instance that will be returned from the
 		///     <see cref="DataflowExecutionBlockBuilder{TStart,TBuilder,TInput}" /> methods.
 		/// </summary>
-		protected override DataflowSplitJoinFinalBuilder<TStart, TParent, TItem> Builder { get { return this; } }
+		protected override DataflowSplitJoinFinalBuilder<TStart, TParent, TItem> Builder => this;
 
-		#endregion
-
-		#region Protected methods
 
 		/// <summary>
 		///     Creates a dataflow block from current configuration.
@@ -69,7 +58,5 @@ namespace Rocks.Dataflow.Fluent.Builders.SplitJoin.Join
 
 			return block;
 		}
-
-		#endregion
 	}
 }

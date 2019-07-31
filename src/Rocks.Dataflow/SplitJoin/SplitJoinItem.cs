@@ -10,17 +10,12 @@ namespace Rocks.Dataflow.SplitJoin
 	[DebuggerDisplay ("Parent = {Parent}, Item = {Item}, Result = {Result}")]
 	public class SplitJoinItem<TParent, TItem>
 	{
-		#region Private fields
-
 		private readonly TParent parent;
 		private readonly TItem item;
 		private readonly int totalItemsCount;
 
 		private SplitJoinItemResult? result;
 
-		#endregion
-
-		#region Construct
 
 		public SplitJoinItem ([NotNull] TParent parent, TItem item, int totalItemsCount)
 		{
@@ -37,38 +32,32 @@ namespace Rocks.Dataflow.SplitJoin
 			this.totalItemsCount = totalItemsCount;
 		}
 
-		#endregion
-
-		#region Public properties
 
 		/// <summary>
 		///     Parent data of the current <see cref="Item" />.
 		/// </summary>
-		public TParent Parent { get { return this.parent; } }
+		public TParent Parent => this.parent;
 
 		/// <summary>
 		///     Item data.
 		/// </summary>
-		public TItem Item { get { return this.item; } }
+		public TItem Item => this.item;
 
 		/// <summary>
 		///     Executed result. Default is null.
 		/// </summary>
-		public SplitJoinItemResult? Result { get { return this.result; } }
+		public SplitJoinItemResult? Result => this.result;
 
 		/// <summary>
 		///     The total number of items that was generated (splitted) from <see cref="Parent" />.
 		/// </summary>
-		public int TotalItemsCount { get { return this.totalItemsCount; } }
+		public int TotalItemsCount => this.totalItemsCount;
 
 		/// <summary>
 		///     The latest exception that was passed to <see cref="Failed" /> method.
 		/// </summary>
 		public Exception Exception { get; private set; }
 
-		#endregion
-
-		#region Public methods
 
 		/// <summary>
 		///     Signals that processing of the <see cref="Item" /> has been started.
@@ -105,7 +94,5 @@ namespace Rocks.Dataflow.SplitJoin
 		{
 			return string.Format ("{1} of {0} ({2})", this.Parent, this.Item, this.Result);
 		}
-
-		#endregion
 	}
 }

@@ -11,14 +11,9 @@ namespace Rocks.Dataflow.SplitJoin
 	[DebuggerDisplay ("Item = {Item}, Exception = {Exception}")]
 	public class SplitJoinFailedItem<TItem>
 	{
-		#region Private fields
-
 		private readonly TItem item;
 		private readonly Exception exception;
 
-		#endregion
-
-		#region Construct
 
 		public SplitJoinFailedItem (TItem item, [NotNull] Exception exception)
 		{
@@ -29,31 +24,23 @@ namespace Rocks.Dataflow.SplitJoin
 			this.exception = exception;
 		}
 
-		#endregion
-
-		#region Public properties
 
 		/// <summary>
 		///     Item data.
 		/// </summary>
-		public TItem Item { get { return this.item; } }
+		public TItem Item => this.item;
 
 
 		/// <summary>
 		///     Exception that caused the item to fail.
 		/// </summary>
 		[NotNull]
-		public Exception Exception { get { return this.exception; } }
+		public Exception Exception => this.exception;
 
-		#endregion
-
-		#region Public methods
 
 		public override string ToString ()
 		{
 			return string.Format ("{1}: {0}", this.Item, this.Exception.Message);
 		}
-
-		#endregion
 	}
 }

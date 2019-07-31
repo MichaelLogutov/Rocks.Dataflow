@@ -9,8 +9,6 @@ namespace Rocks.Dataflow.Fluent.Builders
 {
     public abstract class DataflowExecutionBlockBuilder<TStart, TBuilder, TInput> : DataflowStartBuilder<TStart>
     {
-        #region Private fields
-
         /// <summary>
         ///     Previous builder in fluent buidling chain.
         ///     If null, then current builder is the first one.
@@ -33,28 +31,22 @@ namespace Rocks.Dataflow.Fluent.Builders
         /// </summary>
         private Action<Exception, object> defaultExceptionLogger;
 
-        #endregion
-
-        #region Construct
 
         protected DataflowExecutionBlockBuilder([CanBeNull] IDataflowBuilder<TStart, TInput> previousBuilder)
         {
             this.previousBuilder = previousBuilder;
 
-            var previous_start_builder = this.previousBuilder as DataflowStartBuilder<TStart>;
-            if (previous_start_builder != null)
+            if (this.previousBuilder is DataflowStartBuilder<TStart> previous_start_builder)
                 this.defaultExceptionLogger = previous_start_builder.DefaultExceptionLogger;
 
             this.options = new ExecutionDataflowBlockOptions
                            {
                                BoundedCapacity = 100,
-                               MaxDegreeOfParallelism = Environment.ProcessorCount
+                               MaxDegreeOfParallelism = Environment.ProcessorCount,
+                               EnsureOrdered = false
                            };
         }
 
-        #endregion
-
-        #region Public methods
 
         /// <summary>
         ///     Specifies <paramref name="opt" /> that will be used for creation of actual dataflow block.
@@ -82,7 +74,7 @@ namespace Rocks.Dataflow.Fluent.Builders
 
 
         /// <summary>
-        ///     Specifies <see cref="ExecutionDataflowBlockOptions.BoundedCapacity" /> that will be used for creation of actual
+        ///     Specifies <see cref="DataflowBlockOptions.BoundedCapacity" /> that will be used for creation of actual
         ///     dataflow block.
         /// </summary>
         public TBuilder WithBoundedCapacity(int boundedCapacity)
@@ -93,7 +85,7 @@ namespace Rocks.Dataflow.Fluent.Builders
 
 
         /// <summary>
-        ///     Specifies <see cref="ExecutionDataflowBlockOptions.CancellationToken" /> that will be used for creation of actual
+        ///     Specifies <see cref="DataflowBlockOptions.CancellationToken" /> that will be used for creation of actual
         ///     dataflow block.
         /// </summary>
         public TBuilder WithCancelationToken(CancellationToken cancellationToken)
@@ -104,12 +96,23 @@ namespace Rocks.Dataflow.Fluent.Builders
 
 
         /// <summary>
-        ///     Specifies <see cref="ExecutionDataflowBlockOptions.TaskScheduler" /> that will be used for creation of actual
+        ///     Specifies <see cref="DataflowBlockOptions.TaskScheduler" /> that will be used for creation of actual
         ///     dataflow block.
         /// </summary>
         public TBuilder WithTaskScheduler(TaskScheduler taskScheduler)
         {
             this.options.TaskScheduler = taskScheduler;
+            return this.Builder;
+        }
+        
+        
+        /// <summary>
+        ///     Specifies <see cref="DataflowBlockOptions.EnsureOrdered" /> that will be used for creation of actual
+        ///     dataflow block.
+        /// </summary>
+        public TBuilder WithEnsureOrdered(bool ensureOrdered)
+        {
+            this.options.EnsureOrdered = ensureOrdered;
             return this.Builder;
         }
 
@@ -125,9 +128,6 @@ namespace Rocks.Dataflow.Fluent.Builders
             return this.Builder;
         }
 
-        #endregion
-
-        #region Protected properties
 
         /// <summary>
         ///     Default exception logger that will be used if currently
@@ -136,7 +136,7 @@ namespace Rocks.Dataflow.Fluent.Builders
         /// </summary>
         protected internal override Action<Exception, object> DefaultExceptionLogger
         {
-            get { return this.defaultExceptionLogger; }
+            get => this.defaultExceptionLogger;
             set
             {
                 this.defaultExceptionLogger = value;
@@ -155,7 +155,5 @@ namespace Rocks.Dataflow.Fluent.Builders
         ///     <see cref="DataflowExecutionBlockBuilder{TStart,TBuilder, TInput}" /> methods.
         /// </summary>
         protected abstract TBuilder Builder { get; }
-
-        #endregion
     }
 }

@@ -16,16 +16,11 @@ namespace Rocks.Dataflow
     [DebuggerDisplay("{Status}")]
     public class Dataflow<TInput>
     {
-        #region Private fields
-
         private readonly ITargetBlock<TInput> startingBlock;
         private readonly IDataflowBlock finalBlock;
         private DataflowStatus status;
         private Stopwatch stopwatch;
 
-        #endregion
-
-        #region Construct
 
         public Dataflow([NotNull] ITargetBlock<TInput> startingBlock, [NotNull] IDataflowBlock finalBlock)
         {
@@ -50,17 +45,11 @@ namespace Rocks.Dataflow
             this.status = DataflowStatus.NotStarted;
         }
 
-        #endregion
-
-        #region Public properties
 
         /// <summary>
         ///     Current dataflow status.
         /// </summary>
-        public DataflowStatus Status
-        {
-            get { return this.status; }
-        }
+        public DataflowStatus Status => this.status;
 
         /// <summary>
         ///     Elapsed time for processing whole dataflow.
@@ -77,9 +66,6 @@ namespace Rocks.Dataflow
             }
         }
 
-        #endregion
-
-        #region Public methods
 
         /// <summary>
         ///     Performs asynchronous processing of all data <paramref name="items" />.
@@ -150,7 +136,5 @@ namespace Rocks.Dataflow
             this.stopwatch.Stop();
             this.status = DataflowStatus.Completed;
         }
-
-        #endregion
     }
 }
