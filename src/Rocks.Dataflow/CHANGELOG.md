@@ -1,3 +1,7 @@
+## 2.6.1 - 2018-08-25
+### Fixed
+- Fixed issue with batch timer not firing properly
+
 ## 2.6.0 - 2018-04-28
 ### Added
 - Added Batch fluent method that allows building dataflow with BatchBlock with optional timeout on awaiting the total items in the batch 

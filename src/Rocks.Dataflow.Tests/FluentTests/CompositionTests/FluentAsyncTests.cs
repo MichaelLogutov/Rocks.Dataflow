@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -405,13 +406,15 @@ namespace Rocks.Dataflow.Tests.FluentTests.CompositionTests
 
             var sut = DataflowFluent
                       .ReceiveDataOfType<int>()
-                      .Batch(3, TimeSpan.FromMilliseconds(100))
+                      .Batch(5, TimeSpan.FromMilliseconds(100))
+                      .WithEnsureOrdered(true)
                       .ActionAsync(async x =>
                                    {
                                        await Task.Yield();
                                        result.Add(x);
                                    })
-                      .WithMaxDegreeOfParallelism();
+                      .WithEnsureOrdered(true)
+                      .WithMaxDegreeOfParallelism(1);
 
 
             // act
