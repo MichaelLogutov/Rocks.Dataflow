@@ -71,7 +71,6 @@ namespace Rocks.Dataflow.Fluent.Builders.Batch
                     },
                     new ExecutionDataflowBlockOptions
                     {
-                        BoundedCapacity = this.options.BoundedCapacity,
                         MaxDegreeOfParallelism = 1,
                         EnsureOrdered = this.options.EnsureOrdered
                     });

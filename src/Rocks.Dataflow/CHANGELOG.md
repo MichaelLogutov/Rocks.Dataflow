@@ -1,3 +1,7 @@
+## 2.6.2 - 2018-08-26
+### Changed
+- Removed bounded capacity restriction on after batch block (used only when max batch timeout set)
+
 ## 2.6.1 - 2018-08-25
 ### Fixed
 - Fixed issue with batch timer not firing properly
